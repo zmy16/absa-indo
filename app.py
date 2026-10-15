@@ -1,7 +1,6 @@
 # ============================================================
-# ABSA Bahasa Indonesia — Model Arena
-# Teks bebas -> BIO (deteksi aspek) -> 4 model berlomba
-# TF-IDF · BiLSTM · Transformer · mBERT
+# ABSA Bahasa Indonesia - perbandingan 4 model
+# Teks bebas -> BIO (deteksi aspek) -> TF-IDF / BiLSTM / Transformer / mBERT
 # ============================================================
 import json
 import re
@@ -16,8 +15,8 @@ import torch.nn.functional as F
 from huggingface_hub import hf_hub_download
 from transformers import AutoTokenizer
 
-st.set_page_config(page_title="ABSA Bahasa Indonesia — Model Arena",
-                   page_icon="📊", layout="centered")
+st.set_page_config(page_title="ABSA Bahasa Indonesia", page_icon="📊",
+                   layout="centered")
 
 sys.path.insert(0, str(Path(__file__).parent / "model_code"))
 from neural import BiLSTMClassifier, TransformerClassifier  # noqa: E402
@@ -25,9 +24,44 @@ from tfidf_centroid import TfidfCentroid  # noqa: E402
 import vocab as vocab_mod  # noqa: E402
 
 # ------------------------------------------------------------
-# Tema: dark editorial + gradient
+# Tema: dark-tech restrained. Near-black, satu aksen, mono untuk angka.
+# Tanpa gradient, tanpa emoji, tanpa glow.
 # ------------------------------------------------------------
-st.markdown("""<style>  :root { --bg:#0a0d14; --panel:#121722; --line:#202a3c; --ink:#e8ecf4; --mut:#8b94a7; }  .stApp { background: var(--bg); font-family: -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }  .block-container { padding-top: 0 !important; max-width: 47rem; }  #MainMenu, header, footer { visibility: hidden; }  .hero { background: linear-gradient(135deg,#1b2440 0%,#3b2a6d 55%,#6d2a5c 100%); border-radius: 0 0 22px 22px; padding: 2.4rem 2.2rem 2rem; margin: 0 -5rem 1.4rem -5rem; position: relative; overflow: hidden; }  .hero::after { content:""; position:absolute; inset:0; background: radial-gradient(600px 200px at 85% -20%, #ffffff22, transparent 60%); }  .hero h1 { font-weight:800; font-size:2.1rem; color:#fff; margin:0; letter-spacing:-0.5px; }  .hero p { color:#c9c4e8; font-size:0.97rem; margin:0.7rem 0 0; max-width:38rem; }  .hero .tag { display:inline-block; font-size:0.66rem; letter-spacing:2px; color:#a5f3d0; background:#0e3b2e88; border:1px solid #2dd4a055; padding:0.2rem 0.7rem; border-radius:999px; margin-bottom:0.9rem; }  .strip { display:flex; gap:1.8rem; margin-top:1.3rem; position:relative; z-index:1; }  .strip b { font-size:1.25rem; color:#fff; display:block; line-height:1.1; }  .strip span { color:#b9b3d9; font-size:0.7rem; letter-spacing:1.5px; }  h2.sec { font-size:0.78rem; letter-spacing:2.5px; color:var(--mut); text-transform:uppercase; margin:1.5rem 0 0.7rem; font-weight:600; }  .pill button { width:100%; text-align:left; background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:12px; padding:0.6rem 0.9rem; font-size:0.87rem; line-height:1.35; transition: border-color .15s, transform .15s; }  .pill button:hover { border-color:#7c6cf0; transform: translateY(-1px); }  .pill button p { margin:0; }  .stTextArea textarea { background:var(--panel); border:1px solid var(--line); border-radius:14px; font-size:1.02rem; color:var(--ink); }  .stTextArea textarea:focus { border-color:#7c6cf0; box-shadow:0 0 0 3px #7c6cf028; }  div.stButton > button { width:100%; height:3.1rem; font-weight:800; font-size:1.03rem; color:#fff; background:linear-gradient(90deg,#6d5df0,#a55eea); border:none; border-radius:13px; letter-spacing:0.3px; transition: filter .15s, transform .15s; }  div.stButton > button:hover { filter:brightness(1.12); transform:translateY(-1px); }  .card { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:1.05rem 1.15rem; margin:0.8rem 0; }  .card .head { display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }  .cat { font-weight:800; font-size:1.04rem; color:#fff; }  .spanq { font-family:'JetBrains Mono',Consolas,monospace; font-size:0.72rem; color:#9fe8c8; background:#0e3b2e66; border:1px solid #2dd4a033; padding:0.12rem 0.55rem; border-radius:999px; }  .consensus { margin-left:auto; font-size:0.68rem; padding:0.18rem 0.6rem; border-radius:999px; letter-spacing:0.5px; font-weight:700; }  .arena { margin-top:0.85rem; display:flex; flex-direction:column; gap:0.55rem; }  .mrow { display:grid; grid-template-columns: 8.6rem 1fr 5rem; gap:0.7rem; align-items:center; }  .mname { font-family:'JetBrains Mono',Consolas,monospace; font-size:0.73rem; color:var(--mut); display:flex; align-items:center; gap:0.3rem; }  .mname .medal { font-size:0.82rem; }  .track { background:#0d1220; border-radius:999px; height:14px; overflow:hidden; border:1px solid #1a2334; }  .fill { height:100%; border-radius:999px; transition: width .5s cubic-bezier(.2,.8,.2,1); }  .mval { font-family:'JetBrains Mono',Consolas,monospace; font-size:0.75rem; font-weight:700; text-align:right; }  .mval small { color:var(--mut); font-weight:500; }  .note { margin-top:0.75rem; font-size:0.8rem; color:#fbbf24; background:#fbbf2412; border:1px solid #fbbf2433; border-radius:10px; padding:0.5rem 0.75rem; }  .empty { border:1px dashed #2a3550; border-radius:16px; padding:2.6rem 1rem; text-align:center; color:var(--mut); margin-top:1.4rem; }  .empty .big { font-size:1.9rem; margin-bottom:0.4rem; }  ::selection { background:#7c6cf066; }</style>""", unsafe_allow_html=True)
+st.markdown("""<style>
+:root { --bg:#0b0d10; --panel:#13161c; --line:#232833; --ink:#e8ecf4; --mut:#8b94a7; --acc:#34d399; }
+.stApp { background: var(--bg); }
+.block-container { padding-top: 2rem !important; max-width: 46rem; }
+#MainMenu, header, footer { visibility: hidden; }
+.hero { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1.7rem 1.9rem; }
+.hero h1 { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.3px; color: var(--ink); margin: 0; }
+.hero p { color: var(--mut); font-size: 0.95rem; line-height: 1.55; margin: 0.6rem 0 0; max-width: 40rem; }
+.hero .meta { margin-top: 1.05rem; font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.72rem; color: var(--mut); letter-spacing: 0.4px; }
+.sec { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--mut); margin: 1.5rem 0 0.6rem; }
+.pill button { width: 100%; text-align: left; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 0.55rem 0.85rem; font-size: 0.87rem; line-height: 1.4; transition: border-color .15s; }
+.pill button:hover { border-color: var(--acc); }
+.pill button p { margin: 0; }
+.stTextArea textarea { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; font-size: 1rem; color: var(--ink); }
+.stTextArea textarea:focus { border-color: var(--acc); box-shadow: none; }
+button[kind="primary"] { background: var(--ink); color: #0b0d10; border: none; border-radius: 10px; height: 2.8rem; font-weight: 700; font-size: 0.98rem; }
+button[kind="primary"]:hover { background: #ffffff; }
+button[kind="primary"]:active { transform: translateY(1px); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.15rem; margin: 0.7rem 0; }
+.head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+.cat { font-weight: 700; font-size: 1rem; color: var(--ink); }
+.spanq { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.72rem; color: var(--mut); }
+.cons { margin-left: auto; font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.7rem; letter-spacing: 0.4px; }
+.rows { margin-top: 0.5rem; }
+.mrow { display: grid; grid-template-columns: 7.6rem 1fr 8.4rem; gap: 0.8rem; align-items: center; padding: 0.5rem 0; }
+.mrow + .mrow { border-top: 1px solid var(--line); }
+.mname { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.72rem; color: var(--mut); }
+.mname b { color: var(--ink); font-weight: 500; margin-left: 0.45rem; }
+.mbar { height: 3px; }
+.mbar i { display: block; height: 3px; border-radius: 2px; }
+.mval { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.74rem; text-align: right; white-space: nowrap; }
+.mval span { color: var(--mut); }
+.note { margin-top: 0.7rem; font-size: 0.8rem; color: #d9b06c; border-top: 1px solid var(--line); padding-top: 0.6rem; }
+.empty { border: 1px dashed var(--line); border-radius: 14px; padding: 2.4rem 1rem; text-align: center; color: var(--mut); margin-top: 1rem; font-size: 0.92rem; }
+</style>""", unsafe_allow_html=True)
 
 # ------------------------------------------------------------
 # Repo HF Hub
@@ -42,14 +76,13 @@ TFIDF_REPO = "zmuhammadrr/absa-tfidf-aug"
 
 BIO_LABELS = ["O", "B-ASP", "I-ASP", "B-POS", "I-POS", "B-NEG", "I-NEG"]
 CLS_LABELS = ["negatif", "netral", "positif"]
-WARNA = {"negatif": "#f87171", "netral": "#fbbf24", "positif": "#4ade80"}
-MEDALI = {0: "🥇", 1: "🥈", 2: "🥉", 3: " ·"}
+WARNA = {"negatif": "#e07a6b", "netral": "#d9b06c", "positif": "#6fc491"}
 
 
 def baca_teks_hub(repo: str, fname: str) -> str:
     """Baca file kecil langsung dari Hub (tanpa cache hf_hub).
     Cache hf_hub_download di container pernah menyimpan salinan kosong
-    sehingga json.loads gagal — direct HTTP menghindarinya."""
+    sehingga json.loads gagal. Direct HTTP menghindarinya."""
     url = f"https://huggingface.co/{repo}/resolve/main/{fname}"
     with urllib.request.urlopen(url, timeout=30) as r:
         return r.read().decode("utf-8")
@@ -61,7 +94,7 @@ def baca_bytes_hub(repo: str, fname: str) -> bytes:
         return r.read()
 
 
-@st.cache_resource(show_spinner="Memuat 4 model (sekali, ~40 detik)...")
+@st.cache_resource(show_spinner="Memuat 4 model (sekali, sekitar 40 detik)...")
 def load_models():
     # --- BIO (penemu aspek) ---
     bio = torch.load(hf_hub_download(BIO_REPO, "model_int8.pt"),
@@ -98,7 +131,7 @@ def load_models():
     trans.load_state_dict(torch.load(tmp2, map_location="cpu", weights_only=True))
     trans.eval()
 
-    # --- TF-IDF (file kecil, langsung HTTP — hindari cache rusak) ---
+    # --- TF-IDF (file kecil, langsung HTTP) ---
     with tempfile.TemporaryDirectory() as td:
         for f in ["vectorizer.joblib", "centroids.npy", "config.json"]:
             Path(td, f).write_bytes(baca_bytes_hub(TFIDF_REPO, f))
@@ -215,36 +248,35 @@ def pipeline(text):
 
 
 # ------------------------------------------------------------
-# Komponen tampilan
+# Kartu hasil
 # ------------------------------------------------------------
-def kartu_arena(row):
+def kartu(row):
     preds = row["prediksi"]
-    urut = sorted(preds.items(), key=lambda kv: -kv[1][1])  # conf tertinggi dulu
-    setuju = len({p for p, _ in preds.values()}) == 1
+    urut = sorted(preds.items(), key=lambda kv: -kv[1][1])
+    n_pola = len({p for p, _ in preds.values()})
+
+    if n_pola == 1:
+        cons = f'<span class="cons" style="color:{WARNA[urut[0][1][0]]};">4/4 sepakat</span>'
+    else:
+        cons = f'<span class="cons" style="color:#d9b06c;">terbelah {n_pola} polaritas</span>'
 
     baris = ""
-    for rank, (nama, (pol, conf)) in enumerate(urut):
+    for rank, (nama, (pol, conf)) in enumerate(urut, start=1):
         w = WARNA[pol]
         pct = int(conf * 100)
         baris += f"""
         <div class="mrow">
-          <div class="mname"><span class="medal">{MEDALI[rank]}</span>{nama.upper()}</div>
-          <div class="track"><div class="fill" style="width:{pct}%;background:{w};opacity:{1 - rank * 0.16};"></div></div>
-          <div class="mval" style="color:{w};">{pct}%<small> {pol}</small></div>
+          <div class="mname">{rank}<b>{nama}</b></div>
+          <div class="mbar"><i style="width:{pct}%;background:{w};"></i></div>
+          <div class="mval" style="color:{w};">{pct}% <span>{pol}</span></div>
         </div>"""
 
     span = row["span"]
     spanq = (f'<span class="spanq">&ldquo;{span}&rdquo;</span>' if span
-             else '<span class="spanq" style="color:#8b94a7;background:#1a2130aa;border-color:#2a3550;">fallback</span>')
-    if setuju:
-        cons = (f'<span class="consensus" style="color:#4ade80;background:#4ade8015;'
-                f'border:1px solid #4ade8044;">KONSENSUS 4/4</span>')
-    else:
-        n_bed = len({p for p, _ in preds.values()})
-        cons = (f'<span class="consensus" style="color:#fbbf24;background:#fbbf2415;'
-                f'border:1px solid #fbbf2444;">TERPISAH {n_bed}/4</span>')
-    note = "" if setuju else ('<div class="note">⚠ Model tidak sepakat — span ini menarik '
-                              'untuk analisis komparatif.</div>')
+             else '<span class="spanq">tanpa span, fallback Umum</span>')
+    note = "" if n_pola == 1 else (
+        '<div class="note">Model tidak sepakat pada aspek ini. '
+        'Menarik untuk dibandingkan di analisis.</div>')
 
     return f"""
     <div class="card">
@@ -253,7 +285,7 @@ def kartu_arena(row):
         {spanq}
         {cons}
       </div>
-      <div class="arena">{baris}</div>
+      <div class="rows">{baris}</div>
       {note}
     </div>"""
 
@@ -271,19 +303,12 @@ CONTOH = [
 if "hasil_terakhir" not in st.session_state:
     st.session_state["hasil_terakhir"] = None
 
-# ---- HERO ----
 st.markdown("""
 <div class="hero">
-  <span class="tag">ASPECT-BASED SENTIMENT ANALYSIS · BAHASA INDONESIA</span>
-  <h1>Model Arena</h1>
-  <p>Ketik ulasan informal apa saja. Model <b>BIO</b> menemukan aspeknya secara otomatis —
-  lalu <b>4 model</b> bersaing memprediksi polaritasnya, peringkat berdasarkan keyakinan.</p>
-  <div class="strip">
-    <div class="st"><b>4</b><span>MODEL</span></div>
-    <div class="st"><b>8</b><span>ASPEK</span></div>
-    <div class="st"><b>3</b><span>DOMAIN</span></div>
-    <div class="st"><b>19.116</b><span>INSTANCE LATIH</span></div>
-  </div>
+  <h1>ABSA Bahasa Indonesia</h1>
+  <p>Ketik ulasan informal apa saja. Model BIO menemukan aspeknya secara otomatis,
+  lalu empat model memprediksi polaritasnya berdampingan, diurutkan per keyakinan.</p>
+  <div class="meta">4 model &nbsp; 8 aspek &nbsp; 3 domain &nbsp; 19.116 instance latih</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -293,7 +318,7 @@ def set_example(text):
     st.session_state["hasil_terakhir"] = None
 
 
-st.markdown("<h2 class='sec'>Coba contoh</h2>", unsafe_allow_html=True)
+st.markdown("<div class='sec'>Contoh</div>", unsafe_allow_html=True)
 cols = st.columns(2)
 for i, c in enumerate(CONTOH):
     with cols[i % 2]:
@@ -307,32 +332,31 @@ teks = st.text_area("Teks ulasan", key="teks", height=110,
                     placeholder="Tulis ulasan apa saja, atau klik contoh di atas…",
                     label_visibility="collapsed")
 
-kiri, tengah, kanan = st.columns([1.4, 1, 1.4])
+kiri, tengah, kanan = st.columns([1.5, 1, 1.5])
 with tengah:
-    klik = st.button("⚡  Analisa Sekarang", use_container_width=True)
+    klik = st.button("Analisa", type="primary", use_container_width=True)
 
 if klik:
     if not teks.strip():
         st.warning("Tulis ulasan dulu, atau klik salah satu contoh.")
     else:
-        with st.spinner("4 model sedang bertanding…"):
+        with st.spinner("Empat model sedang memproses…"):
             st.session_state["hasil_terakhir"] = pipeline(teks)
 
 simpan = st.session_state.get("hasil_terakhir")
 
-st.markdown("<h2 class='sec'>Papan peringkat</h2>", unsafe_allow_html=True)
+st.markdown("<div class='sec'>Hasil</div>", unsafe_allow_html=True)
 
 if simpan is None:
     st.markdown("""
     <div class="empty">
-      <div class="big">🏟️</div>
-      Hasil pertandingan 4 model akan muncul di sini.<br>
-      <span style="font-size:0.85rem;">1 teks → aspek → 4 prediksi diperingkat per keyakinan.</span>
+      Hasil perbandingan empat model akan muncul di sini setelah analisa.
     </div>""", unsafe_allow_html=True)
 else:
     for row in simpan:
-        st.markdown(kartu_arena(row), unsafe_allow_html=True)
+        st.markdown(kartu(row), unsafe_allow_html=True)
 
-st.markdown("<div style='margin-top:1.8rem'></div>", unsafe_allow_html=True)
-st.caption("Semua model dilatih pada data augmented · Macro-F1: mBERT 0,671 · Transformer 0,613 · "
-           "TF-IDF 0,609 · BiLSTM 0,595 · data: IndoHotelABSA + Tech ABSA + Tokopedia")
+st.markdown("<div style='margin-top:1.6rem'></div>", unsafe_allow_html=True)
+st.caption("Semua model dilatih pada data augmented. Macro-F1 test: mBERT 0,671, "
+           "Transformer 0,613, TF-IDF 0,609, BiLSTM 0,595. "
+           "Data: IndoHotelABSA, Tech ABSA, Tokopedia.")

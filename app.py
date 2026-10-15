@@ -132,11 +132,29 @@ st.caption("Model BIO menemukan aspek otomatis dari teks, lalu klasifikator mBER
            "memprediksi polaritasnya (negatif/netral/positif). "
            "Dilatih pada gabungan 3 dataset: hotel, teknologi, marketplace.")
 
-teks = st.text_area("Teks ulasan", height=100,
-                    placeholder="Tulis ulasan apa saja...")
+CONTOH = [
+    "Kamarnya bersih dan luas, pelayanan staff ramah banget. Tapi AC nya bocor dan sarapan hambar.",
+    "Ah sumpah jelek banget packagingnya, tapi untung barangnya bagus bangett",
+    "Pengiriman lama banget 2 minggu, admin seller gak respon respon.",
+    "Wifi kenceng, lokasi deket stasiun, cuma parkirnya sempit.",
+]
 
-if st.button("Analisis", type="primary") and teks.strip():
-    spans = detect_aspects(teks)
+def set_example(text):
+    # callback jalan SEBELUM widget dirender ulang — pola yang benar
+    st.session_state["teks"] = text
+
+st.caption("Contoh — klik untuk mencoba:")
+for i, c in enumerate(CONTOH):
+    st.button(c[:70] + ("…" if len(c) > 70 else ""), key=f"ex{i}",
+              on_click=set_example, args=(c,))
+
+teks = st.text_area("Teks ulasan", key="teks", height=100,
+                    placeholder="Tulis ulasan apa saja, atau klik contoh di atas...")
+
+if teks.strip():
+    with st.spinner("Menganalisis..."):
+        spans = detect_aspects(teks)
+        hasil = pipeline(teks)
     st.subheader("Aspek terdeteksi (model BIO)")
     st.write(", ".join(spans) if spans else
              "(tidak ada aspek terdeteksi — fallback ke Umum)")
@@ -145,19 +163,6 @@ if st.button("Analisis", type="primary") and teks.strip():
     st.dataframe(
         [{"Span": h["span"] or "-", "Kategori": h["kategori"],
           "Polaritas": h["polaritas"], "Confidence": h["confidence"]}
-         for h in pipeline(teks)],
+         for h in hasil],
         use_container_width=True, hide_index=True,
     )
-
-st.divider()
-st.caption("Contoh — klik untuk mencoba:")
-for c in ["Kamarnya bersih dan luas, pelayanan staff ramah banget. Tapi AC nya bocor dan sarapan hambar.",
-          "Ah sumpah jelek banget packagingnya, tapi untung barangnya bagus bangett",
-          "Pengiriman lama banget 2 minggu, admin seller gak respon respon.",
-          "Wifi kenceng, lokasi deket stasiun, cuma parkirnya sempit."]:
-    if st.button(c, key=c[:20]):
-        st.session_state["isi"] = c
-        st.rerun()
-
-if st.session_state.get("isi"):
-    st.session_state.setdefault("_tmp", None)

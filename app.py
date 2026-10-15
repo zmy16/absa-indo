@@ -61,6 +61,15 @@ button[kind="primary"]:active { transform: translateY(1px); }
 .mval span { color: var(--mut); }
 .note { margin-top: 0.7rem; font-size: 0.8rem; color: #d9b06c; border-top: 1px solid var(--line); padding-top: 0.6rem; }
 .empty { border: 1px dashed var(--line); border-radius: 14px; padding: 2.4rem 1rem; text-align: center; color: var(--mut); margin-top: 1rem; font-size: 0.92rem; }
+.foot-wrap { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-top: 1.2rem; }
+.foot-col { padding: 0.9rem 1.1rem; }
+.foot-col + .foot-col { border-left: 1px solid var(--line); }
+.foot-h { font-size: 0.68rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mut); margin-bottom: 0.55rem; }
+.foot-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0.18rem 0; font-size: 0.8rem; color: var(--ink); }
+.foot-row span { color: var(--mut); }
+.foot-row b { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-weight: 600; font-size: 0.78rem; }
+.foot-note { color: #5d6575; font-size: 0.74rem; line-height: 1.5; margin: 0.9rem 0.15rem 2.5rem; }
+@media (max-width: 640px) { .foot-wrap { grid-template-columns: 1fr; } .foot-col + .foot-col { border-left: none; border-top: 1px solid var(--line); } }
 </style>""", unsafe_allow_html=True)
 
 # ------------------------------------------------------------
@@ -357,6 +366,31 @@ else:
         st.markdown(kartu(row), unsafe_allow_html=True)
 
 st.markdown("<div style='margin-top:1.6rem'></div>", unsafe_allow_html=True)
-st.caption("Semua model dilatih pada data augmented. Macro-F1 test: mBERT 0,671, "
-           "Transformer 0,613, TF-IDF 0,609, BiLSTM 0,595. "
-           "Data: IndoHotelABSA, Tech ABSA, Tokopedia.")
+
+st.markdown("""
+<div class="foot-wrap">
+  <div class="foot-col">
+    <div class="foot-h">Macro-F1 test (augmented)</div>
+    <div class="foot-row"><span>mBERT</span><b>0,671</b></div>
+    <div class="foot-row"><span>Transformer</span><b>0,613</b></div>
+    <div class="foot-row"><span>TF-IDF</span><b>0,609</b></div>
+    <div class="foot-row"><span>BiLSTM</span><b>0,595</b></div>
+  </div>
+  <div class="foot-col">
+    <div class="foot-h">Data latih</div>
+    <div class="foot-row"><span>IndoHotelABSA</span><b>8.107</b></div>
+    <div class="foot-row"><span>Tech ABSA</span><b>7.084</b></div>
+    <div class="foot-row"><span>Tokopedia</span><b>3.925</b></div>
+    <div class="foot-row"><span>Total instance</span><b>19.116</b></div>
+  </div>
+  <div class="foot-col">
+    <div class="foot-h">Sistem</div>
+    <div class="foot-row"><span>Deteksi aspek (BIO)</span><b>F1 0,684</b></div>
+    <div class="foot-row"><span>Aspek gabungan</span><b>8 kategori</b></div>
+    <div class="foot-row"><span>Polaritas</span><b>3 kelas</b></div>
+    <div class="foot-row"><span>Uji McNemar</span><b>p&lt;0,001</b></div>
+  </div>
+</div>
+<div class="foot-note">Skripsi: Optimasi Data Augmentation pada Aspect-Based Sentiment Analysis
+Ulasan Bahasa Indonesia Informal. Studi Komparatif TF-IDF, BiLSTM, Transformer, dan mBERT.</div>
+""", unsafe_allow_html=True)

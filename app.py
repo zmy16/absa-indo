@@ -1,8 +1,13 @@
 # ============================================================
-# ABSA Bahasa Indonesia — Streamlit Web
-# Teks bebas -> BIO (deteksi aspek) -> klasifikasi (polaritas)
+# ABSA Bahasa Indonesia — Perbandingan 4 Model
+# TF-IDF · BiLSTM · Transformer · mBERT
 # ============================================================
+# Teks bebas -> BIO menemukan aspek -> 4 model memprediksi polaritas
+# per aspek, ditampilkan berdampingan (studi komparatif).
+import json
 import re
+import sys
+from pathlib import Path
 
 import streamlit as st
 import torch
@@ -12,6 +17,12 @@ from transformers import AutoTokenizer
 
 st.set_page_config(page_title="ABSA Bahasa Indonesia", page_icon="📊",
                    layout="centered")
+
+# kode model (arsitektur) dari repo
+sys.path.insert(0, str(Path(__file__).parent / "model_code"))
+from neural import BiLSTMClassifier, TransformerClassifier  # noqa: E402
+from tfidf_centroid import TfidfCentroid  # noqa: E402
+import vocab as vocab_mod  # noqa: E402
 
 # ------------------------------------------------------------
 # Tampilan
@@ -35,12 +46,21 @@ st.markdown("""
   .card .kategori { font-weight: 700; font-size: 1.02rem; }
   .card .span-txt { color: #9aa3af; font-size: 0.85rem; margin-top: 0.25rem; }
   .badge {
-      padding: 0.15rem 0.65rem; border-radius: 999px; font-size: 0.78rem;
-      font-weight: 700; letter-spacing: 0.4px;
+      padding: 0.12rem 0.55rem; border-radius: 999px; font-size: 0.72rem;
+      font-weight: 700; letter-spacing: 0.3px; margin-left: 0.3rem;
   }
-  .conf-track { background: #232c3b; border-radius: 999px; height: 7px; margin-top: 0.6rem; }
-  .conf-bar { height: 7px; border-radius: 999px; }
-  .conf-label { color: #9aa3af; font-size: 0.75rem; margin-top: 0.3rem; }
+  .models { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.7rem; }
+  .model-box {
+      flex: 1 1 40%; background: #10151d; border: 1px solid #232c3b;
+      border-radius: 9px; padding: 0.5rem 0.7rem;
+  }
+  .model-name { color: #9aa3af; font-size: 0.72rem; letter-spacing: 0.4px; }
+  .model-pol { font-weight: 700; font-size: 0.95rem; }
+  .disagree {
+      margin-top: 0.6rem; font-size: 0.8rem; color: #fbbf24;
+      background: #fbbf2415; border: 1px solid #fbbf2444;
+      border-radius: 8px; padding: 0.4rem 0.7rem;
+  }
   .stTextArea textarea { font-size: 1rem; }
   div.stButton > button {
       height: 2.9rem; font-size: 1.05rem; font-weight: 700;
@@ -49,28 +69,72 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# ------------------------------------------------------------
+# Repo HF Hub
+# ------------------------------------------------------------
 BIO_REPO = "zmuhammadrr/absa-bio-mbert-int8"
 CLS_REPO = "zmuhammadrr/absa-klasifikasi-mbert-int8"
 BIO_TOK_REPO = "zmuhammadrr/absa-bio-mbert"
 CLS_TOK_REPO = "zmuhammadrr/absa-klasifikasi-mbert"
+BILSTM_REPO = "zmuhammadrr/absa-bilstm-aug"
+TRANSFORMER_REPO = "zmuhammadrr/absa-transformer-aug"
+TFIDF_REPO = "zmuhammadrr/absa-tfidf-aug"
 
 BIO_LABELS = ["O", "B-ASP", "I-ASP", "B-POS", "I-POS", "B-NEG", "I-NEG"]
 CLS_LABELS = ["negatif", "netral", "positif"]
 WARNA = {"negatif": "#f87171", "netral": "#fbbf24", "positif": "#4ade80"}
+MODELS = ["TF-IDF", "BiLSTM", "Transformer", "mBERT"]
 
 
-@st.cache_resource(show_spinner="Memuat model (sekali, ~20 detik)...")
+@st.cache_resource(show_spinner="Memuat 4 model (sekali, ~40 detik)...")
 def load_models():
-    bio_model = torch.load(hf_hub_download(BIO_REPO, "model_int8.pt"),
-                           map_location="cpu", weights_only=False).eval()
-    cls_model = torch.load(hf_hub_download(CLS_REPO, "model_int8.pt"),
-                           map_location="cpu", weights_only=False).eval()
+    # --- BIO (penemu aspek) ---
+    bio = torch.load(hf_hub_download(BIO_REPO, "model_int8.pt"),
+                     map_location="cpu", weights_only=False).eval()
     bio_tok = AutoTokenizer.from_pretrained(BIO_TOK_REPO)
+
+    # --- mBERT klasifikasi (int8) ---
+    cls = torch.load(hf_hub_download(CLS_REPO, "model_int8.pt"),
+                     map_location="cpu", weights_only=False).eval()
     cls_tok = AutoTokenizer.from_pretrained(CLS_TOK_REPO)
-    return bio_model, bio_tok, cls_model, cls_tok
+
+    # --- BiLSTM ---
+    cfg = json.loads(hf_hub_download(BILSTM_REPO, "config.json"))
+    v = vocab_mod.Vocab.load(hf_hub_download(BILSTM_REPO, "vocab_augmented.json"))
+    bilstm = BiLSTMClassifier(vocab_size=len(v), num_classes=cfg["num_classes"],
+                              embed_dim=cfg["embed_dim"], hidden_dim=cfg["hidden_dim"],
+                              num_layers=cfg["num_layers"], dropout=cfg["dropout"],
+                              pad_id=0, pooling=cfg["pooling"])
+    bilstm.load_state_dict(torch.load(
+        hf_hub_download(BILSTM_REPO, "model_augmented.pt"),
+        map_location="cpu", weights_only=True))
+    bilstm.eval()
+
+    # --- Transformer ---
+    cfg_t = json.loads(hf_hub_download(TRANSFORMER_REPO, "config.json"))
+    v_t = vocab_mod.Vocab.load(hf_hub_download(TRANSFORMER_REPO, "vocab_augmented.json"))
+    trans = TransformerClassifier(vocab_size=len(v_t), num_classes=cfg_t["num_classes"],
+                                  embed_dim=cfg_t["embed_dim"], num_heads=cfg_t["num_heads"],
+                                  num_layers=cfg_t["num_layers"], ff_dim=cfg_t["ff_dim"],
+                                  max_len=cfg_t["max_len"], dropout=cfg_t["dropout"],
+                                  pad_id=0, pooling=cfg_t["pooling"])
+    trans.load_state_dict(torch.load(
+        hf_hub_download(TRANSFORMER_REPO, "model_augmented.pt"),
+        map_location="cpu", weights_only=True))
+    trans.eval()
+
+    # --- TF-IDF ---
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        for f in ["vectorizer.joblib", "centroids.npy", "config.json"]:
+            Path(td, f).write_bytes(hf_hub_download(TFIDF_REPO, f))
+        tfidf = TfidfCentroid.load(Path(td))
+
+    return bio, bio_tok, cls, cls_tok, (bilstm, v, cfg), (trans, v_t, cfg_t), tfidf
 
 
-bio_model, bio_tokenizer, cls_model, cls_tokenizer = load_models()
+(bio_model, bio_tokenizer, cls_model, cls_tokenizer,
+ (bilstm, bilstm_vocab, bilstm_cfg), (transf, trans_vocab, trans_cfg), tfidf) = load_models()
 
 # ------------------------------------------------------------
 # Pipeline
@@ -133,49 +197,80 @@ def span_to_category(span):
 
 
 @torch.no_grad()
-def classify(text, category):
-    inp = cls_tokenizer(f"{text} [ASPECT] {category}", truncation=True,
-                        max_length=256, return_tensors="pt")
-    prob = F.softmax(cls_model(**inp).logits, -1)[0]
-    i = int(prob.argmax())
-    return CLS_LABELS[i], float(prob[i])
+def predict_all(text, category):
+    """Input gabungan -> polaritas dari 4 model: {model: (polaritas, conf)"""
+    inp_text = f"{text} [ASPECT] {category}"
+    hasil = {}
+
+    # TF-IDF
+    scores = tfidf.decision_scores([inp_text])[0]
+    probs_t = F.softmax(torch.tensor(scores), -1)
+    i = int(probs_t.argmax())
+    hasil["TF-IDF"] = (tfidf.classes_[i], float(probs_t[i]))
+
+    # BiLSTM & Transformer (vocab + padding sama seperti train.py)
+    import numpy as np
+    for name, net, voc, cfg in [("BiLSTM", bilstm, bilstm_vocab, bilstm_cfg),
+                                ("Transformer", transf, trans_vocab, trans_cfg)]:
+        ids = voc.encode_text(inp_text)[: cfg["max_len"]]
+        arr = np.full((1, max(1, len(ids))), 0, dtype=np.int64)
+        arr[0, : len(ids)] = ids
+        logits = net(torch.from_numpy(arr))[0]
+        probs = F.softmax(logits, -1)
+        j = int(probs.argmax())
+        hasil[name] = (CLS_LABELS[j], float(probs[j]))
+
+    # mBERT (int8)
+    enc = cls_tokenizer(inp_text, truncation=True, max_length=256, return_tensors="pt")
+    probs_m = F.softmax(cls_model(**enc).logits, -1)[0]
+    k = int(probs_m.argmax())
+    hasil["mBERT"] = (CLS_LABELS[k], float(probs_m[k]))
+
+    return hasil
 
 
 def pipeline(text):
     spans = detect_aspects(text)
     if not spans:
-        pol, conf = classify(text, "Umum")
-        return [{"span": None, "kategori": "Umum", "polaritas": pol,
-                 "confidence": round(conf, 3)}]
-    hasil = []
-    for span in spans:
-        cat = span_to_category(span)
-        pol, conf = classify(text, cat)
-        hasil.append({"span": span, "kategori": cat, "polaritas": pol,
-                      "confidence": round(conf, 3)})
-    best = {}
-    for h in hasil:
-        if h["kategori"] not in best or h["confidence"] > best[h["kategori"]]["confidence"]:
-            best[h["kategori"]] = h
-    return list(best.values())
+        kategori = ["Umum"]
+        sumber = {None: "Umum"}
+    else:
+        sumber = {}
+        for s in spans:
+            sumber.setdefault(span_to_category(s), s)
+        kategori = list(sumber.keys())
+    return [{"kategori": k, "span": sumber[k], "prediksi": predict_all(text, k)}
+            for k in kategori]
 
 
 # ------------------------------------------------------------
 # Komponen
 # ------------------------------------------------------------
-def kartu_hasil(h):
-    w = WARNA[h["polaritas"]]
-    span = h["span"] or "—"
-    pct = int(h["confidence"] * 100)
+def kartu_hasil(row):
+    preds = row["prediksi"]
+    setuju = len({p for p, _ in preds.values()}) == 1
+    boxes = "".join(
+        f"""<div class="model-box">
+              <div class="model-name">{m.upper()}</div>
+              <div class="model-pol" style="color:{WARNA[p]};">{p.upper()}
+                <span style="color:#9aa3af;font-weight:400;font-size:0.72rem;">{int(c*100)}%</span>
+              </div>
+            </div>"""
+        for m, (p, c) in preds.items())
+    cat = row["kategori"]
+    span = row["span"]
+    span_txt = f'span: &ldquo;{span}&rdquo;' if span else "fallback (tidak ada aspek terdeteksi)"
+    cat_badge = f'<span class="badge" style="background:#5b9dff22;color:#5b9dff;border:1px solid #5b9dff66;">{cat}</span>'
+    disagree = ""
+    if not setuju:
+        disagree = ('<div class="disagree">⚠ Model tidak sepakat — '
+                    'menarik untuk analisis komparatif.</div>')
     return f"""
     <div class="card">
-      <div class="row1">
-        <span class="kategori">{h['kategori']}</span>
-        <span class="badge" style="background:{w}22;color:{w};border:1px solid {w}66;">{h['polaritas'].upper()}</span>
-      </div>
-      <div class="span-txt">span terdeteksi: &ldquo;{span}&rdquo;</div>
-      <div class="conf-track"><div class="conf-bar" style="width:{pct}%;background:{w};"></div></div>
-      <div class="conf-label">confidence {pct}%</div>
+      <div class="row1">{cat_badge}</div>
+      <div class="span-txt">{span_txt}</div>
+      <div class="models">{boxes}</div>
+      {disagree}
     </div>"""
 
 
@@ -194,15 +289,15 @@ if "hasil_terakhir" not in st.session_state:
 
 st.markdown("# ABSA Bahasa Indonesia")
 st.markdown(
-    "<div class='sub'>Ketik ulasan apa saja — model <b>BIO</b> menemukan aspeknya otomatis, "
-    "lalu klasifikator <b>mBERT</b> memprediksi polaritasnya (negatif / netral / positif). "
-    "Dilatih pada gabungan 3 dataset: hotel, teknologi, marketplace.</div>",
+    "<div class='sub'>Ketik ulasan apa saja — model <b>BIO</b> menemukan aspeknya, "
+    "lalu <b>4 model</b> (TF-IDF, BiLSTM, Transformer, mBERT) memprediksi polaritasnya "
+    "berdampingan. Studi komparatif pada ulasan informal bahasa Indonesia.</div>",
     unsafe_allow_html=True)
 
 
 def set_example(text):
     st.session_state["teks"] = text
-    st.session_state["hasil_terakhir"] = None  # hasil lama tidak relevan lagi
+    st.session_state["hasil_terakhir"] = None
 
 
 st.caption("💡 Coba contoh:")
@@ -225,46 +320,23 @@ if klik:
     if not teks.strip():
         st.warning("Tulis ulasan dulu, atau klik salah satu contoh di atas.")
     else:
-        with st.spinner("Model sedang membaca ulasan…"):
-            spans = detect_aspects(teks)
-            hasil = pipeline(teks)
-        st.session_state["hasil_terakhir"] = {"spans": spans, "hasil": hasil}
+        with st.spinner("4 model sedang membaca ulasan…"):
+            st.session_state["hasil_terakhir"] = pipeline(teks)
 
-# ------------------------------------------------------------
-# Render hasil (persist sampai contoh baru diklik)
-# ------------------------------------------------------------
 simpan = st.session_state.get("hasil_terakhir")
 
 if simpan is None:
     st.markdown("""
     <div class="card" style="text-align:center;color:#9aa3af;padding:2rem 1rem;">
-      Hasil analisis akan muncul di sini.<br>
-      <span style="font-size:0.85rem;">1 teks &rarr; beberapa aspek &rarr; polaritas masing-masing.</span>
+      Hasil perbandingan 4 model akan muncul di sini.<br>
+      <span style="font-size:0.85rem;">1 teks &rarr; aspek &rarr; polaritas dari tiap model.</span>
     </div>""", unsafe_allow_html=True)
 else:
-    spans, hasil = simpan["spans"], simpan["hasil"]
-
-    n = {"negatif": 0, "netral": 0, "positif": 0}
-    for h in hasil:
-        n[h["polaritas"]] += 1
-    ringkas = " &nbsp;·&nbsp; ".join(
-        f"<span style='color:{WARNA[p]};font-weight:600;'>{v} {p}</span>"
-        for p, v in n.items() if v)
-
-    st.markdown(f"**Aspek terdeteksi ({len(spans)})**")
-    if spans:
-        st.markdown("".join(f"<span class='chip'>{s}</span>" for s in spans),
-                    unsafe_allow_html=True)
-    else:
-        st.markdown("<span class='chip'>tidak ada — fallback ke Umum</span>",
-                    unsafe_allow_html=True)
-
-    st.markdown(f"<div style='margin-top:1.2rem;margin-bottom:-0.4rem'>"
-                f"<b>Hasil</b> &nbsp;·&nbsp; {ringkas}</div>",
-                unsafe_allow_html=True)
-    for h in hasil:
-        st.markdown(kartu_hasil(h), unsafe_allow_html=True)
+    st.markdown(f"**{len(simpan)} aspek terdeteksi**")
+    for row in simpan:
+        st.markdown(kartu_hasil(row), unsafe_allow_html=True)
 
 st.markdown("<div style='margin-top:2rem'></div>", unsafe_allow_html=True)
-st.caption("mBERT BIO span F1 0,684 · klasifikasi Macro-F1 0,671 · "
-           "data: IndoHotelABSA + Tech ABSA + Tokopedia (19.116 instance)")
+st.caption("Semua model dilatih pada data augmented · mBERT Macro-F1 0,671 · "
+           "BiLSTM 0,595 · Transformer 0,613 · TF-IDF 0,609 · "
+           "data: IndoHotelABSA + Tech ABSA + Tokopedia")

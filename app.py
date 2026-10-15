@@ -7,6 +7,7 @@
 import json
 import re
 import sys
+import urllib.request
 from pathlib import Path
 
 import streamlit as st
@@ -86,6 +87,15 @@ WARNA = {"negatif": "#f87171", "netral": "#fbbf24", "positif": "#4ade80"}
 MODELS = ["TF-IDF", "BiLSTM", "Transformer", "mBERT"]
 
 
+def baca_teks_hub(repo: str, fname: str) -> str:
+    """Baca file kecil langsung dari Hub (tanpa cache hf_hub).
+    Cache hf_hub_download di container pernah menyimpan salinan kosong
+    sehingga json.loads gagal — direct HTTP menghindarinya."""
+    url = f"https://huggingface.co/{repo}/resolve/main/{fname}"
+    with urllib.request.urlopen(url, timeout=30) as r:
+        return r.read().decode("utf-8")
+
+
 @st.cache_resource(show_spinner="Memuat 4 model (sekali, ~40 detik)...")
 def load_models():
     # --- BIO (penemu aspek) ---
@@ -99,8 +109,8 @@ def load_models():
     cls_tok = AutoTokenizer.from_pretrained(CLS_TOK_REPO)
 
     # --- BiLSTM ---
-    cfg = json.loads(hf_hub_download(BILSTM_REPO, "config.json"))
-    v = vocab_mod.Vocab.load(hf_hub_download(BILSTM_REPO, "vocab_augmented.json"))
+    cfg = json.loads(baca_teks_hub(BILSTM_REPO, "config.json"))
+    v = vocab_mod.Vocab(json.loads(baca_teks_hub(BILSTM_REPO, "vocab_augmented.json"))["token_to_id"])
     bilstm = BiLSTMClassifier(vocab_size=len(v), num_classes=cfg["num_classes"],
                               embed_dim=cfg["embed_dim"], hidden_dim=cfg["hidden_dim"],
                               num_layers=cfg["num_layers"], dropout=cfg["dropout"],
@@ -111,8 +121,8 @@ def load_models():
     bilstm.eval()
 
     # --- Transformer ---
-    cfg_t = json.loads(hf_hub_download(TRANSFORMER_REPO, "config.json"))
-    v_t = vocab_mod.Vocab.load(hf_hub_download(TRANSFORMER_REPO, "vocab_augmented.json"))
+    cfg_t = json.loads(baca_teks_hub(TRANSFORMER_REPO, "config.json"))
+    v_t = vocab_mod.Vocab(json.loads(baca_teks_hub(TRANSFORMER_REPO, "vocab_augmented.json"))["token_to_id"])
     trans = TransformerClassifier(vocab_size=len(v_t), num_classes=cfg_t["num_classes"],
                                   embed_dim=cfg_t["embed_dim"], num_heads=cfg_t["num_heads"],
                                   num_layers=cfg_t["num_layers"], ff_dim=cfg_t["ff_dim"],

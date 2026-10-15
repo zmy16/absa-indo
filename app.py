@@ -96,6 +96,12 @@ def baca_teks_hub(repo: str, fname: str) -> str:
         return r.read().decode("utf-8")
 
 
+def baca_bytes_hub(repo: str, fname: str) -> bytes:
+    url = f"https://huggingface.co/{repo}/resolve/main/{fname}"
+    with urllib.request.urlopen(url, timeout=60) as r:
+        return r.read()
+
+
 @st.cache_resource(show_spinner="Memuat 4 model (sekali, ~40 detik)...")
 def load_models():
     # --- BIO (penemu aspek) ---
@@ -133,11 +139,11 @@ def load_models():
         map_location="cpu", weights_only=True))
     trans.eval()
 
-    # --- TF-IDF ---
+    # --- TF-IDF (file kecil, langsung HTTP — hindari cache rusak) ---
     import tempfile
     with tempfile.TemporaryDirectory() as td:
         for f in ["vectorizer.joblib", "centroids.npy", "config.json"]:
-            Path(td, f).write_bytes(hf_hub_download(TFIDF_REPO, f))
+            Path(td, f).write_bytes(baca_bytes_hub(TFIDF_REPO, f))
         tfidf = TfidfCentroid.load(Path(td))
 
     return bio, bio_tok, cls, cls_tok, (bilstm, v, cfg), (trans, v_t, cfg_t), tfidf

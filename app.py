@@ -1,9 +1,8 @@
 # ============================================================
-# ABSA Bahasa Indonesia — Perbandingan 4 Model
+# ABSA Bahasa Indonesia — Model Arena
+# Teks bebas -> BIO (deteksi aspek) -> 4 model berlomba
 # TF-IDF · BiLSTM · Transformer · mBERT
 # ============================================================
-# Teks bebas -> BIO menemukan aspek -> 4 model memprediksi polaritas
-# per aspek, ditampilkan berdampingan (studi komparatif).
 import json
 import re
 import sys
@@ -17,57 +16,110 @@ import torch.nn.functional as F
 from huggingface_hub import hf_hub_download
 from transformers import AutoTokenizer
 
-st.set_page_config(page_title="ABSA Bahasa Indonesia", page_icon="📊",
-                   layout="centered")
+st.set_page_config(page_title="ABSA Bahasa Indonesia — Model Arena",
+                   page_icon="📊", layout="centered")
 
-# kode model (arsitektur) dari repo
 sys.path.insert(0, str(Path(__file__).parent / "model_code"))
 from neural import BiLSTMClassifier, TransformerClassifier  # noqa: E402
 from tfidf_centroid import TfidfCentroid  # noqa: E402
 import vocab as vocab_mod  # noqa: E402
 
 # ------------------------------------------------------------
-# Tampilan
+# Tema: dark editorial + gradient
 # ------------------------------------------------------------
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  .block-container { padding-top: 2.2rem; max-width: 46rem; }
-  #MainMenu, footer { visibility: hidden; }
-  h1 { font-size: 1.9rem !important; margin-bottom: 0 !important; }
-  .sub { color: #9aa3af; font-size: 0.95rem; margin-bottom: 1.4rem; }
-  .chip {
-      display: inline-block; padding: 0.25rem 0.75rem; margin: 0.15rem 0.2rem;
-      background: #1d2530; border: 1px solid #2c3848; border-radius: 999px;
-      font-size: 0.9rem;
+  :root { --bg:#0a0d14; --panel:#121722; --line:#202a3c; --ink:#e8ecf4; --mut:#8b94a7; }
+  .stApp { background: var(--bg); }
+  .block-container { padding-top: 0 !important; max-width: 47rem; }
+  #MainMenu, header, footer { visibility: hidden; }
+
+  /* ---- HERO ---- */
+  .hero {
+      background: linear-gradient(135deg,#1b2440 0%,#3b2a6d 55%,#6d2a5c 100%);
+      border-radius: 0 0 22px 22px; padding: 2.4rem 2.2rem 2rem;
+      margin: 0 -5rem 1.4rem -5rem; position: relative; overflow: hidden;
   }
-  .card {
-      background: #161b24; border-radius: 12px; padding: 0.9rem 1.1rem;
-      margin: 0.55rem 0; border: 1px solid #232c3b;
+  .hero::after {
+      content:""; position:absolute; inset:0;
+      background: radial-gradient(600px 200px at 85% -20%, #ffffff22, transparent 60%);
   }
-  .card .row1 { display: flex; justify-content: space-between; align-items: center; }
-  .card .kategori { font-weight: 700; font-size: 1.02rem; }
-  .card .span-txt { color: #9aa3af; font-size: 0.85rem; margin-top: 0.25rem; }
-  .badge {
-      padding: 0.12rem 0.55rem; border-radius: 999px; font-size: 0.72rem;
-      font-weight: 700; letter-spacing: 0.3px; margin-left: 0.3rem;
+  .hero h1 { font-family:'Sora',sans-serif; font-weight:800; font-size:2.1rem;
+             color:#fff; margin:0; letter-spacing:-0.5px; }
+  .hero p  { color:#c9c4e8; font-size:0.97rem; margin:0.7rem 0 0; max-width:38rem; }
+  .hero .tag {
+      display:inline-block; font-family:'JetBrains Mono',monospace; font-size:0.66rem;
+      letter-spacing:2px; color:#a5f3d0; background:#0e3b2e88; border:1px solid #2dd4a055;
+      padding:0.2rem 0.7rem; border-radius:999px; margin-bottom:0.9rem;
   }
-  .models { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.7rem; }
-  .model-box {
-      flex: 1 1 40%; background: #10151d; border: 1px solid #232c3b;
-      border-radius: 9px; padding: 0.5rem 0.7rem;
+  .strip { display:flex; gap:1.8rem; margin-top:1.3rem; position:relative; z-index:1; }
+  .strip b { font-family:'Sora'; font-size:1.25rem; color:#fff; display:block; line-height:1.1; }
+  .strip span { color:#b9b3d9; font-size:0.7rem; letter-spacing:1.5px; }
+
+  h2.sec { font-family:'Sora'; font-size:0.78rem; letter-spacing:2.5px; color:var(--mut);
+           text-transform:uppercase; margin:1.5rem 0 0.7rem; }
+
+  /* ---- contoh pills ---- */
+  .pill button {
+      width:100%; text-align:left; background:var(--panel); color:var(--ink);
+      border:1px solid var(--line); border-radius:12px; padding:0.6rem 0.9rem;
+      font-size:0.87rem; line-height:1.35;
+      transition: border-color .15s, transform .15s;
   }
-  .model-name { color: #9aa3af; font-size: 0.72rem; letter-spacing: 0.4px; }
-  .model-pol { font-weight: 700; font-size: 0.95rem; }
-  .disagree {
-      margin-top: 0.6rem; font-size: 0.8rem; color: #fbbf24;
-      background: #fbbf2415; border: 1px solid #fbbf2444;
-      border-radius: 8px; padding: 0.4rem 0.7rem;
+  .pill button:hover { border-color:#7c6cf0; transform: translateY(-1px); }
+  .pill button p { margin:0; }
+
+  /* ---- textarea + tombol ---- */
+  .stTextArea textarea {
+      background:var(--panel); border:1px solid var(--line); border-radius:14px;
+      font-size:1.02rem; color:var(--ink);
   }
-  .stTextArea textarea { font-size: 1rem; }
+  .stTextArea textarea:focus { border-color:#7c6cf0; box-shadow:0 0 0 3px #7c6cf028; }
   div.stButton > button {
-      height: 2.9rem; font-size: 1.05rem; font-weight: 700;
-      border-radius: 10px;
+      width:100%; height:3.1rem; font-family:'Sora'; font-weight:800; font-size:1.03rem;
+      color:#fff; background:linear-gradient(90deg,#6d5df0,#a55eea);
+      border:none; border-radius:13px; letter-spacing:0.3px;
+      transition: filter .15s, transform .15s;
   }
+  div.stButton > button:hover { filter:brightness(1.12); transform:translateY(-1px); }
+
+  /* ---- kartu arena ---- */
+  .card {
+      background:var(--panel); border:1px solid var(--line); border-radius:16px;
+      padding:1.05rem 1.15rem; margin:0.8rem 0;
+  }
+  .card .head { display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
+  .cat { font-family:'Sora'; font-weight:800; font-size:1.04rem; color:#fff; }
+  .spanq {
+      font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#9fe8c8;
+      background:#0e3b2e66; border:1px solid #2dd4a033; padding:0.12rem 0.55rem;
+      border-radius:999px;
+  }
+  .consensus { margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:0.68rem;
+               padding:0.18rem 0.6rem; border-radius:999px; letter-spacing:0.5px; }
+
+  .arena { margin-top:0.85rem; display:flex; flex-direction:column; gap:0.55rem; }
+  .mrow { display:grid; grid-template-columns: 8.6rem 1fr 5rem; gap:0.7rem; align-items:center; }
+  .mname { font-family:'JetBrains Mono',monospace; font-size:0.73rem; color:var(--mut);
+           display:flex; align-items:center; gap:0.3rem; }
+  .mname .medal { font-size:0.82rem; }
+  .track { background:#0d1220; border-radius:999px; height:14px; overflow:hidden;
+           border:1px solid #1a2334; }
+  .fill { height:100%; border-radius:999px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+  .mval { font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:700; text-align:right; }
+  .mval small { color:var(--mut); font-weight:500; }
+
+  .note { margin-top:0.75rem; font-size:0.8rem; color:#fbbf24; background:#fbbf2412;
+          border:1px solid #fbbf2433; border-radius:10px; padding:0.5rem 0.75rem; }
+
+  .empty {
+      border:1px dashed #2a3550; border-radius:16px; padding:2.6rem 1rem;
+      text-align:center; color:var(--mut); margin-top:1.4rem;
+  }
+  .empty .big { font-size:1.9rem; margin-bottom:0.4rem; }
+
+  ::selection { background:#7c6cf066; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -85,7 +137,7 @@ TFIDF_REPO = "zmuhammadrr/absa-tfidf-aug"
 BIO_LABELS = ["O", "B-ASP", "I-ASP", "B-POS", "I-POS", "B-NEG", "I-NEG"]
 CLS_LABELS = ["negatif", "netral", "positif"]
 WARNA = {"negatif": "#f87171", "netral": "#fbbf24", "positif": "#4ade80"}
-MODELS = ["TF-IDF", "BiLSTM", "Transformer", "mBERT"]
+MEDALI = {0: "🥇", 1: "🥈", 2: "🥉", 3: " ·"}
 
 
 def baca_teks_hub(repo: str, fname: str) -> str:
@@ -214,7 +266,7 @@ def span_to_category(span):
 
 @torch.no_grad()
 def predict_all(text, category):
-    """Input gabungan -> polaritas dari 4 model: {model: (polaritas, conf)"""
+    """Input gabungan -> polaritas dari 4 model: {model: (polaritas, conf)}"""
     inp_text = f"{text} [ASPECT] {category}"
     hasil = {}
 
@@ -248,45 +300,55 @@ def predict_all(text, category):
 def pipeline(text):
     spans = detect_aspects(text)
     if not spans:
-        kategori = ["Umum"]
-        sumber = {None: "Umum"}
-    else:
-        sumber = {}
-        for s in spans:
-            sumber.setdefault(span_to_category(s), s)
-        kategori = list(sumber.keys())
+        return [{"kategori": "Umum", "span": None, "prediksi": predict_all(text, "Umum")}]
+    sumber = {}
+    for s in spans:
+        sumber.setdefault(span_to_category(s), s)
     return [{"kategori": k, "span": sumber[k], "prediksi": predict_all(text, k)}
-            for k in kategori]
+            for k in sumber]
 
 
 # ------------------------------------------------------------
-# Komponen
+# Komponen tampilan
 # ------------------------------------------------------------
-def kartu_hasil(row):
+def kartu_arena(row):
     preds = row["prediksi"]
+    urut = sorted(preds.items(), key=lambda kv: -kv[1][1])  # conf tertinggi dulu
     setuju = len({p for p, _ in preds.values()}) == 1
-    boxes = "".join(
-        f"""<div class="model-box">
-              <div class="model-name">{m.upper()}</div>
-              <div class="model-pol" style="color:{WARNA[p]};">{p.upper()}
-                <span style="color:#9aa3af;font-weight:400;font-size:0.72rem;">{int(c*100)}%</span>
-              </div>
-            </div>"""
-        for m, (p, c) in preds.items())
-    cat = row["kategori"]
+
+    baris = ""
+    for rank, (nama, (pol, conf)) in enumerate(urut):
+        w = WARNA[pol]
+        pct = int(conf * 100)
+        baris += f"""
+        <div class="mrow">
+          <div class="mname"><span class="medal">{MEDALI[rank]}</span>{nama.upper()}</div>
+          <div class="track"><div class="fill" style="width:{pct}%;background:{w};opacity:{1 - rank * 0.16};"></div></div>
+          <div class="mval" style="color:{w};">{pct}%<small> {pol}</small></div>
+        </div>"""
+
     span = row["span"]
-    span_txt = f'span: &ldquo;{span}&rdquo;' if span else "fallback (tidak ada aspek terdeteksi)"
-    cat_badge = f'<span class="badge" style="background:#5b9dff22;color:#5b9dff;border:1px solid #5b9dff66;">{cat}</span>'
-    disagree = ""
-    if not setuju:
-        disagree = ('<div class="disagree">⚠ Model tidak sepakat — '
-                    'menarik untuk analisis komparatif.</div>')
+    spanq = (f'<span class="spanq">&ldquo;{span}&rdquo;</span>' if span
+             else '<span class="spanq" style="color:#8b94a7;background:#1a2130aa;border-color:#2a3550;">fallback</span>')
+    if setuju:
+        cons = (f'<span class="consensus" style="color:#4ade80;background:#4ade8015;'
+                f'border:1px solid #4ade8044;">KONSENSUS 4/4</span>')
+    else:
+        n_bed = len({p for p, _ in preds.values()})
+        cons = (f'<span class="consensus" style="color:#fbbf24;background:#fbbf2415;'
+                f'border:1px solid #fbbf2444;">TERPISAH {n_bed}/4</span>')
+    note = "" if setuju else ('<div class="note">⚠ Model tidak sepakat — span ini menarik '
+                              'untuk analisis komparatif.</div>')
+
     return f"""
     <div class="card">
-      <div class="row1">{cat_badge}</div>
-      <div class="span-txt">{span_txt}</div>
-      <div class="models">{boxes}</div>
-      {disagree}
+      <div class="head">
+        <span class="cat">{row['kategori']}</span>
+        {spanq}
+        {cons}
+      </div>
+      <div class="arena">{baris}</div>
+      {note}
     </div>"""
 
 
@@ -303,12 +365,21 @@ CONTOH = [
 if "hasil_terakhir" not in st.session_state:
     st.session_state["hasil_terakhir"] = None
 
-st.markdown("# ABSA Bahasa Indonesia")
-st.markdown(
-    "<div class='sub'>Ketik ulasan apa saja — model <b>BIO</b> menemukan aspeknya, "
-    "lalu <b>4 model</b> (TF-IDF, BiLSTM, Transformer, mBERT) memprediksi polaritasnya "
-    "berdampingan. Studi komparatif pada ulasan informal bahasa Indonesia.</div>",
-    unsafe_allow_html=True)
+# ---- HERO ----
+st.markdown("""
+<div class="hero">
+  <span class="tag">ASPECT-BASED SENTIMENT ANALYSIS · BAHASA INDONESIA</span>
+  <h1>Model Arena</h1>
+  <p>Ketik ulasan informal apa saja. Model <b>BIO</b> menemukan aspeknya secara otomatis —
+  lalu <b>4 model</b> bersaing memprediksi polaritasnya, peringkat berdasarkan keyakinan.</p>
+  <div class="strip">
+    <div class="st"><b>4</b><span>MODEL</span></div>
+    <div class="st"><b>8</b><span>ASPEK</span></div>
+    <div class="st"><b>3</b><span>DOMAIN</span></div>
+    <div class="st"><b>19.116</b><span>INSTANCE LATIH</span></div>
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
 
 def set_example(text):
@@ -316,43 +387,46 @@ def set_example(text):
     st.session_state["hasil_terakhir"] = None
 
 
-st.caption("💡 Coba contoh:")
+st.markdown("<h2 class='sec'>Coba contoh</h2>", unsafe_allow_html=True)
 cols = st.columns(2)
 for i, c in enumerate(CONTOH):
     with cols[i % 2]:
-        st.button(c[:52] + ("…" if len(c) > 52 else ""),
+        st.markdown("<div class='pill'>", unsafe_allow_html=True)
+        st.button(c[:56] + ("…" if len(c) > 56 else ""),
                   key=f"ex{i}", on_click=set_example, args=(c,),
                   use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 teks = st.text_area("Teks ulasan", key="teks", height=110,
                     placeholder="Tulis ulasan apa saja, atau klik contoh di atas…",
                     label_visibility="collapsed")
 
-kiri, tengah, kanan = st.columns([1.2, 1, 1.2])
+kiri, tengah, kanan = st.columns([1.4, 1, 1.4])
 with tengah:
-    klik = st.button("🔍  Analisa", type="primary", use_container_width=True)
+    klik = st.button("⚡  Analisa Sekarang", use_container_width=True)
 
 if klik:
     if not teks.strip():
-        st.warning("Tulis ulasan dulu, atau klik salah satu contoh di atas.")
+        st.warning("Tulis ulasan dulu, atau klik salah satu contoh.")
     else:
-        with st.spinner("4 model sedang membaca ulasan…"):
+        with st.spinner("4 model sedang bertanding…"):
             st.session_state["hasil_terakhir"] = pipeline(teks)
 
 simpan = st.session_state.get("hasil_terakhir")
 
+st.markdown("<h2 class='sec'>Papan peringkat</h2>", unsafe_allow_html=True)
+
 if simpan is None:
     st.markdown("""
-    <div class="card" style="text-align:center;color:#9aa3af;padding:2rem 1rem;">
-      Hasil perbandingan 4 model akan muncul di sini.<br>
-      <span style="font-size:0.85rem;">1 teks &rarr; aspek &rarr; polaritas dari tiap model.</span>
+    <div class="empty">
+      <div class="big">🏟️</div>
+      Hasil pertandingan 4 model akan muncul di sini.<br>
+      <span style="font-size:0.85rem;">1 teks → aspek → 4 prediksi diperingkat per keyakinan.</span>
     </div>""", unsafe_allow_html=True)
 else:
-    st.markdown(f"**{len(simpan)} aspek terdeteksi**")
     for row in simpan:
-        st.markdown(kartu_hasil(row), unsafe_allow_html=True)
+        st.markdown(kartu_arena(row), unsafe_allow_html=True)
 
-st.markdown("<div style='margin-top:2rem'></div>", unsafe_allow_html=True)
-st.caption("Semua model dilatih pada data augmented · mBERT Macro-F1 0,671 · "
-           "BiLSTM 0,595 · Transformer 0,613 · TF-IDF 0,609 · "
-           "data: IndoHotelABSA + Tech ABSA + Tokopedia")
+st.markdown("<div style='margin-top:1.8rem'></div>", unsafe_allow_html=True)
+st.caption("Semua model dilatih pada data augmented · Macro-F1: mBERT 0,671 · Transformer 0,613 · "
+           "TF-IDF 0,609 · BiLSTM 0,595 · data: IndoHotelABSA + Tech ABSA + Tokopedia")

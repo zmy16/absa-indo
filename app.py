@@ -7,6 +7,7 @@
 import json
 import re
 import sys
+import tempfile
 import urllib.request
 from pathlib import Path
 
@@ -121,9 +122,9 @@ def load_models():
                               embed_dim=cfg["embed_dim"], hidden_dim=cfg["hidden_dim"],
                               num_layers=cfg["num_layers"], dropout=cfg["dropout"],
                               pad_id=0, pooling=cfg["pooling"])
-    bilstm.load_state_dict(torch.load(
-        hf_hub_download(BILSTM_REPO, "model_augmented.pt"),
-        map_location="cpu", weights_only=True))
+    tmp1 = Path(tempfile.gettempdir(), "bilstm_aug.pt")
+    tmp1.write_bytes(baca_bytes_hub(BILSTM_REPO, "model_augmented.pt"))
+    bilstm.load_state_dict(torch.load(tmp1, map_location="cpu", weights_only=True))
     bilstm.eval()
 
     # --- Transformer ---
@@ -134,13 +135,12 @@ def load_models():
                                   num_layers=cfg_t["num_layers"], ff_dim=cfg_t["ff_dim"],
                                   max_len=cfg_t["max_len"], dropout=cfg_t["dropout"],
                                   pad_id=0, pooling=cfg_t["pooling"])
-    trans.load_state_dict(torch.load(
-        hf_hub_download(TRANSFORMER_REPO, "model_augmented.pt"),
-        map_location="cpu", weights_only=True))
+    tmp2 = Path(tempfile.gettempdir(), "transformer_aug.pt")
+    tmp2.write_bytes(baca_bytes_hub(TRANSFORMER_REPO, "model_augmented.pt"))
+    trans.load_state_dict(torch.load(tmp2, map_location="cpu", weights_only=True))
     trans.eval()
 
     # --- TF-IDF (file kecil, langsung HTTP — hindari cache rusak) ---
-    import tempfile
     with tempfile.TemporaryDirectory() as td:
         for f in ["vectorizer.joblib", "centroids.npy", "config.json"]:
             Path(td, f).write_bytes(baca_bytes_hub(TFIDF_REPO, f))

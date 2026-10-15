@@ -2,8 +2,6 @@
 # ABSA Bahasa Indonesia — Streamlit Web
 # Teks bebas -> BIO (deteksi aspek) -> klasifikasi (polaritas)
 # ============================================================
-# Model int8 dimuat dari Hugging Face Hub (repo zmuhammadrr).
-
 import re
 
 import streamlit as st
@@ -12,23 +10,57 @@ import torch.nn.functional as F
 from huggingface_hub import hf_hub_download
 from transformers import AutoTokenizer
 
+st.set_page_config(page_title="ABSA Bahasa Indonesia", page_icon="🇮🇩",
+                   layout="centered")
+
+# ------------------------------------------------------------
+# Tampilan
+# ------------------------------------------------------------
+st.markdown("""
+<style>
+  .block-container { padding-top: 2.2rem; max-width: 46rem; }
+  #MainMenu, footer { visibility: hidden; }
+  h1 { font-size: 1.9rem !important; margin-bottom: 0 !important; }
+  .sub { color: #9aa3af; font-size: 0.95rem; margin-bottom: 1.4rem; }
+  .chip {
+      display: inline-block; padding: 0.25rem 0.75rem; margin: 0.15rem 0.2rem;
+      background: #1d2530; border: 1px solid #2c3848; border-radius: 999px;
+      font-size: 0.9rem;
+  }
+  .card {
+      background: #161b24; border-radius: 12px; padding: 0.9rem 1.1rem;
+      margin: 0.55rem 0; border: 1px solid #232c3b;
+  }
+  .card .row1 { display: flex; justify-content: space-between; align-items: center; }
+  .card .kategori { font-weight: 700; font-size: 1.02rem; }
+  .card .span-txt { color: #9aa3af; font-size: 0.85rem; margin-top: 0.25rem; }
+  .badge {
+      padding: 0.15rem 0.65rem; border-radius: 999px; font-size: 0.78rem;
+      font-weight: 700; letter-spacing: 0.4px;
+  }
+  .conf-track { background: #232c3b; border-radius: 999px; height: 7px; margin-top: 0.6rem; }
+  .conf-bar { height: 7px; border-radius: 999px; }
+  .conf-label { color: #9aa3af; font-size: 0.75rem; margin-top: 0.3rem; }
+  .stTextArea textarea { font-size: 1rem; }
+</style>
+""", unsafe_allow_html=True)
+
 BIO_REPO = "zmuhammadrr/absa-bio-mbert-int8"
 CLS_REPO = "zmuhammadrr/absa-klasifikasi-mbert-int8"
-BIO_TOK_REPO = "zmuhammadrr/absa-bio-mbert"       # tokenizer ambil dari repo asli
+BIO_TOK_REPO = "zmuhammadrr/absa-bio-mbert"
 CLS_TOK_REPO = "zmuhammadrr/absa-klasifikasi-mbert"
 
-# Config menyimpan LABEL generik; urutan sesuai LABEL_LIST train_bio.py
 BIO_LABELS = ["O", "B-ASP", "I-ASP", "B-POS", "I-POS", "B-NEG", "I-NEG"]
-# Urutan sesuai POLARITIES di schema.py: 0=negatif, 1=netral, 2=positif
 CLS_LABELS = ["negatif", "netral", "positif"]
+WARNA = {"negatif": "#f87171", "netral": "#fbbf24", "positif": "#4ade80"}
 
 
 @st.cache_resource(show_spinner="Memuat model (sekali, ~20 detik)...")
 def load_models():
-    bio_path = hf_hub_download(BIO_REPO, "model_int8.pt")
-    cls_path = hf_hub_download(CLS_REPO, "model_int8.pt")
-    bio_model = torch.load(bio_path, map_location="cpu", weights_only=False).eval()
-    cls_model = torch.load(cls_path, map_location="cpu", weights_only=False).eval()
+    bio_model = torch.load(hf_hub_download(BIO_REPO, "model_int8.pt"),
+                           map_location="cpu", weights_only=False).eval()
+    cls_model = torch.load(hf_hub_download(CLS_REPO, "model_int8.pt"),
+                           map_location="cpu", weights_only=False).eval()
     bio_tok = AutoTokenizer.from_pretrained(BIO_TOK_REPO)
     cls_tok = AutoTokenizer.from_pretrained(CLS_TOK_REPO)
     return bio_model, bio_tok, cls_model, cls_tok
@@ -125,12 +157,23 @@ def pipeline(text):
 
 
 # ------------------------------------------------------------
-# UI
+# Komponen tampilan
 # ------------------------------------------------------------
-st.title("🇮🇩 ABSA Bahasa Indonesia")
-st.caption("Model BIO menemukan aspek otomatis dari teks, lalu klasifikator mBERT "
-           "memprediksi polaritasnya (negatif/netral/positif). "
-           "Dilatih pada gabungan 3 dataset: hotel, teknologi, marketplace.")
+def kartu_hasil(h):
+    w = WARNA[h["polaritas"]]
+    span = h["span"] or "—"
+    pct = int(h["confidence"] * 100)
+    return f"""
+    <div class="card">
+      <div class="row1">
+        <span class="kategori">{h['kategori']}</span>
+        <span class="badge" style="background:{w}22;color:{w};border:1px solid {w}66;">{h['polaritas'].upper()}</span>
+      </div>
+      <div class="span-txt">span terdeteksi: &ldquo;{span}&rdquo;</div>
+      <div class="conf-track"><div class="conf-bar" style="width:{pct}%;background:{w};"></div></div>
+      <div class="conf-label">confidence {h['confidence']:.2f}</div>
+    </div>"""
+
 
 CONTOH = [
     "Kamarnya bersih dan luas, pelayanan staff ramah banget. Tapi AC nya bocor dan sarapan hambar.",
@@ -139,30 +182,50 @@ CONTOH = [
     "Wifi kenceng, lokasi deket stasiun, cuma parkirnya sempit.",
 ]
 
+# ------------------------------------------------------------
+# Halaman
+# ------------------------------------------------------------
+st.markdown("# 🇮🇩 ABSA Bahasa Indonesia")
+st.markdown(
+    "<div class='sub'>Ketik ulasan apa saja — model <b>BIO</b> menemukan aspeknya otomatis, "
+    "lalu klasifikator <b>mBERT</b> memprediksi polaritasnya (negatif / netral / positif). "
+    "Dilatih pada gabungan 3 dataset: hotel, teknologi, marketplace.</div>",
+    unsafe_allow_html=True)
+
+
 def set_example(text):
-    # callback jalan SEBELUM widget dirender ulang — pola yang benar
     st.session_state["teks"] = text
 
-st.caption("Contoh — klik untuk mencoba:")
-for i, c in enumerate(CONTOH):
-    st.button(c[:70] + ("…" if len(c) > 70 else ""), key=f"ex{i}",
-              on_click=set_example, args=(c,))
 
-teks = st.text_area("Teks ulasan", key="teks", height=100,
-                    placeholder="Tulis ulasan apa saja, atau klik contoh di atas...")
+cols = st.columns(2)
+for i, c in enumerate(CONTOH):
+    with cols[i % 2]:
+        st.button("💡 " + (c[:52] + "…" if len(c) > 52 else c),
+                  key=f"ex{i}", on_click=set_example, args=(c,),
+                  use_container_width=True)
+
+teks = st.text_area("Teks ulasan", key="teks", height=110,
+                    placeholder="Tulis ulasan apa saja, atau klik contoh di atas…",
+                    label_visibility="collapsed")
 
 if teks.strip():
-    with st.spinner("Menganalisis..."):
+    with st.spinner("Menganalisis…"):
         spans = detect_aspects(teks)
         hasil = pipeline(teks)
-    st.subheader("Aspek terdeteksi (model BIO)")
-    st.write(", ".join(spans) if spans else
-             "(tidak ada aspek terdeteksi — fallback ke Umum)")
 
-    st.subheader("Hasil")
-    st.dataframe(
-        [{"Span": h["span"] or "-", "Kategori": h["kategori"],
-          "Polaritas": h["polaritas"], "Confidence": h["confidence"]}
-         for h in hasil],
-        use_container_width=True, hide_index=True,
-    )
+    st.markdown("**Aspek terdeteksi**")
+    if spans:
+        st.markdown("".join(f"<span class='chip'>{s}</span>" for s in spans),
+                    unsafe_allow_html=True)
+    else:
+        st.markdown("<span class='chip'>tidak ada — fallback ke Umum</span>",
+                    unsafe_allow_html=True)
+
+    st.markdown("<div style='margin-top:1rem'></div>", unsafe_allow_html=True)
+    st.markdown(f"**Hasil ({len(hasil)} aspek)**")
+    for h in hasil:
+        st.markdown(kartu_hasil(h), unsafe_allow_html=True)
+
+st.markdown("<div style='margin-top:2rem'></div>", unsafe_allow_html=True)
+st.caption("mBERT BIO span F1 0,684 · klasifikasi Macro-F1 0,671 · "
+           "data: IndoHotelABSA + Tech ABSA + Tokopedia (19.116 instance)")

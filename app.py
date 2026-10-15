@@ -391,6 +391,5 @@ st.markdown("""
     <div class="foot-row"><span>Uji McNemar</span><b>p&lt;0,001</b></div>
   </div>
 </div>
-<div class="foot-note">Skripsi: Optimasi Data Augmentation pada Aspect-Based Sentiment Analysis
-Ulasan Bahasa Indonesia Informal. Studi Komparatif TF-IDF, BiLSTM, Transformer, dan mBERT.</div>
+
 """, unsafe_allow_html=True)

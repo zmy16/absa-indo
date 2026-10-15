@@ -42,6 +42,10 @@ st.markdown("""
   .conf-bar { height: 7px; border-radius: 999px; }
   .conf-label { color: #9aa3af; font-size: 0.75rem; margin-top: 0.3rem; }
   .stTextArea textarea { font-size: 1rem; }
+  div.stButton > button {
+      height: 2.9rem; font-size: 1.05rem; font-weight: 700;
+      border-radius: 10px;
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -157,7 +161,7 @@ def pipeline(text):
 
 
 # ------------------------------------------------------------
-# Komponen tampilan
+# Komponen
 # ------------------------------------------------------------
 def kartu_hasil(h):
     w = WARNA[h["polaritas"]]
@@ -185,6 +189,9 @@ CONTOH = [
 # ------------------------------------------------------------
 # Halaman
 # ------------------------------------------------------------
+if "hasil_terakhir" not in st.session_state:
+    st.session_state["hasil_terakhir"] = None
+
 st.markdown("# ABSA Bahasa Indonesia")
 st.markdown(
     "<div class='sub'>Ketik ulasan apa saja — model <b>BIO</b> menemukan aspeknya otomatis, "
@@ -195,12 +202,14 @@ st.markdown(
 
 def set_example(text):
     st.session_state["teks"] = text
+    st.session_state["hasil_terakhir"] = None  # hasil lama tidak relevan lagi
 
 
+st.caption("💡 Coba contoh:")
 cols = st.columns(2)
 for i, c in enumerate(CONTOH):
     with cols[i % 2]:
-        st.button("💡 " + (c[:52] + "…" if len(c) > 52 else c),
+        st.button(c[:52] + ("…" if len(c) > 52 else ""),
                   key=f"ex{i}", on_click=set_example, args=(c,),
                   use_container_width=True)
 
@@ -208,12 +217,41 @@ teks = st.text_area("Teks ulasan", key="teks", height=110,
                     placeholder="Tulis ulasan apa saja, atau klik contoh di atas…",
                     label_visibility="collapsed")
 
-if teks.strip():
-    with st.spinner("Menganalisis…"):
-        spans = detect_aspects(teks)
-        hasil = pipeline(teks)
+kiri, tengah, kanan = st.columns([1.2, 1, 1.2])
+with tengah:
+    klik = st.button("🔍  Analisa", type="primary", use_container_width=True)
 
-    st.markdown("**Aspek terdeteksi**")
+if klik:
+    if not teks.strip():
+        st.warning("Tulis ulasan dulu, atau klik salah satu contoh di atas.")
+    else:
+        with st.spinner("Model sedang membaca ulasan…"):
+            spans = detect_aspects(teks)
+            hasil = pipeline(teks)
+        st.session_state["hasil_terakhir"] = {"spans": spans, "hasil": hasil}
+
+# ------------------------------------------------------------
+# Render hasil (persist sampai contoh baru diklik)
+# ------------------------------------------------------------
+simpan = st.session_state.get("hasil_terakhir")
+
+if simpan is None:
+    st.markdown("""
+    <div class="card" style="text-align:center;color:#9aa3af;padding:2rem 1rem;">
+      Hasil analisis akan muncul di sini.<br>
+      <span style="font-size:0.85rem;">1 teks &rarr; beberapa aspek &rarr; polaritas masing-masing.</span>
+    </div>""", unsafe_allow_html=True)
+else:
+    spans, hasil = simpan["spans"], simpan["hasil"]
+
+    n = {"negatif": 0, "netral": 0, "positif": 0}
+    for h in hasil:
+        n[h["polaritas"]] += 1
+    ringkas = " &nbsp;·&nbsp; ".join(
+        f"<span style='color:{WARNA[p]};font-weight:600;'>{v} {p}</span>"
+        for p, v in n.items() if v)
+
+    st.markdown(f"**Aspek terdeteksi ({len(spans)})**")
     if spans:
         st.markdown("".join(f"<span class='chip'>{s}</span>" for s in spans),
                     unsafe_allow_html=True)
@@ -221,8 +259,9 @@ if teks.strip():
         st.markdown("<span class='chip'>tidak ada — fallback ke Umum</span>",
                     unsafe_allow_html=True)
 
-    st.markdown("<div style='margin-top:1rem'></div>", unsafe_allow_html=True)
-    st.markdown(f"**Hasil ({len(hasil)} aspek)**")
+    st.markdown(f"<div style='margin-top:1.2rem;margin-bottom:-0.4rem'>"
+                f"<b>Hasil</b> &nbsp;·&nbsp; {ringkas}</div>",
+                unsafe_allow_html=True)
     for h in hasil:
         st.markdown(kartu_hasil(h), unsafe_allow_html=True)
 

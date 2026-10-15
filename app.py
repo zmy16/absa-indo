@@ -10,7 +10,7 @@ import torch.nn.functional as F
 from huggingface_hub import hf_hub_download
 from transformers import AutoTokenizer
 
-st.set_page_config(page_title="ABSA Bahasa Indonesia", page_icon="🇮🇩",
+st.set_page_config(page_title="ABSA Bahasa Indonesia", page_icon="📊",
                    layout="centered")
 
 # ------------------------------------------------------------
@@ -171,7 +171,7 @@ def kartu_hasil(h):
       </div>
       <div class="span-txt">span terdeteksi: &ldquo;{span}&rdquo;</div>
       <div class="conf-track"><div class="conf-bar" style="width:{pct}%;background:{w};"></div></div>
-      <div class="conf-label">confidence {h['confidence']:.2f}</div>
+      <div class="conf-label">confidence {pct}%</div>
     </div>"""
 
 
@@ -185,7 +185,7 @@ CONTOH = [
 # ------------------------------------------------------------
 # Halaman
 # ------------------------------------------------------------
-st.markdown("# 🇮🇩 ABSA Bahasa Indonesia")
+st.markdown("# ABSA Bahasa Indonesia")
 st.markdown(
     "<div class='sub'>Ketik ulasan apa saja — model <b>BIO</b> menemukan aspeknya otomatis, "
     "lalu klasifikator <b>mBERT</b> memprediksi polaritasnya (negatif / netral / positif). "

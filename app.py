@@ -344,7 +344,6 @@ teks = st.text_area("Teks ulasan", key="teks", height=110,
 kiri, tengah, kanan = st.columns([1.5, 1, 1.5])
 with tengah:
     klik = st.button("Analisa", type="primary", use_container_width=True)
-
 if klik:
     if not teks.strip():
         st.warning("Tulis ulasan dulu, atau klik salah satu contoh.")
@@ -364,6 +363,63 @@ if simpan is None:
 else:
     for row in simpan:
         st.markdown(kartu(row), unsafe_allow_html=True)
+
+st.markdown("<div style='margin-top:1.6rem'></div>", unsafe_allow_html=True)
+
+# ------------------------------------------------------------
+# Metrik penelitian (dibuat oleh src/analysis/make_web_figures.py)
+# ------------------------------------------------------------
+FIG_DIR = Path(__file__).parent / "figures"
+
+
+def grafik(nama: str, keterangan: str) -> None:
+    p = FIG_DIR / nama
+    if p.exists():
+        st.image(str(p), use_container_width=True)
+        st.caption(keterangan)
+    else:
+        st.caption(f"Grafik {nama} belum tersedia.")
+
+
+st.markdown("<div class='sec'>Metrik penelitian</div>", unsafe_allow_html=True)
+
+with st.expander("Grafik metrik dan tabel hasil lengkap", expanded=False):
+    t1, t2, t3, t4 = st.tabs(["Macro-F1 clean", "Robustness Drop",
+                              "Augmentation Gain", "F1 per kelas"])
+
+    with t1:
+        grafik("macro_f1_clean.png",
+               "F1_clean: Macro-F1 pada clean test set, kondisi original "
+               "dibandingkan augmented. Garis putus-putus adalah baseline "
+               "tebak mayoritas per aspek (0,586).")
+
+    with t2:
+        grafik("robustness_drop.png",
+               "Robustness Drop(k) = F1_clean - F1_noisy(k). Nilai kecil "
+               "berarti model lebih tahan terhadap fenomena informal tersebut. "
+               "Nilai negatif dilaporkan apa adanya.")
+
+    with t3:
+        grafik("augmentation_gain.png",
+               "Augmentation Gain(k) = F1_augmented(k) - F1_original(k). "
+               "Positif berarti augmentation menaikkan Macro-F1, negatif berarti "
+               "menurunkannya.")
+
+    with t4:
+        grafik("per_class_f1.png",
+               "F1 tiap kelas polaritas pada clean test set (kondisi augmented). "
+               "Menjelaskan mengapa Macro-F1 lebih rendah daripada akurasi: "
+               "kelas netral hanya 3,7% data latih.")
+
+    matriks = FIG_DIR / "macro_f1_matrix.csv"
+    if matriks.exists():
+        import pandas as pd
+
+        df = pd.read_csv(matriks)
+        st.markdown("**Macro-F1 kondisi augmented pada seluruh test set**")
+        st.dataframe(df, use_container_width=True, hide_index=True)
+        st.caption("Kolom clean adalah test set asli; kolom lainnya adalah "
+                   "varian noisy dengan satu fenomena informal per salinan.")
 
 st.markdown("<div style='margin-top:1.6rem'></div>", unsafe_allow_html=True)
 

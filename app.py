@@ -441,7 +441,7 @@ if jalankan:
         # mBERT
         try:
             p = pred_mbert(teks, asp)
-            baris.append({"model": "mBERT (Ref)", "prediksi": KELAS[int(np.argmax(p))],
+            baris.append({"model": "mBERT", "prediksi": KELAS[int(np.argmax(p))],
                           "p": p, "macro_f1": 0.7100})
         except Exception as e:
             baris.append({"model": "mBERT", "error": str(e)})
@@ -533,12 +533,14 @@ with st.expander("Hasil Eksperimen & Visualisasi Grafis", expanded=False):
 
 with st.expander("Metodologi dan Benchmark Data"):
     st.markdown("""
-- **Dataset:** 8.212 instance ulasan marketplace Indonesia (Shopee, Tokopedia, Lazada).
-- **Protokol:** Setiap ulasan dipasangkan dengan aspek terdeteksi dalam format `{ulasan} [ASPECT] {aspek}`.
-- **Benchmark Macro-F1 (Test Set):**
-  - **mBERT:** 0,7100
-  - **Transformer:** 0,6008
-  - **BiLSTM:** 0,5857
-  - **TF-IDF:** 0,5794
-- **Catatan Distribusi:** Kelas netral memiliki porsi 5,2% dari data latih, sehingga confidence pada kelas netral secara alami lebih konservatif.
+- **Eksperimen 2 Kondisi Pelatihan:**
+  - **Original (Kontrol):** Dilatih hanya dengan 5.726 data latih asli tanpa penambahan data sintetis.
+  - **Augmented (Aktif di Web):** Dilatih dengan 11.452 data latih (asli + 7 aturan augmentasi informal). **Model yang melayani inferensi interaktif di aplikasi ini adalah versi Augmented.**
+- **Benchmark Macro-F1 (Data Uji 1.261 Instance):**
+  - **mBERT:** 0,7100 (Augmented) vs 0,6945 (Original) -> *Gain: +0,0155*
+  - **Transformer:** 0,6008 (Augmented) vs 0,5682 (Original) -> *Gain: +0,0326*
+  - **BiLSTM:** 0,5857 (Augmented) vs 0,2327 (Original) -> *Gain: +0,3530*
+  - **TF-IDF:** 0,5794 (Augmented) vs 0,6175 (Original) -> *Gain: -0,0381*
+- **Format Input Model:** Setiap ulasan dipasangkan dengan aspek terdeteksi: `{ulasan} [ASPECT] {aspek}`.
+- **Karakteristik Kelas Netral:** Porsi kelas netral adalah 5,2% pada data latih, sehingga confidence probabilitas netral bersifat lebih konservatif dibanding positif/negatif.
 """)

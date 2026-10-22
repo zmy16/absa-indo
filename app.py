@@ -62,7 +62,7 @@ def muat_bilstm():
     model = BiLSTMModel(cfg["vocab_size"], cfg.get("embed", 128),
                         cfg.get("hidden", 128))
     model.load_state_dict(torch.load(MODELS / "bilstm" / "model.pt",
-                                     map_location="cpu"))
+                                     map_location="cpu", weights_only=False))
     model.eval()
     return model, vocab, cfg
 
@@ -92,7 +92,7 @@ def muat_transformer():
                              cfg.get("heads", 4), cfg.get("layers", 2),
                              cfg.get("ff", 256))
     model.load_state_dict(torch.load(MODELS / "transformer" / "model.pt",
-                                     map_location="cpu"))
+                                     map_location="cpu", weights_only=False))
     model.eval()
     return model, vocab, cfg
 
@@ -113,7 +113,7 @@ def muat_mbert():
     from huggingface_hub import hf_hub_download
     tok = AutoTokenizer.from_pretrained(MBERT_HF)
     pt = hf_hub_download(MBERT_HF, "model_int8.pt")
-    model = torch.load(pt, map_location="cpu")
+    model = torch.load(pt, map_location="cpu", weights_only=False)
     model.eval()
     return model, tok
 

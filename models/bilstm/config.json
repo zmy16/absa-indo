@@ -1,0 +1,16 @@
+{
+  "model": "bilstm",
+  "vocab_size": 22877,
+  "embed": 128,
+  "hidden": 128,
+  "num_labels": 3,
+  "max_len": 256,
+  "kelas": [
+    "negatif",
+    "netral",
+    "positif"
+  ],
+  "epoch_terbaik": 7,
+  "val_f1": 0.5743,
+  "macro_f1_uji": 0.5857
+}

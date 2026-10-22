@@ -1,0 +1,17 @@
+{
+  "model": "tfidf_nearest_centroid",
+  "kelas": [
+    "negatif",
+    "netral",
+    "positif"
+  ],
+  "ngram_range": [
+    1,
+    2
+  ],
+  "max_features": 20000,
+  "jumlah_fitur": 20000,
+  "jumlah_instance_latih": 11452,
+  "macro_f1_uji": 0.5794,
+  "input_format": "{teks} [ASPECT] {aspek}"
+}

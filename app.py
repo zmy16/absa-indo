@@ -1,451 +1,352 @@
-# ============================================================
-# ABSA Bahasa Indonesia - perbandingan 4 model
-# Teks bebas -> BIO (deteksi aspek) -> TF-IDF / BiLSTM / Transformer / mBERT
-# ============================================================
+"""ABSA Marketplace Indonesia - uji keempat model secara langsung.
+
+Paradigma AOL v2: ASPEK adalah INPUT model, bukan keluaran.
+User mengetik teks ulasan + memilih aspek, keempat model memberi prediksi.
+
+Jalankan:
+    streamlit run app.py
+"""
+
 import json
-import re
-import sys
-import tempfile
-import urllib.request
 from pathlib import Path
 
+import numpy as np
 import streamlit as st
 import torch
-import torch.nn.functional as F
-from huggingface_hub import hf_hub_download
-from transformers import AutoTokenizer
+import torch.nn as nn
 
-st.set_page_config(page_title="ABSA Bahasa Indonesia", page_icon="📊",
-                   layout="centered")
+MODELS = Path(__file__).resolve().parent / "models"      # repo GitHub
+FP32 = Path(__file__).resolve().parent.parent / "results" / "augmented"
+MBERT_HF = "zmuhammadrr/absa-v2-mbert-int8"              # int8 untuk cloud
+KELAS = ["negatif", "netral", "positif"]
 
-sys.path.insert(0, str(Path(__file__).parent / "model_code"))
-from neural import BiLSTMClassifier, TransformerClassifier  # noqa: E402
-from tfidf_centroid import TfidfCentroid  # noqa: E402
-import vocab as vocab_mod  # noqa: E402
+st.set_page_config(page_title="ABSA Marketplace Indonesia",
+                   page_icon="📊", layout="centered")
 
-# ------------------------------------------------------------
-# Tema: dark-tech restrained. Near-black, satu aksen, mono untuk angka.
-# Tanpa gradient, tanpa emoji, tanpa glow.
-# ------------------------------------------------------------
+# ============================================================
+# muat model (cache)
+# ============================================================
+
+
+@st.cache_resource(show_spinner="Memuat model ...")
+def muat_tfidf():
+    import joblib
+    vec = joblib.load(MODELS / "tfidf" / "vectorizer.joblib")
+    z = np.load(MODELS / "tfidf" / "centroids.npz")
+    centroids = {}
+    for k in z.files:
+        centroids[k.replace("c_", "")] = z[k]
+    cfg = json.load(open(MODELS / "tfidf" / "config.json", encoding="utf-8"))
+    return vec, centroids, cfg
+
+
+@st.cache_resource(show_spinner="Memuat BiLSTM ...")
+def muat_bilstm():
+    cfg = json.load(open(MODELS / "bilstm" / "config.json", encoding="utf-8"))
+    vocab = json.load(open(MODELS / "bilstm" / "vocab.json", encoding="utf-8"))
+
+    class BiLSTMModel(nn.Module):
+        def __init__(self, vocab_size, embed=128, hidden=128, num_labels=3,
+                     dropout=0.3):
+            super().__init__()
+            self.embed = nn.Embedding(vocab_size, embed, padding_idx=0)
+            self.lstm = nn.LSTM(embed, hidden, batch_first=True,
+                                bidirectional=True)
+            self.fc = nn.Linear(hidden * 2, num_labels)
+            self.dropout = nn.Dropout(dropout)
+
+        def forward(self, x):
+            out, _ = self.lstm(self.embed(x))
+            return self.fc(self.dropout(out.mean(dim=1)))
+
+    model = BiLSTMModel(cfg["vocab_size"], cfg.get("embed", 128),
+                        cfg.get("hidden", 128))
+    model.load_state_dict(torch.load(MODELS / "bilstm" / "model.pt",
+                                     map_location="cpu"))
+    model.eval()
+    return model, vocab, cfg
+
+
+@st.cache_resource(show_spinner="Memuat Transformer ...")
+def muat_transformer():
+    cfg = json.load(open(MODELS / "transformer" / "config.json",
+                         encoding="utf-8"))
+    vocab = json.load(open(MODELS / "transformer" / "vocab.json",
+                           encoding="utf-8"))
+
+    class TransformerModel(nn.Module):
+        def __init__(self, vocab_size, embed=128, heads=4, layers=2, ff=256,
+                     num_labels=3, dropout=0.1):
+            super().__init__()
+            self.embed = nn.Embedding(vocab_size, embed, padding_idx=0)
+            layer = nn.TransformerEncoderLayer(
+                d_model=embed, nhead=heads, dim_feedforward=ff,
+                batch_first=True, dropout=dropout)
+            self.encoder = nn.TransformerEncoder(layer, num_layers=layers)
+            self.fc = nn.Linear(embed, num_labels)
+
+        def forward(self, x):
+            return self.fc(self.encoder(self.embed(x)).mean(dim=1))
+
+    model = TransformerModel(cfg["vocab_size"], cfg.get("embed", 128),
+                             cfg.get("heads", 4), cfg.get("layers", 2),
+                             cfg.get("ff", 256))
+    model.load_state_dict(torch.load(MODELS / "transformer" / "model.pt",
+                                     map_location="cpu"))
+    model.eval()
+    return model, vocab, cfg
+
+
+@st.cache_resource(show_spinner="Memuat mBERT (±40 detik) ...")
+def muat_mbert():
+    """Lokal: fp32 dari results/ (unduh sekali). Cloud: int8 dari HF Hub."""
+    from transformers import AutoTokenizer
+
+    fp32 = FP32 / "mbert" / "final"
+    if fp32.exists():
+        from transformers import AutoModelForSequenceClassification
+        tok = AutoTokenizer.from_pretrained(fp32)
+        model = AutoModelForSequenceClassification.from_pretrained(fp32)
+        model.eval()
+        return model, tok
+
+    from huggingface_hub import hf_hub_download
+    tok = AutoTokenizer.from_pretrained(MBERT_HF)
+    pt = hf_hub_download(MBERT_HF, "model_int8.pt")
+    model = torch.load(pt, map_location="cpu")
+    model.eval()
+    return model, tok
+
+
+# ============================================================
+# fungsi prediksi
+# ============================================================
+MAXLEN = 256
+ASPEK = ["Kualitas Produk", "Pelayanan", "Pengiriman", "Harga", "Umum"]
+
+
+def input_text(teks, aspek):
+    plain = " ".join(str(teks).split())
+    return f"{plain} [ASPECT] {aspek}"
+
+
+def encode(vocab, teks):
+    ids = [vocab.get(w, 0) for w in str(teks).lower().split()][:MAXLEN]
+    return ids + [0] * (MAXLEN - len(ids))
+
+
+def softmax(x):
+    e = np.exp(x - np.max(x))
+    return e / e.sum()
+
+
+def pred_tfidf(teks, aspek):
+    vec, centroids, _ = muat_tfidf()
+    x = vec.transform([input_text(teks, aspek)]).toarray().flatten()
+    nv = max(1e-9, np.linalg.norm(x))
+    skor = {k: float(np.dot(x, c)) / (nv * max(1e-9, np.linalg.norm(c)))
+            for k, c in centroids.items()}
+    # skor kosinus belum terkalibrasi jadi probabilitas;
+    # tampilkan sebagai skor kemiripan
+    p = softmax(np.array([skor.get(k, 0.0) for k in KELAS]) * 12)
+    return p, skor
+
+
+def pred_neural(model, vocab, teks, aspek):
+    x = torch.LongTensor([encode(vocab, input_text(teks, aspek))])
+    with torch.no_grad():
+        out = model(x)
+    p = softmax(out[0].numpy())
+    return p
+
+
+def pred_mbert(teks, aspek):
+    model, tok = muat_mbert()
+    enc = tok(input_text(teks, aspek), truncation=True, padding="max_length",
+              max_length=MAXLEN, return_tensors="pt")
+    with torch.no_grad():
+        out = model(**enc)
+    p = softmax(out.logits[0].detach().numpy())
+    return p
+
+
+# ============================================================
+# UI
+# ============================================================
 st.markdown("""<style>
-:root { --bg:#0b0d10; --panel:#13161c; --line:#232833; --ink:#e8ecf4; --mut:#8b94a7; --acc:#34d399; }
-.stApp { background: var(--bg); }
-.block-container { padding-top: 2rem !important; max-width: 46rem; }
-#MainMenu, header, footer { visibility: hidden; }
-.hero { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1.7rem 1.9rem; }
-.hero h1 { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.3px; color: var(--ink); margin: 0; }
-.hero p { color: var(--mut); font-size: 0.95rem; line-height: 1.55; margin: 0.6rem 0 0; max-width: 40rem; }
-.hero .meta { margin-top: 1.05rem; font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.72rem; color: var(--mut); letter-spacing: 0.4px; }
-.sec { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--mut); margin: 1.5rem 0 0.6rem; }
-.pill button { width: 100%; text-align: left; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 0.55rem 0.85rem; font-size: 0.87rem; line-height: 1.4; transition: border-color .15s; }
-.pill button:hover { border-color: var(--acc); }
-.pill button p { margin: 0; }
-.stTextArea textarea { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; font-size: 1rem; color: var(--ink); }
-.stTextArea textarea:focus { border-color: var(--acc); box-shadow: none; }
-button[kind="primary"] { background: var(--ink); color: #0b0d10; border: none; border-radius: 10px; height: 2.8rem; font-weight: 700; font-size: 0.98rem; }
-button[kind="primary"]:hover { background: #ffffff; }
-button[kind="primary"]:active { transform: translateY(1px); }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.15rem; margin: 0.7rem 0; }
-.head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-.cat { font-weight: 700; font-size: 1rem; color: var(--ink); }
-.spanq { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.72rem; color: var(--mut); }
-.cons { margin-left: auto; font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.7rem; letter-spacing: 0.4px; }
-.rows { margin-top: 0.5rem; }
-.mrow { display: grid; grid-template-columns: 7.6rem 1fr 8.4rem; gap: 0.8rem; align-items: center; padding: 0.5rem 0; }
-.mrow + .mrow { border-top: 1px solid var(--line); }
-.mname { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.72rem; color: var(--mut); }
-.mname b { color: var(--ink); font-weight: 500; margin-left: 0.45rem; }
-.mbar { height: 3px; }
-.mbar i { display: block; height: 3px; border-radius: 2px; }
-.mval { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.74rem; text-align: right; white-space: nowrap; }
-.mval span { color: var(--mut); }
-.note { margin-top: 0.7rem; font-size: 0.8rem; color: #d9b06c; border-top: 1px solid var(--line); padding-top: 0.6rem; }
-.empty { border: 1px dashed var(--line); border-radius: 14px; padding: 2.4rem 1rem; text-align: center; color: var(--mut); margin-top: 1rem; font-size: 0.92rem; }
-.foot-wrap { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-top: 1.2rem; }
-.foot-col { padding: 0.9rem 1.1rem; }
-.foot-col + .foot-col { border-left: 1px solid var(--line); }
-.foot-h { font-size: 0.68rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mut); margin-bottom: 0.55rem; }
-.foot-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0.18rem 0; font-size: 0.8rem; color: var(--ink); }
-.foot-row span { color: var(--mut); }
-.foot-row b { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-weight: 600; font-size: 0.78rem; }
-.foot-note { color: #5d6575; font-size: 0.74rem; line-height: 1.5; margin: 0.9rem 0.15rem 2.5rem; }
-@media (max-width: 640px) { .foot-wrap { grid-template-columns: 1fr; } .foot-col + .foot-col { border-left: none; border-top: 1px solid var(--line); } }
+:root { --bg:#0b0d10; --panel:#13161c; --line:#232833;
+       --ink:#e8ecf4; --mut:#8b94a7; --acc:#34d399; }
+.stApp { background:var(--bg); }
+.block-container { padding-top:2rem !important; max-width:50rem; }
+#MainMenu, header, footer { visibility:hidden; }
+h1 { color:var(--ink); font-size:1.55rem; letter-spacing:-0.3px; }
+.stTextArea textarea { background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; color:var(--ink); }
+.stTextArea textarea:focus { border-color:var(--acc); box-shadow:none; }
+div[data-baseweb="radio"] label { color:var(--ink); }
+button[kind="primary"] { background:var(--ink); color:#0b0d10;
+    border:none; border-radius:10px; height:2.7rem; font-weight:700; }
 </style>""", unsafe_allow_html=True)
 
-# ------------------------------------------------------------
-# Repo HF Hub
-# ------------------------------------------------------------
-BIO_REPO = "zmuhammadrr/absa-bio-mbert-int8"
-CLS_REPO = "zmuhammadrr/absa-klasifikasi-mbert-int8"
-BIO_TOK_REPO = "zmuhammadrr/absa-bio-mbert"
-CLS_TOK_REPO = "zmuhammadrr/absa-klasifikasi-mbert"
-BILSTM_REPO = "zmuhammadrr/absa-bilstm-aug"
-TRANSFORMER_REPO = "zmuhammadrr/absa-transformer-aug"
-TFIDF_REPO = "zmuhammadrr/absa-tfidf-aug"
+st.title("ABSA Ulasan Marketplace Indonesia")
+st.caption("Klasifikasi polaritas aspek · aspek sebagai masukan model · "
+           "empat model pada kondisi augmented")
 
-BIO_LABELS = ["O", "B-ASP", "I-ASP", "B-POS", "I-POS", "B-NEG", "I-NEG"]
-CLS_LABELS = ["negatif", "netral", "positif"]
-WARNA = {"negatif": "#e07a6b", "netral": "#d9b06c", "positif": "#6fc491"}
-
-
-def baca_teks_hub(repo: str, fname: str) -> str:
-    """Baca file kecil langsung dari Hub (tanpa cache hf_hub).
-    Cache hf_hub_download di container pernah menyimpan salinan kosong
-    sehingga json.loads gagal. Direct HTTP menghindarinya."""
-    url = f"https://huggingface.co/{repo}/resolve/main/{fname}"
-    with urllib.request.urlopen(url, timeout=30) as r:
-        return r.read().decode("utf-8")
-
-
-def baca_bytes_hub(repo: str, fname: str) -> bytes:
-    url = f"https://huggingface.co/{repo}/resolve/main/{fname}"
-    with urllib.request.urlopen(url, timeout=60) as r:
-        return r.read()
-
-
-@st.cache_resource(show_spinner="Memuat 4 model (sekali, sekitar 40 detik)...")
-def load_models():
-    # --- BIO (penemu aspek) ---
-    bio = torch.load(hf_hub_download(BIO_REPO, "model_int8.pt"),
-                     map_location="cpu", weights_only=False).eval()
-    bio_tok = AutoTokenizer.from_pretrained(BIO_TOK_REPO)
-
-    # --- mBERT klasifikasi (int8) ---
-    cls = torch.load(hf_hub_download(CLS_REPO, "model_int8.pt"),
-                     map_location="cpu", weights_only=False).eval()
-    cls_tok = AutoTokenizer.from_pretrained(CLS_TOK_REPO)
-
-    # --- BiLSTM ---
-    cfg = json.loads(baca_teks_hub(BILSTM_REPO, "config.json"))
-    v = vocab_mod.Vocab(json.loads(baca_teks_hub(BILSTM_REPO, "vocab_augmented.json"))["token_to_id"])
-    bilstm = BiLSTMClassifier(vocab_size=len(v), num_classes=cfg["num_classes"],
-                              embed_dim=cfg["embed_dim"], hidden_dim=cfg["hidden_dim"],
-                              num_layers=cfg["num_layers"], dropout=cfg["dropout"],
-                              pad_id=0, pooling=cfg["pooling"])
-    tmp1 = Path(tempfile.gettempdir(), "bilstm_aug.pt")
-    tmp1.write_bytes(baca_bytes_hub(BILSTM_REPO, "model_augmented.pt"))
-    bilstm.load_state_dict(torch.load(tmp1, map_location="cpu", weights_only=True))
-    bilstm.eval()
-
-    # --- Transformer ---
-    cfg_t = json.loads(baca_teks_hub(TRANSFORMER_REPO, "config.json"))
-    v_t = vocab_mod.Vocab(json.loads(baca_teks_hub(TRANSFORMER_REPO, "vocab_augmented.json"))["token_to_id"])
-    trans = TransformerClassifier(vocab_size=len(v_t), num_classes=cfg_t["num_classes"],
-                                  embed_dim=cfg_t["embed_dim"], num_heads=cfg_t["num_heads"],
-                                  num_layers=cfg_t["num_layers"], ff_dim=cfg_t["ff_dim"],
-                                  max_len=cfg_t["max_len"], dropout=cfg_t["dropout"],
-                                  pad_id=0, pooling=cfg_t["pooling"])
-    tmp2 = Path(tempfile.gettempdir(), "transformer_aug.pt")
-    tmp2.write_bytes(baca_bytes_hub(TRANSFORMER_REPO, "model_augmented.pt"))
-    trans.load_state_dict(torch.load(tmp2, map_location="cpu", weights_only=True))
-    trans.eval()
-
-    # --- TF-IDF (file kecil, langsung HTTP) ---
-    with tempfile.TemporaryDirectory() as td:
-        for f in ["vectorizer.joblib", "centroids.npy", "config.json"]:
-            Path(td, f).write_bytes(baca_bytes_hub(TFIDF_REPO, f))
-        tfidf = TfidfCentroid.load(Path(td))
-
-    return bio, bio_tok, cls, cls_tok, (bilstm, v, cfg), (trans, v_t, cfg_t), tfidf
-
-
-(bio_model, bio_tokenizer, cls_model, cls_tokenizer,
- (bilstm, bilstm_vocab, bilstm_cfg), (transf, trans_vocab, trans_cfg), tfidf) = load_models()
-
-# ------------------------------------------------------------
-# Pipeline
-# ------------------------------------------------------------
-SPAN_MAP = [
-    (r"kirim|pengirim|paket|kurir|antar|sampai|delivery|packaging|packing|bungkus", "Pengiriman"),
-    (r"harga|biaya|tarif|bayar|mahal|murah|price", "Harga"),
-    (r"bersih|kotor|bau|debu|kebersihan|clean", "Kebersihan"),
-    (r"lokasi|strategis|dekat|jauh|akses|location", "Lokasi"),
-    (r"pelayanan|layanan|staf|resepsionis|staff|servis|service|cs|admin|seller|penjual", "Pelayanan"),
-    (r"fasilitas|kolam|parkir|lift|wifi|pool|gym", "Fasilitas"),
-    (r"kamar|bed|makanan|sarapan|minuman|produk|barang|kualitas|quality|baterai|layar|kamera", "Kualitas Produk"),
-]
-
-
-def split_words(text):
-    return re.findall(r"\w+|[^\w\s]", text, re.UNICODE)
-
-
-@torch.no_grad()
-def detect_aspects(text):
-    words = split_words(text)[:250]
-    if not words:
-        return []
-    ids, first_idx = [bio_tokenizer.cls_token_id], []
-    for w in words:
-        first_idx.append(len(ids))
-        sub = bio_tokenizer.encode(w, add_special_tokens=False) or [bio_tokenizer.unk_token_id]
-        ids.extend(sub)
-    ids.append(bio_tokenizer.sep_token_id)
-    t = torch.tensor([ids])
-    logits = bio_model(input_ids=t, attention_mask=torch.ones_like(t)).logits[0]
-    pred = logits.argmax(-1).tolist()
-    spans, cur = [], []
-    for wi, w in enumerate(words):
-        if first_idx[wi] >= len(pred):
-            break
-        tag = BIO_LABELS[pred[first_idx[wi]]]
-        if tag == "B-ASP":
-            if cur:
-                spans.append(cur)
-            cur = [w]
-        elif tag == "I-ASP" and cur:
-            cur.append(w)
-        else:
-            if cur:
-                spans.append(cur)
-            cur = []
-    if cur:
-        spans.append(cur)
-    return [" ".join(s) for s in spans]
-
-
-def span_to_category(span):
-    low = span.lower()
-    for pat, cat in SPAN_MAP:
-        if re.search(pat, low):
-            return cat
-    return "Umum"
-
-
-@torch.no_grad()
-def predict_all(text, category):
-    """Input gabungan -> polaritas dari 4 model: {model: (polaritas, conf)}"""
-    inp_text = f"{text} [ASPECT] {category}"
-    hasil = {}
-
-    # TF-IDF
-    scores = tfidf.decision_scores([inp_text])[0]
-    probs_t = F.softmax(torch.tensor(scores), -1)
-    i = int(probs_t.argmax())
-    hasil["TF-IDF"] = (tfidf.classes_[i], float(probs_t[i]))
-
-    # BiLSTM & Transformer (vocab + padding sama seperti train.py)
-    import numpy as np
-    for name, net, voc, cfg in [("BiLSTM", bilstm, bilstm_vocab, bilstm_cfg),
-                                ("Transformer", transf, trans_vocab, trans_cfg)]:
-        ids = voc.encode_text(inp_text)[: cfg["max_len"]]
-        arr = np.full((1, max(1, len(ids))), 0, dtype=np.int64)
-        arr[0, : len(ids)] = ids
-        logits = net(torch.from_numpy(arr))[0]
-        probs = F.softmax(logits, -1)
-        j = int(probs.argmax())
-        hasil[name] = (CLS_LABELS[j], float(probs[j]))
-
-    # mBERT (int8)
-    enc = cls_tokenizer(inp_text, truncation=True, max_length=256, return_tensors="pt")
-    probs_m = F.softmax(cls_model(**enc).logits, -1)[0]
-    k = int(probs_m.argmax())
-    hasil["mBERT"] = (CLS_LABELS[k], float(probs_m[k]))
-
-    return hasil
-
-
-def pipeline(text):
-    spans = detect_aspects(text)
-    if not spans:
-        return [{"kategori": "Umum", "span": None, "prediksi": predict_all(text, "Umum")}]
-    sumber = {}
-    for s in spans:
-        sumber.setdefault(span_to_category(s), s)
-    return [{"kategori": k, "span": sumber[k], "prediksi": predict_all(text, k)}
-            for k in sumber]
-
-
-# ------------------------------------------------------------
-# Kartu hasil
-# ------------------------------------------------------------
-def kartu(row):
-    preds = row["prediksi"]
-    urut = sorted(preds.items(), key=lambda kv: -kv[1][1])
-    n_pola = len({p for p, _ in preds.values()})
-
-    if n_pola == 1:
-        cons = f'<span class="cons" style="color:{WARNA[urut[0][1][0]]};">4/4 sepakat</span>'
-    else:
-        cons = f'<span class="cons" style="color:#d9b06c;">terbelah {n_pola} polaritas</span>'
-
-    baris = ""
-    for rank, (nama, (pol, conf)) in enumerate(urut, start=1):
-        w = WARNA[pol]
-        pct = int(conf * 100)
-        baris += f"""
-        <div class="mrow">
-          <div class="mname">{rank}<b>{nama}</b></div>
-          <div class="mbar"><i style="width:{pct}%;background:{w};"></i></div>
-          <div class="mval" style="color:{w};">{pct}% <span>{pol}</span></div>
-        </div>"""
-
-    span = row["span"]
-    spanq = (f'<span class="spanq">&ldquo;{span}&rdquo;</span>' if span
-             else '<span class="spanq">tanpa span, fallback Umum</span>')
-    note = "" if n_pola == 1 else (
-        '<div class="note">Model tidak sepakat pada aspek ini. '
-        'Menarik untuk dibandingkan di analisis.</div>')
-
-    return f"""
-    <div class="card">
-      <div class="head">
-        <span class="cat">{row['kategori']}</span>
-        {spanq}
-        {cons}
-      </div>
-      <div class="rows">{baris}</div>
-      {note}
-    </div>"""
-
-
+# contoh ulasan siap-klik: callback dijalankan sebelum widget dirender,
+# sehingga session_state widget bervalid key bisa diatur dengan aman
 CONTOH = [
-    "Kamarnya bersih dan luas, pelayanan staff ramah banget. Tapi AC nya bocor dan sarapan hambar.",
-    "Ah sumpah jelek banget packagingnya, tapi untung barangnya bagus bangett",
-    "Pengiriman lama banget 2 minggu, admin seller gak respon respon.",
-    "Wifi kenceng, lokasi deket stasiun, cuma parkirnya sempit.",
+    ("barangnya bagus banget, cuma lama banget sampainya", "Pengiriman"),
+    ("pengiriman cepat banget, packing rapi aman, recommended seller",
+     "Pengiriman"),
+    ("barang rusak parah, minta ganti susah banget, kecewa", "Pelayanan"),
+    ("harganya oke banget buat ukuran segini", "Harga"),
+    ("diterima hari ini, sesuai deskripsi", "Kualitas Produk"),
+    ("admin toko tidak pernah balas chat, tapi barang original", "Pelayanan"),
 ]
 
-# ------------------------------------------------------------
-# Halaman
-# ------------------------------------------------------------
-if "hasil_terakhir" not in st.session_state:
-    st.session_state["hasil_terakhir"] = None
 
-st.markdown("""
-<div class="hero">
-  <h1>ABSA Bahasa Indonesia</h1>
-  <p>Ketik ulasan informal apa saja. Model BIO menemukan aspeknya secara otomatis,
-  lalu empat model memprediksi polaritasnya berdampingan, diurutkan per keyakinan.</p>
-  <div class="meta">4 model &nbsp; 8 aspek &nbsp; 3 domain &nbsp; 19.116 instance latih</div>
-</div>
-""", unsafe_allow_html=True)
+def pilih_contoh(t, a):
+    st.session_state["ta"] = t
+    st.session_state["ra"] = a
 
 
-def set_example(text):
-    st.session_state["teks"] = text
-    st.session_state["hasil_terakhir"] = None
+col_t, col_a = st.columns([2.2, 1])
 
+with col_t:
+    teks = st.text_area("Teks ulasan", height=130, key="ta",
+                        placeholder="Contoh: barangnya bagus banget, "
+                                    "cuma lama banget sampainya")
 
-st.markdown("<div class='sec'>Contoh</div>", unsafe_allow_html=True)
-cols = st.columns(2)
-for i, c in enumerate(CONTOH):
-    with cols[i % 2]:
-        st.markdown("<div class='pill'>", unsafe_allow_html=True)
-        st.button(c[:56] + ("…" if len(c) > 56 else ""),
-                  key=f"ex{i}", on_click=set_example, args=(c,),
-                  use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+with col_a:
+    aspek = st.radio("Aspek yang dinilai", ASPEK, key="ra",
+                     help="Aspek adalah masukan model - pilih aspek yang "
+                          "ingin dinilai polaritasnya")
 
-teks = st.text_area("Teks ulasan", key="teks", height=110,
-                    placeholder="Tulis ulasan apa saja, atau klik contoh di atas…",
-                    label_visibility="collapsed")
+st.markdown(
+    "<div style='margin:0.9rem 0 0.4rem; color:var(--mut); "
+    "font-size:0.72rem; font-weight:600; letter-spacing:1.6px; "
+    "text-transform:uppercase'>Contoh ulasan (klik satu)</div>",
+    unsafe_allow_html=True)
+cols = st.columns(3)
+for i, (teks_contoh, aspek_contoh) in enumerate(CONTOH):
+    label = teks_contoh if len(teks_contoh) <= 38 else teks_contoh[:38] + "…"
+    cols[i % 3].button(label, key=f"contoh_{i}",
+                       on_click=pilih_contoh, args=(teks_contoh, aspek_contoh),
+                       use_container_width=True)
 
-kiri, tengah, kanan = st.columns([1.5, 1, 1.5])
-with tengah:
-    klik = st.button("Analisa", type="primary", use_container_width=True)
-if klik:
-    if not teks.strip():
-        st.warning("Tulis ulasan dulu, atau klik salah satu contoh.")
-    else:
-        with st.spinner("Empat model sedang memproses…"):
-            st.session_state["hasil_terakhir"] = pipeline(teks)
+jalankan = st.button("Prediksi dengan 4 model", type="primary",
+                      use_container_width=True, disabled=not teks.strip())
 
-simpan = st.session_state.get("hasil_terakhir")
+if jalankan:
 
-st.markdown("<div class='sec'>Hasil</div>", unsafe_allow_html=True)
+    if aspek == "Umum":
+        st.info("Aspek **Umum** cuma 0,8% data latih - hati-hati "
+                "menginterpretasi hasilnya.")
 
-if simpan is None:
+    baris = []
+
+    # ---- TF-IDF
+    try:
+        p, _ = pred_tfidf(teks, aspek)
+        baris.append({"model": "TF-IDF Nearest Centroid",
+                      "prediksi": KELAS[int(np.argmax(p))],
+                      "kemungkinan": p,
+                      "macro_f1": 0.5794})
+    except Exception as e:
+        st.error(f"TF-IDF gagal: {e}")
+
+    # ---- BiLSTM
+    try:
+        m, v, _ = muat_bilstm()
+        p = pred_neural(m, v, teks, aspek)
+        baris.append({"model": "BiLSTM", "prediksi": KELAS[int(np.argmax(p))],
+                      "kemungkinan": p, "macro_f1": 0.5857})
+    except Exception as e:
+        st.error(f"BiLSTM gagal: {e}")
+
+    # ---- Transformer
+    try:
+        m, v, _ = muat_transformer()
+        p = pred_neural(m, v, teks, aspek)
+        baris.append({"model": "Transformer",
+                      "prediksi": KELAS[int(np.argmax(p))],
+                      "kemungkinan": p, "macro_f1": 0.6008})
+    except Exception as e:
+        st.error(f"Transformer gagal: {e}")
+
+    # ---- mBERT
+    try:
+        p = pred_mbert(teks, aspek)
+        baris.append({"model": "mBERT (terbaik)",
+                      "prediksi": KELAS[int(np.argmax(p))],
+                      "kemungkinan": p, "macro_f1": 0.7100})
+    except Exception as e:
+        st.error(f"mBERT gagal: {e}")
+
+    if baris:
+
+        # konsensus
+        suara = {}
+        for b in baris:
+            suara[b["prediksi"]] = suara.get(b["prediksi"], 0) + 1
+        konsensus = max(suara, key=suara.get)
+        serempak = suara[konsensus] == len(baris)
+
+        st.markdown("---")
+        warna = {"negatif": "#ff7a76", "netral": "#ffd166",
+                 "positif": "#34d399"}
+        ikon = {True: "Semua model sepakat", False: "Model berbeda pendapat"}
+        st.markdown(
+            f"### Konsensus: <span style='color:{warna[konsensus]}'"
+            f">{konsensus}</span> "
+            f"<span style='color:var(--mut);font-size:0.85rem'>"
+            f"({suara[konsensus]}/{len(baris)} model · "
+            f"{ikon[serempak]})</span>",
+            unsafe_allow_html=True)
+
+        # kartu tiap model
+        for b in baris:
+            p = b["kemungkinan"]
+            urut = np.argsort(p)[::-1]
+            details = " · ".join(
+                f"{KELAS[i]} {p[i]*100:.1f}%" for i in urut)
+            st.markdown(
+                f"""
+<div style="background:var(--panel);border:1px solid var(--line);
+     border-radius:12px;padding:0.85rem 1.1rem;margin:0.55rem 0;">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;">
+     <b style="color:var(--ink);font-size:0.98rem">{b["model"]}</b>
+     <span style="color:var(--mut);font-size:0.72rem">Macro-F1 uji
+       {b["macro_f1"]:.4f}</span>
+  </div>
+  <div style="margin-top:0.35rem;
+       font-size:1.18rem;font-weight:700;color:{warna[b["prediksi"]]}">
+       {b["prediksi"].upper()}</div>
+  <div style="color:var(--mut);font-size:0.8rem;margin-top:0.25rem">
+       {details}</div>
+</div>""",
+                unsafe_allow_html=True)
+
+        # input yang dikirim ke model
+        with st.expander("Input yang dikirim ke model"):
+            st.code(input_text(teks, aspek))
+
+st.markdown("---")
+with st.expander("Tentang dan keterbatasan"):
     st.markdown("""
-    <div class="empty">
-      Hasil perbandingan empat model akan muncul di sini setelah analisa.
-    </div>""", unsafe_allow_html=True)
-else:
-    for row in simpan:
-        st.markdown(kartu(row), unsafe_allow_html=True)
+**Kondisi yang dipakai:** semua model dilatih pada data augmented (11.452
+instance). Macro-F1 pada data uji 1.261 instance:
+mBERT 0,7100 · Transformer 0,6008 · BiLSTM 0,5857 · TF-IDF 0,5794.
 
-st.markdown("<div style='margin-top:1.6rem'></div>", unsafe_allow_html=True)
+**Keterbatasan yang perlu diingat saat membaca hasil:**
 
-# ------------------------------------------------------------
-# Metrik penelitian (dibuat oleh src/analysis/make_web_figures.py)
-# ------------------------------------------------------------
-FIG_DIR = Path(__file__).parent / "figures"
-
-
-def grafik(nama: str, keterangan: str) -> None:
-    p = FIG_DIR / nama
-    if p.exists():
-        st.image(str(p), use_container_width=True)
-        st.caption(keterangan)
-    else:
-        st.caption(f"Grafik {nama} belum tersedia.")
-
-
-st.markdown("<div class='sec'>Metrik penelitian</div>", unsafe_allow_html=True)
-
-with st.expander("Grafik metrik dan tabel hasil lengkap", expanded=False):
-    t1, t2, t3, t4 = st.tabs(["Macro-F1 clean", "Robustness Drop",
-                              "Augmentation Gain", "F1 per kelas"])
-
-    with t1:
-        grafik("macro_f1_clean.png",
-               "F1_clean: Macro-F1 pada clean test set, kondisi original "
-               "dibandingkan augmented. Garis putus-putus adalah baseline "
-               "tebak mayoritas per aspek (0,586).")
-
-    with t2:
-        grafik("robustness_drop.png",
-               "Robustness Drop(k) = F1_clean - F1_noisy(k). Nilai kecil "
-               "berarti model lebih tahan terhadap fenomena informal tersebut. "
-               "Nilai negatif dilaporkan apa adanya.")
-
-    with t3:
-        grafik("augmentation_gain.png",
-               "Augmentation Gain(k) = F1_augmented(k) - F1_original(k). "
-               "Positif berarti augmentation menaikkan Macro-F1, negatif berarti "
-               "menurunkannya.")
-
-    with t4:
-        grafik("per_class_f1.png",
-               "F1 tiap kelas polaritas pada clean test set (kondisi augmented). "
-               "Menjelaskan mengapa Macro-F1 lebih rendah daripada akurasi: "
-               "kelas netral hanya 3,7% data latih.")
-
-    matriks = FIG_DIR / "macro_f1_matrix.csv"
-    if matriks.exists():
-        import pandas as pd
-
-        df = pd.read_csv(matriks)
-        st.markdown("**Macro-F1 kondisi augmented pada seluruh test set**")
-        st.dataframe(df, use_container_width=True, hide_index=True)
-        st.caption("Kolom clean adalah test set asli; kolom lainnya adalah "
-                   "varian noisy dengan satu fenomena informal per salinan.")
-
-st.markdown("<div style='margin-top:1.6rem'></div>", unsafe_allow_html=True)
-
-st.markdown("""
-<div class="foot-wrap">
-  <div class="foot-col">
-    <div class="foot-h">Macro-F1 test (augmented)</div>
-    <div class="foot-row"><span>mBERT</span><b>0,671</b></div>
-    <div class="foot-row"><span>Transformer</span><b>0,613</b></div>
-    <div class="foot-row"><span>TF-IDF</span><b>0,609</b></div>
-    <div class="foot-row"><span>BiLSTM</span><b>0,595</b></div>
-  </div>
-  <div class="foot-col">
-    <div class="foot-h">Data latih</div>
-    <div class="foot-row"><span>IndoHotelABSA</span><b>8.107</b></div>
-    <div class="foot-row"><span>Tech ABSA</span><b>7.084</b></div>
-    <div class="foot-row"><span>Tokopedia</span><b>3.925</b></div>
-    <div class="foot-row"><span>Total instance</span><b>19.116</b></div>
-  </div>
-  <div class="foot-col">
-    <div class="foot-h">Sistem</div>
-    <div class="foot-row"><span>Deteksi aspek (BIO)</span><b>F1 0,684</b></div>
-    <div class="foot-row"><span>Aspek gabungan</span><b>8 kategori</b></div>
-    <div class="foot-row"><span>Polaritas</span><b>3 kelas</b></div>
-    <div class="foot-row"><span>Uji McNemar</span><b>p&lt;0,001</b></div>
-  </div>
-</div>
-
-""", unsafe_allow_html=True)
+- Kelas netral cuma 5,2% data latih, jadi prediksi netral lebih jarang
+  dan lebih mudah salah (F1 mBERT untuk netral hanya 0,417)
+- Skor TD-IDF adalah kemiripan kosinus yang diubah jadi distribusi
+  sederhana agar bisa dibandingkan; bukan probabilitas terkalibrasi
+- Aspek **Umum** hampir tidak terwakili di data latih (0,8%)
+- Penurunan terbesar model ada pada teks yang banyak salah tulis
+  (uji robustness: typo menurunkan Macro-F1 mBERT 5,7 poin)
+- Model dievaluasi pada ulasan marketplace; keluar dari domain itu
+  kinerjanya tidak dijamin
+""")

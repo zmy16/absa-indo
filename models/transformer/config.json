@@ -1,0 +1,18 @@
+{
+  "model": "transformer",
+  "vocab_size": 22877,
+  "embed": 128,
+  "heads": 4,
+  "layers": 2,
+  "ff": 256,
+  "num_labels": 3,
+  "max_len": 256,
+  "kelas": [
+    "negatif",
+    "netral",
+    "positif"
+  ],
+  "epoch_terbaik": 11,
+  "val_f1": 0.6396,
+  "macro_f1_uji": 0.6008
+}

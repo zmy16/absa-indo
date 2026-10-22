@@ -1,0 +1,1262 @@
+id,ulasan_id,aspek,polaritas_asli,prediksi_bilstm
+lazada:02665:inst1,lazada:02665,Kualitas Produk,negatif,0
+lazada:02801:inst1,lazada:02801,Kualitas Produk,negatif,0
+lazada:02805:inst1,lazada:02805,Kualitas Produk,negatif,0
+lazada:02805:inst2,lazada:02805,Pelayanan,negatif,0
+lazada:02829:inst1,lazada:02829,Kualitas Produk,negatif,0
+lazada:02829:inst2,lazada:02829,Pelayanan,netral,0
+lazada:02834:inst1,lazada:02834,Pengiriman,negatif,0
+lazada:02834:inst2,lazada:02834,Pelayanan,negatif,0
+lazada:02854:inst1,lazada:02854,Pelayanan,negatif,0
+lazada:02973:inst1,lazada:02973,Pengiriman,negatif,0
+lazada:02973:inst2,lazada:02973,Pelayanan,negatif,0
+lazada:02979:inst1,lazada:02979,Pelayanan,negatif,0
+lazada:03034:inst1,lazada:03034,Kualitas Produk,positif,0
+lazada:03034:inst2,lazada:03034,Pengiriman,negatif,0
+lazada:03044:inst1,lazada:03044,Kualitas Produk,positif,2
+lazada:03044:inst2,lazada:03044,Pelayanan,positif,2
+lazada:03044:inst3,lazada:03044,Pengiriman,negatif,1
+lazada:03075:inst1,lazada:03075,Pelayanan,negatif,0
+lazada:03075:inst2,lazada:03075,Kualitas Produk,negatif,0
+lazada:03159:inst1,lazada:03159,Kualitas Produk,positif,2
+lazada:03159:inst2,lazada:03159,Pengiriman,negatif,0
+lazada:03186:inst1,lazada:03186,Kualitas Produk,positif,0
+lazada:03186:inst2,lazada:03186,Pelayanan,negatif,0
+lazada:03186:inst3,lazada:03186,Harga,positif,2
+lazada:03234:inst1,lazada:03234,Kualitas Produk,negatif,0
+lazada:03265:inst1,lazada:03265,Kualitas Produk,negatif,0
+lazada:03291:inst1,lazada:03291,Kualitas Produk,netral,2
+lazada:03291:inst2,lazada:03291,Harga,netral,2
+lazada:03335:inst1,lazada:03335,Kualitas Produk,positif,2
+lazada:03335:inst2,lazada:03335,Pelayanan,positif,2
+lazada:03335:inst3,lazada:03335,Pengiriman,positif,2
+lazada:03367:inst1,lazada:03367,Kualitas Produk,negatif,0
+lazada:03378:inst1,lazada:03378,Kualitas Produk,negatif,0
+lazada:03378:inst2,lazada:03378,Pelayanan,negatif,0
+lazada:03378:inst3,lazada:03378,Harga,negatif,0
+lazada:03412:inst1,lazada:03412,Pengiriman,positif,1
+lazada:03412:inst2,lazada:03412,Kualitas Produk,positif,2
+lazada:03413:inst1,lazada:03413,Kualitas Produk,positif,0
+lazada:03516:inst1,lazada:03516,Umum,positif,2
+lazada:03554:inst1,lazada:03554,Pengiriman,positif,2
+lazada:03554:inst2,lazada:03554,Kualitas Produk,positif,2
+lazada:03632:inst1,lazada:03632,Kualitas Produk,positif,2
+lazada:03632:inst2,lazada:03632,Pengiriman,positif,0
+lazada:03632:inst3,lazada:03632,Harga,positif,2
+lazada:03638:inst1,lazada:03638,Pengiriman,netral,1
+lazada:03638:inst2,lazada:03638,Kualitas Produk,positif,2
+lazada:03647:inst1,lazada:03647,Pengiriman,positif,0
+lazada:03647:inst2,lazada:03647,Kualitas Produk,netral,2
+lazada:03689:inst1,lazada:03689,Kualitas Produk,positif,2
+lazada:03689:inst2,lazada:03689,Pengiriman,negatif,0
+lazada:03744:inst1,lazada:03744,Pelayanan,negatif,0
+lazada:03744:inst2,lazada:03744,Kualitas Produk,negatif,0
+lazada:03744:inst3,lazada:03744,Pengiriman,positif,0
+lazada:03755:inst1,lazada:03755,Kualitas Produk,positif,2
+lazada:03795:inst1,lazada:03795,Pengiriman,netral,0
+lazada:03795:inst2,lazada:03795,Kualitas Produk,positif,2
+beauty:00035:inst1,beauty:00035,Kualitas Produk,negatif,0
+beauty:00035:inst2,beauty:00035,Pelayanan,negatif,0
+beauty:00076:inst1,beauty:00076,Kualitas Produk,negatif,0
+beauty:00076:inst2,beauty:00076,Harga,negatif,0
+beauty:00113:inst1,beauty:00113,Kualitas Produk,positif,0
+beauty:00113:inst2,beauty:00113,Pelayanan,negatif,0
+beauty:00113:inst3,beauty:00113,Pengiriman,negatif,0
+beauty:00192:inst1,beauty:00192,Kualitas Produk,negatif,0
+beauty:00192:inst2,beauty:00192,Pengiriman,negatif,0
+beauty:00192:inst3,beauty:00192,Pelayanan,negatif,0
+beauty:00218:inst1,beauty:00218,Pengiriman,negatif,0
+beauty:00218:inst2,beauty:00218,Pelayanan,negatif,2
+beauty:00321:inst1,beauty:00321,Kualitas Produk,negatif,0
+beauty:00321:inst2,beauty:00321,Pelayanan,negatif,0
+beauty:00324:inst1,beauty:00324,Kualitas Produk,negatif,0
+beauty:00324:inst2,beauty:00324,Pelayanan,negatif,0
+beauty:00403:inst1,beauty:00403,Pengiriman,negatif,0
+beauty:00403:inst2,beauty:00403,Pelayanan,negatif,0
+beauty:00402:inst1,beauty:00402,Pelayanan,negatif,0
+beauty:00402:inst2,beauty:00402,Pengiriman,negatif,0
+beauty:00402:inst3,beauty:00402,Harga,negatif,0
+beauty:00439:inst1,beauty:00439,Pengiriman,negatif,0
+beauty:00505:inst1,beauty:00505,Pelayanan,negatif,0
+beauty:00506:inst1,beauty:00506,Pelayanan,negatif,0
+beauty:00506:inst2,beauty:00506,Pengiriman,negatif,0
+beauty:00517:inst1,beauty:00517,Pengiriman,positif,0
+beauty:00517:inst2,beauty:00517,Pelayanan,negatif,0
+beauty:00525:inst1,beauty:00525,Pengiriman,negatif,0
+beauty:00568:inst1,beauty:00568,Harga,positif,0
+beauty:00568:inst2,beauty:00568,Pelayanan,negatif,0
+beauty:00588:inst1,beauty:00588,Pengiriman,negatif,0
+beauty:00668:inst1,beauty:00668,Kualitas Produk,negatif,2
+beauty:00668:inst2,beauty:00668,Harga,positif,2
+beauty:00692:inst1,beauty:00692,Kualitas Produk,negatif,0
+beauty:00750:inst1,beauty:00750,Pelayanan,positif,0
+beauty:00750:inst2,beauty:00750,Kualitas Produk,negatif,0
+beauty:00763:inst1,beauty:00763,Kualitas Produk,negatif,0
+beauty:00763:inst2,beauty:00763,Pelayanan,negatif,0
+beauty:00779:inst1,beauty:00779,Pelayanan,negatif,0
+beauty:00866:inst1,beauty:00866,Kualitas Produk,negatif,0
+beauty:00866:inst2,beauty:00866,Pelayanan,negatif,0
+beauty:00989:inst1,beauty:00989,Kualitas Produk,negatif,0
+beauty:01003:inst1,beauty:01003,Pelayanan,positif,0
+beauty:01003:inst2,beauty:01003,Kualitas Produk,negatif,0
+beauty:01012:inst1,beauty:01012,Harga,positif,2
+beauty:01038:inst1,beauty:01038,Kualitas Produk,negatif,0
+beauty:01106:inst1,beauty:01106,Pengiriman,negatif,1
+beauty:01241:inst1,beauty:01241,Kualitas Produk,negatif,0
+beauty:01272:inst1,beauty:01272,Pengiriman,negatif,0
+beauty:01272:inst2,beauty:01272,Pelayanan,negatif,0
+beauty:01272:inst3,beauty:01272,Kualitas Produk,negatif,0
+beauty:01329:inst1,beauty:01329,Kualitas Produk,negatif,0
+beauty:01372:inst1,beauty:01372,Kualitas Produk,positif,2
+beauty:01369:inst1,beauty:01369,Pengiriman,positif,0
+beauty:01417:inst1,beauty:01417,Kualitas Produk,positif,0
+beauty:01417:inst2,beauty:01417,Pengiriman,negatif,0
+beauty:01523:inst1,beauty:01523,Pelayanan,negatif,0
+beauty:01590:inst1,beauty:01590,Pelayanan,negatif,0
+beauty:01674:inst1,beauty:01674,Kualitas Produk,positif,2
+beauty:01674:inst2,beauty:01674,Pengiriman,negatif,0
+beauty:01682:inst1,beauty:01682,Pengiriman,negatif,0
+beauty:01685:inst1,beauty:01685,Kualitas Produk,negatif,0
+beauty:01709:inst1,beauty:01709,Pelayanan,negatif,0
+beauty:01709:inst2,beauty:01709,Pengiriman,negatif,0
+beauty:01743:inst1,beauty:01743,Kualitas Produk,positif,0
+beauty:01743:inst2,beauty:01743,Pengiriman,negatif,0
+beauty:01761:inst1,beauty:01761,Kualitas Produk,negatif,0
+beauty:01765:inst1,beauty:01765,Pelayanan,positif,2
+beauty:01765:inst2,beauty:01765,Kualitas Produk,positif,2
+beauty:01765:inst3,beauty:01765,Harga,positif,2
+beauty:01765:inst4,beauty:01765,Pengiriman,positif,2
+beauty:01824:inst1,beauty:01824,Kualitas Produk,positif,2
+beauty:01824:inst2,beauty:01824,Pelayanan,positif,2
+beauty:01886:inst1,beauty:01886,Kualitas Produk,positif,2
+beauty:01889:inst1,beauty:01889,Kualitas Produk,positif,2
+beauty:01954:inst1,beauty:01954,Harga,positif,2
+beauty:01954:inst2,beauty:01954,Kualitas Produk,netral,2
+beauty:02066:inst1,beauty:02066,Kualitas Produk,positif,0
+beauty:02066:inst2,beauty:02066,Harga,positif,2
+beauty:02093:inst1,beauty:02093,Kualitas Produk,positif,2
+beauty:02126:inst1,beauty:02126,Kualitas Produk,positif,2
+beauty:02126:inst2,beauty:02126,Pelayanan,positif,2
+beauty:02126:inst3,beauty:02126,Pengiriman,positif,2
+beauty:02156:inst1,beauty:02156,Kualitas Produk,negatif,2
+beauty:02156:inst2,beauty:02156,Pelayanan,positif,0
+beauty:02171:inst1,beauty:02171,Kualitas Produk,positif,2
+beauty:02223:inst1,beauty:02223,Pengiriman,positif,2
+beauty:02223:inst2,beauty:02223,Pelayanan,positif,2
+beauty:02246:inst1,beauty:02246,Pengiriman,positif,2
+beauty:02246:inst2,beauty:02246,Pelayanan,positif,2
+beauty:02252:inst1,beauty:02252,Kualitas Produk,positif,2
+beauty:02252:inst2,beauty:02252,Pengiriman,negatif,2
+beauty:02298:inst1,beauty:02298,Kualitas Produk,negatif,0
+beauty:02298:inst2,beauty:02298,Pelayanan,positif,2
+beauty:02315:inst1,beauty:02315,Kualitas Produk,positif,0
+beauty:02377:inst1,beauty:02377,Kualitas Produk,negatif,2
+tokopedia:03814:inst1,tokopedia:03814,Pelayanan,negatif,2
+tokopedia:03831:inst1,tokopedia:03831,Kualitas Produk,negatif,0
+tokopedia:03849:inst1,tokopedia:03849,Pengiriman,negatif,0
+tokopedia:03849:inst2,tokopedia:03849,Kualitas Produk,negatif,0
+tokopedia:03981:inst1,tokopedia:03981,Kualitas Produk,negatif,0
+tokopedia:04017:inst1,tokopedia:04017,Kualitas Produk,negatif,0
+tokopedia:04017:inst2,tokopedia:04017,Harga,netral,2
+tokopedia:04077:inst1,tokopedia:04077,Pelayanan,negatif,0
+tokopedia:04092:inst1,tokopedia:04092,Pengiriman,negatif,0
+tokopedia:04111:inst1,tokopedia:04111,Kualitas Produk,negatif,0
+tokopedia:04111:inst2,tokopedia:04111,Pelayanan,negatif,0
+tokopedia:04230:inst1,tokopedia:04230,Kualitas Produk,negatif,0
+tokopedia:04241:inst1,tokopedia:04241,Pengiriman,negatif,0
+tokopedia:04241:inst2,tokopedia:04241,Kualitas Produk,negatif,0
+tokopedia:04303:inst1,tokopedia:04303,Kualitas Produk,positif,2
+tokopedia:04303:inst2,tokopedia:04303,Pelayanan,negatif,0
+tokopedia:04360:inst1,tokopedia:04360,Pelayanan,negatif,0
+tokopedia:04425:inst1,tokopedia:04425,Kualitas Produk,positif,2
+tokopedia:04425:inst2,tokopedia:04425,Pelayanan,positif,0
+tokopedia:04425:inst3,tokopedia:04425,Pengiriman,negatif,0
+tokopedia:04431:inst1,tokopedia:04431,Kualitas Produk,netral,0
+tokopedia:04431:inst2,tokopedia:04431,Harga,negatif,2
+tokopedia:04438:inst1,tokopedia:04438,Pelayanan,negatif,0
+tokopedia:04499:inst1,tokopedia:04499,Kualitas Produk,negatif,0
+tokopedia:04501:inst1,tokopedia:04501,Kualitas Produk,negatif,0
+tokopedia:04512:inst1,tokopedia:04512,Pelayanan,negatif,0
+tokopedia:04521:inst1,tokopedia:04521,Kualitas Produk,negatif,0
+tokopedia:04521:inst2,tokopedia:04521,Harga,negatif,2
+tokopedia:04537:inst1,tokopedia:04537,Kualitas Produk,negatif,0
+tokopedia:04570:inst1,tokopedia:04570,Pengiriman,positif,0
+tokopedia:04570:inst2,tokopedia:04570,Kualitas Produk,negatif,2
+tokopedia:04627:inst1,tokopedia:04627,Pelayanan,negatif,0
+tokopedia:04665:inst1,tokopedia:04665,Kualitas Produk,positif,2
+tokopedia:04724:inst1,tokopedia:04724,Kualitas Produk,negatif,0
+tokopedia:04724:inst2,tokopedia:04724,Pelayanan,negatif,0
+tokopedia:04773:inst1,tokopedia:04773,Umum,positif,2
+tokopedia:04798:inst1,tokopedia:04798,Kualitas Produk,negatif,0
+tokopedia:04827:inst1,tokopedia:04827,Kualitas Produk,positif,0
+tokopedia:04827:inst2,tokopedia:04827,Harga,positif,2
+tokopedia:04827:inst3,tokopedia:04827,Pelayanan,positif,2
+tokopedia:04860:inst1,tokopedia:04860,Kualitas Produk,positif,2
+tokopedia:04860:inst2,tokopedia:04860,Pelayanan,positif,2
+tokopedia:04860:inst3,tokopedia:04860,Pengiriman,positif,1
+tokopedia:04922:inst1,tokopedia:04922,Kualitas Produk,positif,0
+lazada:02604:inst1,lazada:02604,Kualitas Produk,negatif,0
+lazada:02605:inst1,lazada:02605,Kualitas Produk,negatif,0
+lazada:02605:inst2,lazada:02605,Pengiriman,negatif,0
+lazada:02613:inst1,lazada:02613,Pengiriman,negatif,0
+lazada:02621:inst1,lazada:02621,Kualitas Produk,negatif,0
+lazada:02622:inst1,lazada:02622,Kualitas Produk,negatif,0
+lazada:02631:inst1,lazada:02631,Kualitas Produk,negatif,0
+lazada:02637:inst1,lazada:02637,Pengiriman,negatif,0
+lazada:02654:inst1,lazada:02654,Pengiriman,negatif,0
+lazada:02654:inst2,lazada:02654,Pelayanan,negatif,0
+lazada:02654:inst3,lazada:02654,Kualitas Produk,negatif,0
+lazada:02674:inst1,lazada:02674,Kualitas Produk,negatif,0
+lazada:02681:inst1,lazada:02681,Kualitas Produk,negatif,0
+lazada:02705:inst1,lazada:02705,Pengiriman,negatif,2
+lazada:02707:inst1,lazada:02707,Kualitas Produk,negatif,0
+lazada:02715:inst1,lazada:02715,Kualitas Produk,negatif,0
+lazada:02719:inst1,lazada:02719,Kualitas Produk,negatif,0
+lazada:02720:inst1,lazada:02720,Kualitas Produk,negatif,0
+lazada:02720:inst2,lazada:02720,Pengiriman,negatif,0
+lazada:02720:inst3,lazada:02720,Pelayanan,negatif,0
+lazada:02737:inst1,lazada:02737,Kualitas Produk,negatif,0
+lazada:02737:inst2,lazada:02737,Pelayanan,positif,0
+lazada:02746:inst1,lazada:02746,Harga,positif,0
+lazada:02746:inst2,lazada:02746,Kualitas Produk,negatif,0
+lazada:02773:inst1,lazada:02773,Pengiriman,negatif,0
+lazada:02780:inst1,lazada:02780,Pelayanan,negatif,0
+lazada:02780:inst2,lazada:02780,Kualitas Produk,negatif,0
+lazada:02784:inst1,lazada:02784,Kualitas Produk,negatif,0
+lazada:02795:inst1,lazada:02795,Pelayanan,negatif,0
+lazada:02807:inst1,lazada:02807,Kualitas Produk,negatif,0
+lazada:02807:inst2,lazada:02807,Harga,negatif,2
+lazada:02808:inst1,lazada:02808,Pengiriman,negatif,0
+lazada:02813:inst1,lazada:02813,Pengiriman,negatif,0
+lazada:02813:inst2,lazada:02813,Kualitas Produk,negatif,0
+lazada:02814:inst1,lazada:02814,Pelayanan,negatif,0
+lazada:02818:inst1,lazada:02818,Kualitas Produk,negatif,0
+lazada:02819:inst1,lazada:02819,Pengiriman,positif,1
+lazada:02819:inst2,lazada:02819,Pelayanan,positif,0
+lazada:02819:inst3,lazada:02819,Kualitas Produk,negatif,2
+lazada:02826:inst1,lazada:02826,Kualitas Produk,negatif,2
+lazada:02826:inst2,lazada:02826,Pelayanan,negatif,0
+lazada:02822:inst1,lazada:02822,Kualitas Produk,negatif,2
+lazada:02822:inst2,lazada:02822,Pelayanan,netral,0
+lazada:02836:inst1,lazada:02836,Kualitas Produk,negatif,0
+lazada:02845:inst1,lazada:02845,Harga,positif,2
+lazada:02845:inst2,lazada:02845,Kualitas Produk,negatif,2
+lazada:02856:inst1,lazada:02856,Kualitas Produk,negatif,0
+lazada:02856:inst2,lazada:02856,Pelayanan,negatif,0
+lazada:02859:inst1,lazada:02859,Pengiriman,netral,1
+lazada:02859:inst2,lazada:02859,Kualitas Produk,negatif,0
+lazada:02859:inst3,lazada:02859,Pelayanan,netral,0
+lazada:02889:inst1,lazada:02889,Kualitas Produk,negatif,0
+lazada:02889:inst2,lazada:02889,Pelayanan,positif,0
+lazada:02894:inst1,lazada:02894,Kualitas Produk,negatif,0
+lazada:02899:inst1,lazada:02899,Pelayanan,negatif,0
+lazada:02899:inst2,lazada:02899,Kualitas Produk,negatif,0
+lazada:02907:inst1,lazada:02907,Pengiriman,netral,0
+lazada:02907:inst2,lazada:02907,Pelayanan,negatif,0
+lazada:02907:inst3,lazada:02907,Kualitas Produk,negatif,0
+lazada:02909:inst1,lazada:02909,Kualitas Produk,negatif,0
+lazada:02922:inst1,lazada:02922,Pelayanan,negatif,0
+lazada:02930:inst1,lazada:02930,Pengiriman,negatif,0
+lazada:02930:inst2,lazada:02930,Kualitas Produk,negatif,0
+lazada:02930:inst3,lazada:02930,Harga,positif,2
+lazada:02939:inst1,lazada:02939,Kualitas Produk,negatif,0
+lazada:02996:inst1,lazada:02996,Kualitas Produk,negatif,0
+lazada:02996:inst2,lazada:02996,Pelayanan,netral,0
+lazada:03017:inst1,lazada:03017,Pelayanan,negatif,0
+lazada:03026:inst1,lazada:03026,Pelayanan,netral,0
+lazada:03026:inst2,lazada:03026,Pengiriman,positif,0
+lazada:03026:inst3,lazada:03026,Harga,negatif,2
+lazada:03026:inst4,lazada:03026,Kualitas Produk,negatif,0
+lazada:03035:inst1,lazada:03035,Kualitas Produk,negatif,0
+lazada:03035:inst2,lazada:03035,Pelayanan,negatif,0
+lazada:03038:inst1,lazada:03038,Kualitas Produk,positif,0
+lazada:03038:inst2,lazada:03038,Pengiriman,netral,2
+lazada:03038:inst3,lazada:03038,Pelayanan,negatif,0
+lazada:03066:inst1,lazada:03066,Kualitas Produk,positif,2
+lazada:03067:inst1,lazada:03067,Kualitas Produk,negatif,0
+lazada:03077:inst1,lazada:03077,Kualitas Produk,positif,2
+lazada:03077:inst2,lazada:03077,Pelayanan,negatif,2
+lazada:03081:inst1,lazada:03081,Kualitas Produk,negatif,0
+lazada:03081:inst2,lazada:03081,Harga,positif,2
+lazada:03086:inst1,lazada:03086,Pelayanan,negatif,0
+lazada:03088:inst1,lazada:03088,Kualitas Produk,netral,2
+lazada:03092:inst1,lazada:03092,Kualitas Produk,negatif,2
+lazada:03099:inst1,lazada:03099,Harga,positif,2
+lazada:03099:inst2,lazada:03099,Kualitas Produk,negatif,2
+lazada:03099:inst3,lazada:03099,Pelayanan,positif,2
+lazada:03099:inst4,lazada:03099,Pengiriman,positif,2
+lazada:03109:inst1,lazada:03109,Pengiriman,negatif,0
+lazada:03123:inst1,lazada:03123,Pelayanan,positif,2
+lazada:03123:inst2,lazada:03123,Kualitas Produk,positif,2
+lazada:03123:inst3,lazada:03123,Pengiriman,negatif,1
+lazada:03129:inst1,lazada:03129,Kualitas Produk,positif,2
+lazada:03129:inst2,lazada:03129,Pelayanan,positif,0
+lazada:03129:inst3,lazada:03129,Pengiriman,negatif,0
+lazada:03130:inst1,lazada:03130,Pelayanan,positif,2
+lazada:03130:inst2,lazada:03130,Pengiriman,negatif,1
+lazada:03131:inst1,lazada:03131,Pengiriman,negatif,0
+lazada:03131:inst2,lazada:03131,Umum,positif,2
+lazada:03132:inst1,lazada:03132,Pengiriman,negatif,0
+lazada:03133:inst1,lazada:03133,Pengiriman,positif,1
+lazada:03133:inst2,lazada:03133,Kualitas Produk,negatif,2
+lazada:03135:inst1,lazada:03135,Harga,negatif,2
+lazada:03157:inst1,lazada:03157,Pelayanan,positif,2
+lazada:03157:inst2,lazada:03157,Pengiriman,negatif,0
+lazada:03177:inst1,lazada:03177,Harga,positif,2
+lazada:03197:inst1,lazada:03197,Pelayanan,negatif,0
+lazada:03217:inst1,lazada:03217,Pengiriman,netral,0
+lazada:03231:inst1,lazada:03231,Harga,positif,2
+lazada:03231:inst2,lazada:03231,Kualitas Produk,negatif,2
+lazada:03254:inst1,lazada:03254,Pelayanan,negatif,2
+lazada:03254:inst2,lazada:03254,Kualitas Produk,positif,2
+lazada:03266:inst1,lazada:03266,Kualitas Produk,positif,2
+lazada:03267:inst1,lazada:03267,Harga,negatif,0
+lazada:03267:inst2,lazada:03267,Kualitas Produk,negatif,0
+lazada:03290:inst1,lazada:03290,Kualitas Produk,positif,0
+lazada:03290:inst2,lazada:03290,Pelayanan,negatif,0
+lazada:03311:inst1,lazada:03311,Umum,positif,2
+lazada:03311:inst2,lazada:03311,Pelayanan,negatif,0
+lazada:03316:inst1,lazada:03316,Pelayanan,positif,0
+lazada:03316:inst2,lazada:03316,Pengiriman,positif,0
+lazada:03316:inst3,lazada:03316,Kualitas Produk,negatif,0
+lazada:03330:inst1,lazada:03330,Kualitas Produk,negatif,0
+lazada:03330:inst2,lazada:03330,Pengiriman,positif,1
+lazada:03354:inst1,lazada:03354,Pelayanan,negatif,0
+lazada:03354:inst2,lazada:03354,Pengiriman,negatif,0
+lazada:03369:inst1,lazada:03369,Kualitas Produk,negatif,0
+lazada:03369:inst2,lazada:03369,Harga,positif,2
+lazada:03380:inst1,lazada:03380,Kualitas Produk,negatif,2
+lazada:03383:inst1,lazada:03383,Pelayanan,negatif,0
+lazada:03383:inst2,lazada:03383,Kualitas Produk,positif,0
+lazada:03403:inst1,lazada:03403,Kualitas Produk,positif,0
+lazada:03403:inst2,lazada:03403,Harga,positif,2
+lazada:03405:inst1,lazada:03405,Pengiriman,negatif,0
+lazada:03405:inst2,lazada:03405,Kualitas Produk,netral,0
+lazada:03398:inst1,lazada:03398,Kualitas Produk,positif,2
+lazada:03398:inst2,lazada:03398,Harga,positif,2
+lazada:03437:inst1,lazada:03437,Pengiriman,positif,1
+lazada:03437:inst2,lazada:03437,Pelayanan,positif,2
+lazada:03439:inst1,lazada:03439,Pelayanan,positif,2
+lazada:03439:inst2,lazada:03439,Kualitas Produk,positif,2
+lazada:03442:inst1,lazada:03442,Pengiriman,positif,0
+lazada:03442:inst2,lazada:03442,Kualitas Produk,positif,2
+lazada:03475:inst1,lazada:03475,Pengiriman,netral,1
+lazada:03475:inst2,lazada:03475,Kualitas Produk,positif,2
+lazada:03483:inst1,lazada:03483,Kualitas Produk,positif,2
+lazada:03483:inst2,lazada:03483,Pengiriman,positif,0
+lazada:03483:inst3,lazada:03483,Pelayanan,negatif,0
+lazada:03499:inst1,lazada:03499,Kualitas Produk,positif,2
+lazada:03499:inst2,lazada:03499,Pelayanan,positif,2
+lazada:03509:inst1,lazada:03509,Pengiriman,netral,0
+lazada:03509:inst2,lazada:03509,Kualitas Produk,negatif,0
+lazada:03511:inst1,lazada:03511,Pengiriman,positif,1
+lazada:03511:inst2,lazada:03511,Kualitas Produk,positif,2
+lazada:03523:inst1,lazada:03523,Kualitas Produk,positif,2
+lazada:03526:inst1,lazada:03526,Pengiriman,positif,2
+lazada:03526:inst2,lazada:03526,Kualitas Produk,positif,2
+lazada:03526:inst3,lazada:03526,Pelayanan,positif,2
+lazada:03553:inst1,lazada:03553,Kualitas Produk,negatif,2
+lazada:03561:inst1,lazada:03561,Kualitas Produk,positif,2
+lazada:03571:inst1,lazada:03571,Kualitas Produk,positif,2
+lazada:03571:inst2,lazada:03571,Pengiriman,positif,1
+lazada:03597:inst1,lazada:03597,Pelayanan,positif,0
+lazada:03602:inst1,lazada:03602,Pelayanan,positif,2
+lazada:03602:inst2,lazada:03602,Pengiriman,positif,2
+lazada:03606:inst1,lazada:03606,Pengiriman,positif,1
+lazada:03606:inst2,lazada:03606,Pelayanan,positif,2
+lazada:03607:inst1,lazada:03607,Pengiriman,positif,1
+lazada:03607:inst2,lazada:03607,Kualitas Produk,positif,2
+lazada:03607:inst3,lazada:03607,Pelayanan,positif,2
+lazada:03620:inst1,lazada:03620,Pengiriman,netral,1
+lazada:03620:inst2,lazada:03620,Pelayanan,negatif,2
+lazada:03620:inst3,lazada:03620,Kualitas Produk,positif,2
+lazada:03620:inst4,lazada:03620,Harga,positif,2
+lazada:03623:inst1,lazada:03623,Umum,positif,2
+lazada:03623:inst2,lazada:03623,Pengiriman,positif,2
+lazada:03623:inst3,lazada:03623,Kualitas Produk,positif,2
+lazada:03628:inst1,lazada:03628,Pengiriman,positif,0
+lazada:03628:inst2,lazada:03628,Kualitas Produk,positif,0
+lazada:03663:inst1,lazada:03663,Kualitas Produk,positif,2
+lazada:03663:inst2,lazada:03663,Pengiriman,negatif,0
+lazada:03673:inst1,lazada:03673,Harga,netral,2
+lazada:03673:inst2,lazada:03673,Kualitas Produk,positif,2
+lazada:03677:inst1,lazada:03677,Pengiriman,positif,2
+lazada:03677:inst2,lazada:03677,Umum,positif,2
+lazada:03701:inst1,lazada:03701,Kualitas Produk,positif,0
+lazada:03701:inst2,lazada:03701,Pengiriman,negatif,0
+lazada:03698:inst1,lazada:03698,Pengiriman,netral,0
+lazada:03698:inst2,lazada:03698,Pelayanan,positif,2
+lazada:03698:inst3,lazada:03698,Kualitas Produk,positif,2
+lazada:03703:inst1,lazada:03703,Pengiriman,netral,0
+lazada:03703:inst2,lazada:03703,Pelayanan,positif,0
+lazada:03703:inst3,lazada:03703,Kualitas Produk,positif,2
+lazada:03705:inst1,lazada:03705,Kualitas Produk,positif,2
+lazada:03707:inst1,lazada:03707,Kualitas Produk,positif,2
+lazada:03713:inst1,lazada:03713,Kualitas Produk,positif,2
+lazada:03713:inst2,lazada:03713,Harga,positif,2
+lazada:03715:inst1,lazada:03715,Pengiriman,netral,2
+lazada:03715:inst2,lazada:03715,Pelayanan,netral,2
+lazada:03715:inst3,lazada:03715,Harga,positif,2
+lazada:03715:inst4,lazada:03715,Kualitas Produk,positif,2
+lazada:03723:inst1,lazada:03723,Kualitas Produk,positif,0
+lazada:03725:inst1,lazada:03725,Pengiriman,positif,2
+lazada:03725:inst2,lazada:03725,Kualitas Produk,positif,2
+lazada:03733:inst1,lazada:03733,Pengiriman,positif,2
+lazada:03733:inst2,lazada:03733,Harga,positif,2
+lazada:03733:inst3,lazada:03733,Kualitas Produk,positif,2
+lazada:03748:inst1,lazada:03748,Kualitas Produk,positif,2
+lazada:03760:inst1,lazada:03760,Kualitas Produk,positif,2
+lazada:03760:inst2,lazada:03760,Pengiriman,positif,2
+lazada:03763:inst1,lazada:03763,Pengiriman,netral,0
+lazada:03763:inst2,lazada:03763,Kualitas Produk,positif,2
+lazada:03771:inst1,lazada:03771,Kualitas Produk,positif,2
+lazada:03771:inst2,lazada:03771,Pengiriman,positif,2
+lazada:03771:inst3,lazada:03771,Pelayanan,negatif,2
+lazada:03774:inst1,lazada:03774,Pelayanan,positif,0
+lazada:03774:inst2,lazada:03774,Pengiriman,positif,0
+lazada:03776:inst1,lazada:03776,Pelayanan,positif,2
+lazada:03776:inst2,lazada:03776,Pengiriman,positif,2
+lazada:03788:inst1,lazada:03788,Pengiriman,positif,1
+lazada:03788:inst2,lazada:03788,Kualitas Produk,positif,2
+lazada:03788:inst3,lazada:03788,Pelayanan,positif,2
+beauty:00007:inst1,beauty:00007,Pengiriman,netral,0
+beauty:00007:inst2,beauty:00007,Pelayanan,positif,0
+beauty:00007:inst3,beauty:00007,Kualitas Produk,negatif,0
+beauty:00009:inst1,beauty:00009,Pengiriman,negatif,0
+beauty:00010:inst1,beauty:00010,Pelayanan,positif,0
+beauty:00010:inst2,beauty:00010,Kualitas Produk,negatif,0
+beauty:00010:inst3,beauty:00010,Harga,positif,0
+beauty:00011:inst1,beauty:00011,Kualitas Produk,negatif,0
+beauty:00016:inst1,beauty:00016,Umum,negatif,2
+beauty:00034:inst1,beauty:00034,Pelayanan,negatif,0
+beauty:00038:inst1,beauty:00038,Kualitas Produk,negatif,0
+beauty:00038:inst2,beauty:00038,Pelayanan,negatif,0
+beauty:00044:inst1,beauty:00044,Pelayanan,negatif,0
+beauty:00070:inst1,beauty:00070,Kualitas Produk,negatif,2
+beauty:00071:inst1,beauty:00071,Pelayanan,negatif,0
+beauty:00077:inst1,beauty:00077,Pelayanan,negatif,0
+beauty:00080:inst1,beauty:00080,Kualitas Produk,positif,2
+beauty:00088:inst1,beauty:00088,Kualitas Produk,negatif,0
+beauty:00087:inst1,beauty:00087,Pelayanan,negatif,0
+beauty:00100:inst1,beauty:00100,Kualitas Produk,negatif,0
+beauty:00100:inst2,beauty:00100,Harga,negatif,0
+beauty:00104:inst1,beauty:00104,Pengiriman,negatif,0
+beauty:00104:inst2,beauty:00104,Pelayanan,negatif,2
+beauty:00110:inst1,beauty:00110,Kualitas Produk,negatif,0
+beauty:00110:inst2,beauty:00110,Harga,positif,0
+beauty:00120:inst1,beauty:00120,Pelayanan,negatif,0
+beauty:00123:inst1,beauty:00123,Kualitas Produk,negatif,0
+beauty:00123:inst2,beauty:00123,Pengiriman,negatif,0
+beauty:00123:inst3,beauty:00123,Pelayanan,negatif,0
+beauty:00129:inst1,beauty:00129,Kualitas Produk,negatif,0
+beauty:00147:inst1,beauty:00147,Pelayanan,negatif,0
+beauty:00156:inst1,beauty:00156,Kualitas Produk,positif,0
+beauty:00156:inst2,beauty:00156,Pelayanan,negatif,0
+beauty:00163:inst1,beauty:00163,Pelayanan,negatif,0
+beauty:00163:inst2,beauty:00163,Pengiriman,negatif,0
+beauty:00183:inst1,beauty:00183,Pelayanan,negatif,0
+beauty:00186:inst1,beauty:00186,Kualitas Produk,positif,0
+beauty:00186:inst2,beauty:00186,Pelayanan,negatif,0
+beauty:00205:inst1,beauty:00205,Pelayanan,negatif,0
+beauty:00205:inst2,beauty:00205,Kualitas Produk,negatif,0
+beauty:00216:inst1,beauty:00216,Kualitas Produk,negatif,2
+beauty:00215:inst1,beauty:00215,Pengiriman,negatif,0
+beauty:00215:inst2,beauty:00215,Kualitas Produk,netral,0
+beauty:00217:inst1,beauty:00217,Pengiriman,negatif,0
+beauty:00229:inst1,beauty:00229,Pelayanan,negatif,0
+beauty:00267:inst1,beauty:00267,Pelayanan,negatif,0
+beauty:00269:inst1,beauty:00269,Pelayanan,negatif,0
+beauty:00284:inst1,beauty:00284,Kualitas Produk,netral,2
+beauty:00300:inst1,beauty:00300,Kualitas Produk,negatif,2
+beauty:00304:inst1,beauty:00304,Pelayanan,negatif,0
+beauty:00304:inst2,beauty:00304,Pengiriman,positif,0
+beauty:00322:inst1,beauty:00322,Kualitas Produk,negatif,0
+beauty:00326:inst1,beauty:00326,Kualitas Produk,negatif,0
+beauty:00341:inst1,beauty:00341,Pelayanan,negatif,0
+beauty:00341:inst2,beauty:00341,Pengiriman,negatif,0
+beauty:00355:inst1,beauty:00355,Pelayanan,negatif,0
+beauty:00358:inst1,beauty:00358,Kualitas Produk,negatif,0
+beauty:00361:inst1,beauty:00361,Kualitas Produk,negatif,0
+beauty:00361:inst2,beauty:00361,Pelayanan,negatif,0
+beauty:00368:inst1,beauty:00368,Pelayanan,negatif,0
+beauty:00380:inst1,beauty:00380,Pengiriman,negatif,0
+beauty:00380:inst2,beauty:00380,Pelayanan,negatif,0
+beauty:00394:inst1,beauty:00394,Pelayanan,negatif,0
+beauty:00394:inst2,beauty:00394,Harga,negatif,2
+beauty:00400:inst1,beauty:00400,Pelayanan,negatif,0
+beauty:00408:inst1,beauty:00408,Kualitas Produk,negatif,0
+beauty:00409:inst1,beauty:00409,Kualitas Produk,negatif,0
+beauty:00409:inst2,beauty:00409,Pengiriman,negatif,0
+beauty:00412:inst1,beauty:00412,Kualitas Produk,negatif,2
+beauty:00422:inst1,beauty:00422,Kualitas Produk,negatif,0
+beauty:00422:inst2,beauty:00422,Pengiriman,negatif,0
+beauty:00417:inst1,beauty:00417,Pelayanan,negatif,0
+beauty:00425:inst1,beauty:00425,Pelayanan,negatif,0
+beauty:00425:inst2,beauty:00425,Pengiriman,negatif,0
+beauty:00433:inst1,beauty:00433,Kualitas Produk,negatif,0
+beauty:00442:inst1,beauty:00442,Pelayanan,negatif,0
+beauty:00445:inst1,beauty:00445,Pengiriman,negatif,0
+beauty:00449:inst1,beauty:00449,Kualitas Produk,positif,0
+beauty:00449:inst2,beauty:00449,Pelayanan,negatif,0
+beauty:00460:inst1,beauty:00460,Pengiriman,negatif,0
+beauty:00460:inst2,beauty:00460,Pelayanan,negatif,0
+beauty:00462:inst1,beauty:00462,Kualitas Produk,negatif,0
+beauty:00470:inst1,beauty:00470,Kualitas Produk,negatif,0
+beauty:00472:inst1,beauty:00472,Kualitas Produk,negatif,0
+beauty:00478:inst1,beauty:00478,Kualitas Produk,negatif,0
+beauty:00485:inst1,beauty:00485,Kualitas Produk,positif,2
+beauty:00485:inst2,beauty:00485,Pelayanan,negatif,0
+beauty:00499:inst1,beauty:00499,Kualitas Produk,negatif,0
+beauty:00511:inst1,beauty:00511,Harga,positif,2
+beauty:00511:inst2,beauty:00511,Kualitas Produk,negatif,2
+beauty:00515:inst1,beauty:00515,Kualitas Produk,negatif,0
+beauty:00532:inst1,beauty:00532,Pengiriman,netral,0
+beauty:00532:inst2,beauty:00532,Kualitas Produk,negatif,0
+beauty:00548:inst1,beauty:00548,Kualitas Produk,negatif,0
+beauty:00548:inst2,beauty:00548,Pelayanan,negatif,0
+beauty:00553:inst1,beauty:00553,Pengiriman,negatif,0
+beauty:00553:inst2,beauty:00553,Pelayanan,negatif,0
+beauty:00559:inst1,beauty:00559,Kualitas Produk,negatif,0
+beauty:00559:inst2,beauty:00559,Pelayanan,positif,0
+beauty:00562:inst1,beauty:00562,Kualitas Produk,negatif,0
+beauty:00571:inst1,beauty:00571,Pengiriman,negatif,0
+beauty:00571:inst2,beauty:00571,Pelayanan,negatif,0
+beauty:00576:inst1,beauty:00576,Kualitas Produk,netral,0
+beauty:00584:inst1,beauty:00584,Kualitas Produk,negatif,0
+beauty:00584:inst2,beauty:00584,Pelayanan,positif,0
+beauty:00584:inst3,beauty:00584,Pengiriman,positif,0
+beauty:00596:inst1,beauty:00596,Pelayanan,negatif,0
+beauty:00602:inst1,beauty:00602,Pengiriman,negatif,0
+beauty:00620:inst1,beauty:00620,Kualitas Produk,negatif,0
+beauty:00628:inst1,beauty:00628,Pengiriman,negatif,0
+beauty:00628:inst2,beauty:00628,Pelayanan,negatif,0
+beauty:00629:inst1,beauty:00629,Pelayanan,negatif,0
+beauty:00633:inst1,beauty:00633,Umum,positif,2
+beauty:00633:inst2,beauty:00633,Pengiriman,positif,2
+beauty:00645:inst1,beauty:00645,Kualitas Produk,negatif,0
+beauty:00651:inst1,beauty:00651,Pelayanan,negatif,0
+beauty:00669:inst1,beauty:00669,Kualitas Produk,positif,0
+beauty:00669:inst2,beauty:00669,Pelayanan,negatif,0
+beauty:00669:inst3,beauty:00669,Pengiriman,negatif,0
+beauty:00669:inst4,beauty:00669,Harga,netral,0
+beauty:00682:inst1,beauty:00682,Pelayanan,negatif,0
+beauty:00725:inst1,beauty:00725,Pelayanan,negatif,0
+beauty:00730:inst1,beauty:00730,Pelayanan,negatif,0
+beauty:00733:inst1,beauty:00733,Kualitas Produk,negatif,2
+beauty:00734:inst1,beauty:00734,Kualitas Produk,negatif,0
+beauty:00753:inst1,beauty:00753,Kualitas Produk,positif,0
+beauty:00753:inst2,beauty:00753,Pelayanan,negatif,0
+beauty:00754:inst1,beauty:00754,Kualitas Produk,negatif,0
+beauty:00774:inst1,beauty:00774,Pelayanan,negatif,0
+beauty:00800:inst1,beauty:00800,Kualitas Produk,negatif,0
+beauty:00828:inst1,beauty:00828,Pengiriman,negatif,0
+beauty:00828:inst2,beauty:00828,Pelayanan,negatif,0
+beauty:00841:inst1,beauty:00841,Kualitas Produk,negatif,2
+beauty:00842:inst1,beauty:00842,Pelayanan,negatif,0
+beauty:00842:inst2,beauty:00842,Kualitas Produk,negatif,0
+beauty:00843:inst1,beauty:00843,Kualitas Produk,negatif,2
+beauty:00853:inst1,beauty:00853,Pelayanan,negatif,0
+beauty:00859:inst1,beauty:00859,Kualitas Produk,negatif,0
+beauty:00859:inst2,beauty:00859,Pelayanan,negatif,0
+beauty:00859:inst3,beauty:00859,Harga,negatif,2
+beauty:00861:inst1,beauty:00861,Harga,negatif,2
+beauty:00861:inst2,beauty:00861,Kualitas Produk,positif,0
+beauty:00865:inst1,beauty:00865,Pelayanan,negatif,0
+beauty:00869:inst1,beauty:00869,Pelayanan,negatif,0
+beauty:00873:inst1,beauty:00873,Pelayanan,negatif,0
+beauty:00874:inst1,beauty:00874,Pelayanan,negatif,0
+beauty:00876:inst1,beauty:00876,Kualitas Produk,negatif,0
+beauty:00885:inst1,beauty:00885,Pengiriman,negatif,0
+beauty:00909:inst1,beauty:00909,Kualitas Produk,negatif,0
+beauty:00910:inst1,beauty:00910,Pelayanan,negatif,0
+beauty:00910:inst2,beauty:00910,Pengiriman,negatif,0
+beauty:00912:inst1,beauty:00912,Kualitas Produk,negatif,0
+beauty:00918:inst1,beauty:00918,Pelayanan,negatif,0
+beauty:00918:inst2,beauty:00918,Kualitas Produk,negatif,0
+beauty:00929:inst1,beauty:00929,Kualitas Produk,negatif,0
+beauty:00932:inst1,beauty:00932,Kualitas Produk,positif,0
+beauty:00932:inst2,beauty:00932,Pelayanan,negatif,0
+beauty:00963:inst1,beauty:00963,Kualitas Produk,negatif,0
+beauty:00967:inst1,beauty:00967,Kualitas Produk,negatif,0
+beauty:00971:inst1,beauty:00971,Harga,netral,0
+beauty:00971:inst2,beauty:00971,Kualitas Produk,negatif,0
+beauty:00972:inst1,beauty:00972,Pelayanan,negatif,0
+beauty:00976:inst1,beauty:00976,Pengiriman,negatif,0
+beauty:00979:inst1,beauty:00979,Kualitas Produk,positif,0
+beauty:00979:inst2,beauty:00979,Pelayanan,positif,0
+beauty:00979:inst3,beauty:00979,Pengiriman,positif,0
+beauty:01025:inst1,beauty:01025,Kualitas Produk,negatif,0
+beauty:01026:inst1,beauty:01026,Kualitas Produk,negatif,0
+beauty:01029:inst1,beauty:01029,Harga,positif,2
+beauty:01029:inst2,beauty:01029,Pelayanan,negatif,0
+beauty:01029:inst3,beauty:01029,Kualitas Produk,netral,0
+beauty:01043:inst1,beauty:01043,Kualitas Produk,negatif,0
+beauty:01051:inst1,beauty:01051,Pengiriman,negatif,0
+beauty:01050:inst1,beauty:01050,Kualitas Produk,negatif,0
+beauty:01057:inst1,beauty:01057,Kualitas Produk,netral,2
+beauty:01057:inst2,beauty:01057,Pelayanan,negatif,0
+beauty:01059:inst1,beauty:01059,Pelayanan,positif,0
+beauty:01059:inst2,beauty:01059,Kualitas Produk,negatif,2
+beauty:01060:inst1,beauty:01060,Kualitas Produk,positif,2
+beauty:01060:inst2,beauty:01060,Pengiriman,positif,2
+beauty:01060:inst3,beauty:01060,Pelayanan,positif,2
+beauty:01066:inst1,beauty:01066,Pelayanan,negatif,0
+beauty:01089:inst1,beauty:01089,Kualitas Produk,negatif,0
+beauty:01116:inst1,beauty:01116,Kualitas Produk,negatif,0
+beauty:01132:inst1,beauty:01132,Pelayanan,positif,0
+beauty:01160:inst1,beauty:01160,Pelayanan,negatif,0
+beauty:01162:inst1,beauty:01162,Pelayanan,negatif,0
+beauty:01165:inst1,beauty:01165,Pengiriman,positif,0
+beauty:01165:inst2,beauty:01165,Kualitas Produk,negatif,0
+beauty:01175:inst1,beauty:01175,Pelayanan,negatif,0
+beauty:01180:inst1,beauty:01180,Pengiriman,negatif,2
+beauty:01192:inst1,beauty:01192,Pelayanan,positif,2
+beauty:01192:inst2,beauty:01192,Pengiriman,negatif,0
+beauty:01217:inst1,beauty:01217,Pelayanan,negatif,0
+beauty:01217:inst2,beauty:01217,Pengiriman,negatif,0
+beauty:01217:inst3,beauty:01217,Kualitas Produk,negatif,0
+beauty:01217:inst4,beauty:01217,Harga,negatif,0
+beauty:01222:inst1,beauty:01222,Kualitas Produk,negatif,0
+beauty:01226:inst1,beauty:01226,Kualitas Produk,negatif,0
+beauty:01226:inst2,beauty:01226,Pelayanan,negatif,0
+beauty:01228:inst1,beauty:01228,Kualitas Produk,positif,2
+beauty:01228:inst2,beauty:01228,Pengiriman,positif,2
+beauty:01228:inst3,beauty:01228,Harga,positif,2
+beauty:01228:inst4,beauty:01228,Pelayanan,positif,2
+beauty:01243:inst1,beauty:01243,Kualitas Produk,negatif,0
+beauty:01248:inst1,beauty:01248,Kualitas Produk,negatif,0
+beauty:01248:inst2,beauty:01248,Pelayanan,positif,0
+beauty:01259:inst1,beauty:01259,Kualitas Produk,negatif,0
+beauty:01264:inst1,beauty:01264,Pelayanan,negatif,0
+beauty:01277:inst1,beauty:01277,Pelayanan,negatif,0
+beauty:01283:inst1,beauty:01283,Kualitas Produk,netral,0
+beauty:01283:inst2,beauty:01283,Pelayanan,negatif,0
+beauty:01289:inst1,beauty:01289,Kualitas Produk,negatif,0
+beauty:01320:inst1,beauty:01320,Kualitas Produk,positif,1
+beauty:01320:inst2,beauty:01320,Pelayanan,negatif,1
+beauty:01333:inst1,beauty:01333,Pengiriman,negatif,0
+beauty:01340:inst1,beauty:01340,Kualitas Produk,negatif,0
+beauty:01340:inst2,beauty:01340,Pelayanan,negatif,0
+beauty:01353:inst1,beauty:01353,Pelayanan,negatif,0
+beauty:01358:inst1,beauty:01358,Kualitas Produk,positif,2
+beauty:01358:inst2,beauty:01358,Pengiriman,positif,2
+beauty:01373:inst1,beauty:01373,Pelayanan,negatif,0
+beauty:01373:inst2,beauty:01373,Pengiriman,positif,2
+beauty:01385:inst1,beauty:01385,Kualitas Produk,positif,2
+beauty:01385:inst2,beauty:01385,Pelayanan,positif,0
+beauty:01385:inst3,beauty:01385,Pengiriman,negatif,2
+beauty:01390:inst1,beauty:01390,Kualitas Produk,negatif,0
+beauty:01396:inst1,beauty:01396,Kualitas Produk,negatif,0
+beauty:01396:inst2,beauty:01396,Pelayanan,positif,2
+beauty:01408:inst1,beauty:01408,Pengiriman,positif,2
+beauty:01408:inst2,beauty:01408,Harga,positif,2
+beauty:01415:inst1,beauty:01415,Kualitas Produk,negatif,0
+beauty:01467:inst1,beauty:01467,Kualitas Produk,netral,2
+beauty:01467:inst2,beauty:01467,Pelayanan,positif,2
+beauty:01467:inst3,beauty:01467,Pengiriman,positif,1
+beauty:01512:inst1,beauty:01512,Kualitas Produk,negatif,2
+beauty:01512:inst2,beauty:01512,Pelayanan,positif,2
+beauty:01512:inst3,beauty:01512,Harga,negatif,1
+beauty:01531:inst1,beauty:01531,Pengiriman,negatif,0
+beauty:01533:inst1,beauty:01533,Pengiriman,negatif,0
+beauty:01541:inst1,beauty:01541,Pelayanan,negatif,0
+beauty:01548:inst1,beauty:01548,Kualitas Produk,negatif,0
+beauty:01548:inst2,beauty:01548,Pelayanan,positif,0
+beauty:01561:inst1,beauty:01561,Kualitas Produk,negatif,0
+beauty:01561:inst2,beauty:01561,Harga,negatif,0
+beauty:01564:inst1,beauty:01564,Pelayanan,negatif,0
+beauty:01575:inst1,beauty:01575,Pengiriman,positif,2
+beauty:01575:inst2,beauty:01575,Kualitas Produk,negatif,2
+beauty:01596:inst1,beauty:01596,Kualitas Produk,negatif,2
+beauty:01596:inst2,beauty:01596,Harga,positif,2
+beauty:01610:inst1,beauty:01610,Kualitas Produk,negatif,0
+beauty:01610:inst2,beauty:01610,Pengiriman,negatif,0
+beauty:01623:inst1,beauty:01623,Kualitas Produk,negatif,0
+beauty:01634:inst1,beauty:01634,Kualitas Produk,negatif,0
+beauty:01634:inst2,beauty:01634,Pengiriman,negatif,0
+beauty:01638:inst1,beauty:01638,Pelayanan,negatif,0
+beauty:01657:inst1,beauty:01657,Kualitas Produk,negatif,0
+beauty:01669:inst1,beauty:01669,Kualitas Produk,negatif,0
+beauty:01688:inst1,beauty:01688,Harga,netral,0
+beauty:01688:inst2,beauty:01688,Kualitas Produk,negatif,0
+beauty:01691:inst1,beauty:01691,Kualitas Produk,negatif,0
+beauty:01698:inst1,beauty:01698,Kualitas Produk,netral,2
+beauty:01708:inst1,beauty:01708,Kualitas Produk,negatif,0
+beauty:01713:inst1,beauty:01713,Pengiriman,negatif,0
+beauty:01713:inst2,beauty:01713,Pelayanan,positif,0
+beauty:01716:inst1,beauty:01716,Kualitas Produk,negatif,2
+beauty:01716:inst2,beauty:01716,Pelayanan,negatif,0
+beauty:01721:inst1,beauty:01721,Kualitas Produk,negatif,0
+beauty:01722:inst1,beauty:01722,Kualitas Produk,negatif,2
+beauty:01725:inst1,beauty:01725,Pengiriman,positif,0
+beauty:01725:inst2,beauty:01725,Pelayanan,positif,0
+beauty:01725:inst3,beauty:01725,Kualitas Produk,negatif,0
+beauty:01774:inst1,beauty:01774,Kualitas Produk,positif,2
+beauty:01779:inst1,beauty:01779,Kualitas Produk,positif,0
+beauty:01779:inst2,beauty:01779,Pelayanan,negatif,0
+beauty:01813:inst1,beauty:01813,Kualitas Produk,negatif,0
+beauty:01813:inst2,beauty:01813,Pelayanan,positif,0
+beauty:01819:inst1,beauty:01819,Kualitas Produk,positif,2
+beauty:01819:inst2,beauty:01819,Pelayanan,negatif,2
+beauty:01819:inst3,beauty:01819,Pengiriman,negatif,2
+beauty:01831:inst1,beauty:01831,Kualitas Produk,netral,2
+beauty:01831:inst2,beauty:01831,Pengiriman,positif,2
+beauty:01831:inst3,beauty:01831,Pelayanan,positif,2
+beauty:01842:inst1,beauty:01842,Kualitas Produk,positif,2
+beauty:01842:inst2,beauty:01842,Harga,positif,2
+beauty:01837:inst1,beauty:01837,Pelayanan,positif,2
+beauty:01837:inst2,beauty:01837,Kualitas Produk,positif,2
+beauty:01837:inst3,beauty:01837,Pengiriman,positif,2
+beauty:01837:inst4,beauty:01837,Harga,positif,2
+beauty:01870:inst1,beauty:01870,Kualitas Produk,positif,2
+beauty:01870:inst2,beauty:01870,Pengiriman,negatif,0
+beauty:01883:inst1,beauty:01883,Kualitas Produk,positif,2
+beauty:01897:inst1,beauty:01897,Kualitas Produk,positif,2
+beauty:01894:inst1,beauty:01894,Kualitas Produk,positif,2
+beauty:01910:inst1,beauty:01910,Pengiriman,netral,2
+beauty:01910:inst2,beauty:01910,Kualitas Produk,positif,2
+beauty:01934:inst1,beauty:01934,Kualitas Produk,positif,0
+beauty:01938:inst1,beauty:01938,Kualitas Produk,negatif,0
+beauty:01942:inst1,beauty:01942,Kualitas Produk,negatif,0
+beauty:01943:inst1,beauty:01943,Kualitas Produk,positif,2
+beauty:01966:inst1,beauty:01966,Kualitas Produk,negatif,0
+beauty:01966:inst2,beauty:01966,Harga,positif,0
+beauty:01969:inst1,beauty:01969,Kualitas Produk,negatif,0
+beauty:01969:inst2,beauty:01969,Harga,positif,0
+beauty:01991:inst1,beauty:01991,Kualitas Produk,positif,2
+beauty:01991:inst2,beauty:01991,Harga,positif,2
+beauty:02000:inst1,beauty:02000,Kualitas Produk,positif,2
+beauty:02002:inst1,beauty:02002,Kualitas Produk,negatif,0
+beauty:02002:inst2,beauty:02002,Pelayanan,positif,0
+beauty:02002:inst3,beauty:02002,Harga,positif,2
+beauty:02026:inst1,beauty:02026,Kualitas Produk,positif,2
+beauty:02028:inst1,beauty:02028,Kualitas Produk,negatif,2
+beauty:02028:inst2,beauty:02028,Pelayanan,positif,2
+beauty:02028:inst3,beauty:02028,Pengiriman,positif,0
+beauty:02034:inst1,beauty:02034,Kualitas Produk,negatif,2
+beauty:02041:inst1,beauty:02041,Kualitas Produk,positif,2
+beauty:02041:inst2,beauty:02041,Pengiriman,positif,2
+beauty:02041:inst3,beauty:02041,Pelayanan,positif,2
+beauty:02046:inst1,beauty:02046,Kualitas Produk,positif,0
+beauty:02046:inst2,beauty:02046,Pelayanan,positif,0
+beauty:02046:inst3,beauty:02046,Harga,positif,2
+beauty:02046:inst4,beauty:02046,Pengiriman,negatif,0
+beauty:02054:inst1,beauty:02054,Kualitas Produk,positif,2
+beauty:02059:inst1,beauty:02059,Pelayanan,positif,2
+beauty:02075:inst1,beauty:02075,Kualitas Produk,positif,2
+beauty:02075:inst2,beauty:02075,Pelayanan,positif,2
+beauty:02075:inst3,beauty:02075,Pengiriman,positif,2
+beauty:02077:inst1,beauty:02077,Kualitas Produk,positif,2
+beauty:02077:inst2,beauty:02077,Pelayanan,negatif,0
+beauty:02086:inst1,beauty:02086,Kualitas Produk,positif,2
+beauty:02086:inst2,beauty:02086,Pengiriman,positif,2
+beauty:02088:inst1,beauty:02088,Kualitas Produk,negatif,1
+beauty:02088:inst2,beauty:02088,Pelayanan,netral,0
+beauty:02095:inst1,beauty:02095,Pengiriman,negatif,0
+beauty:02107:inst1,beauty:02107,Kualitas Produk,negatif,2
+beauty:02107:inst2,beauty:02107,Pengiriman,positif,0
+beauty:02122:inst1,beauty:02122,Pelayanan,positif,2
+beauty:02122:inst2,beauty:02122,Kualitas Produk,negatif,2
+beauty:02123:inst1,beauty:02123,Kualitas Produk,positif,2
+beauty:02123:inst2,beauty:02123,Pelayanan,positif,2
+beauty:02123:inst3,beauty:02123,Pengiriman,netral,2
+beauty:02127:inst1,beauty:02127,Kualitas Produk,netral,2
+beauty:02128:inst1,beauty:02128,Pelayanan,positif,2
+beauty:02128:inst2,beauty:02128,Kualitas Produk,positif,2
+beauty:02132:inst1,beauty:02132,Pelayanan,positif,2
+beauty:02132:inst2,beauty:02132,Kualitas Produk,positif,2
+beauty:02140:inst1,beauty:02140,Pengiriman,positif,2
+beauty:02140:inst2,beauty:02140,Harga,positif,2
+beauty:02139:inst1,beauty:02139,Kualitas Produk,netral,0
+beauty:02139:inst2,beauty:02139,Pengiriman,negatif,0
+beauty:02146:inst1,beauty:02146,Pelayanan,positif,2
+beauty:02146:inst2,beauty:02146,Pengiriman,positif,2
+beauty:02146:inst3,beauty:02146,Kualitas Produk,positif,2
+beauty:02155:inst1,beauty:02155,Pengiriman,positif,1
+beauty:02155:inst2,beauty:02155,Kualitas Produk,positif,2
+beauty:02163:inst1,beauty:02163,Pengiriman,positif,0
+beauty:02163:inst2,beauty:02163,Harga,positif,2
+beauty:02167:inst1,beauty:02167,Kualitas Produk,positif,2
+beauty:02167:inst2,beauty:02167,Pelayanan,positif,2
+beauty:02178:inst1,beauty:02178,Kualitas Produk,positif,2
+beauty:02178:inst2,beauty:02178,Pelayanan,positif,2
+beauty:02178:inst3,beauty:02178,Pengiriman,positif,2
+beauty:02180:inst1,beauty:02180,Pengiriman,positif,1
+beauty:02180:inst2,beauty:02180,Pelayanan,positif,2
+beauty:02188:inst1,beauty:02188,Pelayanan,negatif,0
+beauty:02188:inst2,beauty:02188,Kualitas Produk,negatif,0
+beauty:02199:inst1,beauty:02199,Pengiriman,negatif,0
+beauty:02199:inst2,beauty:02199,Kualitas Produk,positif,0
+beauty:02210:inst1,beauty:02210,Kualitas Produk,positif,2
+beauty:02216:inst1,beauty:02216,Kualitas Produk,positif,2
+beauty:02217:inst1,beauty:02217,Pelayanan,positif,2
+beauty:02218:inst1,beauty:02218,Kualitas Produk,positif,2
+beauty:02274:inst1,beauty:02274,Kualitas Produk,negatif,0
+beauty:02281:inst1,beauty:02281,Pengiriman,negatif,0
+beauty:02281:inst2,beauty:02281,Kualitas Produk,positif,2
+beauty:02295:inst1,beauty:02295,Pengiriman,negatif,0
+beauty:02302:inst1,beauty:02302,Pelayanan,negatif,0
+beauty:02312:inst1,beauty:02312,Kualitas Produk,negatif,2
+beauty:02318:inst1,beauty:02318,Kualitas Produk,negatif,0
+beauty:02338:inst1,beauty:02338,Pelayanan,positif,2
+beauty:02338:inst2,beauty:02338,Kualitas Produk,positif,2
+beauty:02340:inst1,beauty:02340,Kualitas Produk,positif,2
+beauty:02344:inst1,beauty:02344,Kualitas Produk,negatif,2
+beauty:02347:inst1,beauty:02347,Kualitas Produk,positif,2
+beauty:02347:inst2,beauty:02347,Pengiriman,negatif,2
+beauty:02368:inst1,beauty:02368,Kualitas Produk,positif,2
+beauty:02386:inst1,beauty:02386,Kualitas Produk,positif,2
+beauty:02385:inst1,beauty:02385,Pelayanan,negatif,2
+beauty:02390:inst1,beauty:02390,Kualitas Produk,positif,2
+beauty:02397:inst1,beauty:02397,Kualitas Produk,positif,2
+beauty:02397:inst2,beauty:02397,Pelayanan,positif,2
+beauty:02402:inst1,beauty:02402,Pelayanan,positif,2
+beauty:02410:inst1,beauty:02410,Pengiriman,positif,2
+beauty:02415:inst1,beauty:02415,Kualitas Produk,positif,0
+beauty:02415:inst2,beauty:02415,Harga,positif,2
+beauty:02422:inst1,beauty:02422,Kualitas Produk,positif,2
+beauty:02424:inst1,beauty:02424,Pelayanan,positif,2
+beauty:02426:inst1,beauty:02426,Pelayanan,negatif,0
+beauty:02426:inst2,beauty:02426,Kualitas Produk,negatif,2
+beauty:02431:inst1,beauty:02431,Pengiriman,negatif,0
+beauty:02431:inst2,beauty:02431,Pelayanan,negatif,0
+beauty:02438:inst1,beauty:02438,Kualitas Produk,positif,2
+beauty:02438:inst2,beauty:02438,Pengiriman,negatif,2
+beauty:02442:inst1,beauty:02442,Kualitas Produk,positif,2
+beauty:02442:inst2,beauty:02442,Pelayanan,positif,0
+beauty:02442:inst3,beauty:02442,Harga,netral,2
+beauty:02449:inst1,beauty:02449,Pelayanan,negatif,0
+beauty:02454:inst1,beauty:02454,Pengiriman,positif,1
+beauty:02454:inst2,beauty:02454,Pelayanan,positif,0
+beauty:02454:inst3,beauty:02454,Kualitas Produk,positif,2
+beauty:02476:inst1,beauty:02476,Kualitas Produk,positif,2
+beauty:02476:inst2,beauty:02476,Pengiriman,positif,2
+beauty:02493:inst1,beauty:02493,Harga,positif,2
+beauty:02493:inst2,beauty:02493,Pelayanan,positif,0
+beauty:02493:inst3,beauty:02493,Pengiriman,positif,0
+beauty:02493:inst4,beauty:02493,Kualitas Produk,positif,0
+beauty:02501:inst1,beauty:02501,Kualitas Produk,positif,2
+beauty:02502:inst1,beauty:02502,Harga,positif,2
+beauty:02508:inst1,beauty:02508,Pelayanan,positif,0
+beauty:02521:inst1,beauty:02521,Kualitas Produk,positif,2
+beauty:02544:inst1,beauty:02544,Pengiriman,netral,1
+beauty:02544:inst2,beauty:02544,Kualitas Produk,positif,2
+beauty:02544:inst3,beauty:02544,Pelayanan,positif,2
+beauty:02545:inst1,beauty:02545,Pengiriman,negatif,0
+beauty:02545:inst2,beauty:02545,Pelayanan,positif,0
+beauty:02547:inst1,beauty:02547,Kualitas Produk,positif,2
+beauty:02548:inst1,beauty:02548,Kualitas Produk,positif,2
+beauty:02549:inst1,beauty:02549,Pengiriman,netral,0
+beauty:02571:inst1,beauty:02571,Kualitas Produk,positif,2
+beauty:02571:inst2,beauty:02571,Pengiriman,positif,2
+beauty:02571:inst3,beauty:02571,Pelayanan,negatif,2
+beauty:02575:inst1,beauty:02575,Kualitas Produk,netral,2
+beauty:02575:inst2,beauty:02575,Pelayanan,negatif,2
+beauty:02575:inst3,beauty:02575,Harga,positif,2
+beauty:02587:inst1,beauty:02587,Kualitas Produk,positif,0
+tokopedia:03802:inst1,tokopedia:03802,Pelayanan,negatif,0
+tokopedia:03817:inst1,tokopedia:03817,Pelayanan,negatif,0
+tokopedia:03826:inst1,tokopedia:03826,Pelayanan,negatif,0
+tokopedia:03843:inst1,tokopedia:03843,Kualitas Produk,negatif,2
+tokopedia:03843:inst2,tokopedia:03843,Pelayanan,negatif,0
+tokopedia:03850:inst1,tokopedia:03850,Pelayanan,negatif,0
+tokopedia:03854:inst1,tokopedia:03854,Kualitas Produk,negatif,0
+tokopedia:03854:inst2,tokopedia:03854,Pelayanan,negatif,0
+tokopedia:03860:inst1,tokopedia:03860,Pengiriman,positif,0
+tokopedia:03860:inst2,tokopedia:03860,Kualitas Produk,negatif,0
+tokopedia:03860:inst3,tokopedia:03860,Harga,positif,2
+tokopedia:03862:inst1,tokopedia:03862,Kualitas Produk,negatif,0
+tokopedia:03870:inst1,tokopedia:03870,Kualitas Produk,negatif,0
+tokopedia:03870:inst2,tokopedia:03870,Harga,negatif,0
+tokopedia:03870:inst3,tokopedia:03870,Pelayanan,negatif,0
+tokopedia:03877:inst1,tokopedia:03877,Pelayanan,negatif,0
+tokopedia:03877:inst2,tokopedia:03877,Kualitas Produk,negatif,0
+tokopedia:03882:inst1,tokopedia:03882,Kualitas Produk,negatif,0
+tokopedia:03885:inst1,tokopedia:03885,Kualitas Produk,negatif,2
+tokopedia:03899:inst1,tokopedia:03899,Kualitas Produk,netral,2
+tokopedia:03899:inst2,tokopedia:03899,Pelayanan,negatif,0
+tokopedia:03905:inst1,tokopedia:03905,Pelayanan,negatif,0
+tokopedia:03905:inst2,tokopedia:03905,Pengiriman,negatif,0
+tokopedia:03915:inst1,tokopedia:03915,Kualitas Produk,negatif,0
+tokopedia:03915:inst2,tokopedia:03915,Pelayanan,negatif,0
+lazada:02664:inst1,lazada:02664,Pengiriman,negatif,0
+lazada:02664:inst2,lazada:02664,Kualitas Produk,negatif,0
+lazada:02673:inst1,lazada:02673,Pelayanan,negatif,0
+lazada:02749:inst1,lazada:02749,Pengiriman,negatif,0
+lazada:02749:inst2,lazada:02749,Pelayanan,negatif,0
+lazada:02958:inst1,lazada:02958,Pengiriman,negatif,0
+lazada:02958:inst2,lazada:02958,Pelayanan,negatif,0
+lazada:02985:inst1,lazada:02985,Pengiriman,negatif,0
+lazada:03056:inst1,lazada:03056,Pengiriman,negatif,0
+lazada:03056:inst2,lazada:03056,Pelayanan,negatif,0
+lazada:03097:inst1,lazada:03097,Kualitas Produk,negatif,0
+lazada:03174:inst1,lazada:03174,Pelayanan,negatif,0
+lazada:03193:inst1,lazada:03193,Pengiriman,positif,0
+lazada:03193:inst2,lazada:03193,Pelayanan,negatif,0
+lazada:03246:inst1,lazada:03246,Pengiriman,positif,0
+lazada:03246:inst2,lazada:03246,Pelayanan,negatif,0
+lazada:03249:inst1,lazada:03249,Harga,positif,2
+lazada:03249:inst2,lazada:03249,Pengiriman,positif,2
+lazada:03283:inst1,lazada:03283,Pengiriman,positif,2
+lazada:03283:inst2,lazada:03283,Kualitas Produk,positif,2
+lazada:03314:inst1,lazada:03314,Pengiriman,negatif,0
+lazada:03314:inst2,lazada:03314,Kualitas Produk,positif,2
+lazada:03314:inst3,lazada:03314,Pelayanan,positif,0
+lazada:03315:inst1,lazada:03315,Pengiriman,negatif,0
+lazada:03388:inst1,lazada:03388,Kualitas Produk,positif,2
+lazada:03388:inst2,lazada:03388,Pelayanan,negatif,0
+lazada:03391:inst1,lazada:03391,Pelayanan,negatif,0
+lazada:03458:inst1,lazada:03458,Kualitas Produk,positif,2
+lazada:03458:inst2,lazada:03458,Pengiriman,positif,2
+lazada:03464:inst1,lazada:03464,Pengiriman,netral,1
+lazada:03464:inst2,lazada:03464,Pelayanan,positif,2
+lazada:03464:inst3,lazada:03464,Kualitas Produk,positif,2
+lazada:03496:inst1,lazada:03496,Pengiriman,positif,2
+lazada:03496:inst2,lazada:03496,Kualitas Produk,positif,2
+lazada:03519:inst1,lazada:03519,Pengiriman,negatif,2
+lazada:03519:inst2,lazada:03519,Pelayanan,positif,0
+lazada:03519:inst3,lazada:03519,Kualitas Produk,negatif,2
+lazada:03559:inst1,lazada:03559,Kualitas Produk,negatif,0
+lazada:03575:inst1,lazada:03575,Pengiriman,netral,0
+lazada:03575:inst2,lazada:03575,Kualitas Produk,negatif,2
+lazada:03601:inst1,lazada:03601,Pelayanan,negatif,2
+lazada:03601:inst2,lazada:03601,Pengiriman,negatif,2
+lazada:03601:inst3,lazada:03601,Harga,positif,2
+lazada:03601:inst4,lazada:03601,Kualitas Produk,positif,2
+lazada:03650:inst1,lazada:03650,Pelayanan,positif,2
+lazada:03650:inst2,lazada:03650,Pengiriman,positif,1
+lazada:03730:inst1,lazada:03730,Pelayanan,positif,2
+lazada:03730:inst2,lazada:03730,Harga,positif,2
+lazada:03784:inst1,lazada:03784,Kualitas Produk,positif,2
+beauty:00003:inst1,beauty:00003,Kualitas Produk,negatif,0
+beauty:00003:inst2,beauty:00003,Harga,netral,0
+beauty:00015:inst1,beauty:00015,Kualitas Produk,negatif,0
+beauty:00054:inst1,beauty:00054,Kualitas Produk,negatif,0
+beauty:00054:inst2,beauty:00054,Harga,negatif,2
+beauty:00054:inst3,beauty:00054,Pelayanan,negatif,0
+beauty:00115:inst1,beauty:00115,Pengiriman,negatif,0
+beauty:00158:inst1,beauty:00158,Kualitas Produk,negatif,0
+beauty:00158:inst2,beauty:00158,Pelayanan,negatif,0
+beauty:00195:inst1,beauty:00195,Kualitas Produk,negatif,0
+beauty:00195:inst2,beauty:00195,Pelayanan,positif,0
+beauty:00204:inst1,beauty:00204,Pelayanan,negatif,0
+beauty:00232:inst1,beauty:00232,Kualitas Produk,negatif,0
+beauty:00232:inst2,beauty:00232,Pelayanan,negatif,0
+beauty:00261:inst1,beauty:00261,Pengiriman,negatif,0
+beauty:00278:inst1,beauty:00278,Kualitas Produk,negatif,0
+beauty:00278:inst2,beauty:00278,Pelayanan,negatif,0
+beauty:00313:inst1,beauty:00313,Kualitas Produk,negatif,0
+beauty:00313:inst2,beauty:00313,Pelayanan,negatif,0
+beauty:00315:inst1,beauty:00315,Kualitas Produk,negatif,0
+beauty:00315:inst2,beauty:00315,Harga,positif,2
+beauty:00369:inst1,beauty:00369,Pengiriman,negatif,0
+beauty:00406:inst1,beauty:00406,Pelayanan,negatif,0
+beauty:00401:inst1,beauty:00401,Pengiriman,negatif,0
+beauty:00454:inst1,beauty:00454,Kualitas Produk,negatif,0
+beauty:00473:inst1,beauty:00473,Pengiriman,netral,0
+beauty:00473:inst2,beauty:00473,Pelayanan,negatif,0
+beauty:00482:inst1,beauty:00482,Kualitas Produk,negatif,2
+beauty:00560:inst1,beauty:00560,Pelayanan,negatif,0
+beauty:00643:inst1,beauty:00643,Pelayanan,positif,0
+beauty:00643:inst2,beauty:00643,Kualitas Produk,negatif,0
+beauty:00689:inst1,beauty:00689,Pelayanan,negatif,0
+beauty:00689:inst2,beauty:00689,Kualitas Produk,positif,0
+beauty:00744:inst1,beauty:00744,Kualitas Produk,negatif,0
+beauty:00981:inst1,beauty:00981,Kualitas Produk,positif,2
+beauty:00981:inst2,beauty:00981,Pengiriman,netral,1
+beauty:00981:inst3,beauty:00981,Pelayanan,negatif,2
+beauty:00984:inst1,beauty:00984,Kualitas Produk,positif,2
+beauty:00984:inst2,beauty:00984,Pengiriman,negatif,0
+beauty:00985:inst1,beauty:00985,Pelayanan,negatif,0
+beauty:01020:inst1,beauty:01020,Pengiriman,netral,0
+beauty:01020:inst2,beauty:01020,Pelayanan,negatif,0
+beauty:01023:inst1,beauty:01023,Kualitas Produk,negatif,0
+beauty:01035:inst1,beauty:01035,Pengiriman,negatif,0
+beauty:01035:inst2,beauty:01035,Pelayanan,negatif,0
+beauty:01041:inst1,beauty:01041,Kualitas Produk,negatif,0
+beauty:01041:inst2,beauty:01041,Pelayanan,negatif,0
+beauty:01094:inst1,beauty:01094,Kualitas Produk,negatif,0
+beauty:01094:inst2,beauty:01094,Harga,negatif,0
+lazada:02609:inst1,lazada:02609,Kualitas Produk,negatif,0
+lazada:03274:inst1,lazada:03274,Kualitas Produk,positif,0
+lazada:03274:inst2,lazada:03274,Pengiriman,negatif,0
+beauty:01171:inst1,beauty:01171,Kualitas Produk,negatif,0
+beauty:01317:inst1,beauty:01317,Harga,negatif,2
+beauty:01317:inst2,beauty:01317,Kualitas Produk,negatif,0
+beauty:01418:inst1,beauty:01418,Pengiriman,negatif,0
+beauty:01418:inst2,beauty:01418,Harga,negatif,0
+beauty:01700:inst1,beauty:01700,Pengiriman,netral,1
+beauty:01700:inst2,beauty:01700,Pelayanan,negatif,0
+beauty:01700:inst3,beauty:01700,Kualitas Produk,positif,0
+beauty:01744:inst1,beauty:01744,Kualitas Produk,positif,0
+beauty:01784:inst1,beauty:01784,Harga,positif,2
+beauty:01784:inst2,beauty:01784,Kualitas Produk,positif,2
+beauty:01784:inst3,beauty:01784,Pelayanan,positif,2
+beauty:01832:inst1,beauty:01832,Pengiriman,positif,2
+beauty:01832:inst2,beauty:01832,Kualitas Produk,positif,2
+beauty:01846:inst1,beauty:01846,Kualitas Produk,positif,0
+beauty:01877:inst1,beauty:01877,Kualitas Produk,positif,0
+beauty:01877:inst2,beauty:01877,Pelayanan,negatif,0
+beauty:01891:inst1,beauty:01891,Kualitas Produk,positif,0
+beauty:01891:inst2,beauty:01891,Harga,positif,0
+beauty:01895:inst1,beauty:01895,Pelayanan,positif,0
+beauty:01895:inst2,beauty:01895,Kualitas Produk,negatif,0
+beauty:01974:inst1,beauty:01974,Pengiriman,positif,2
+beauty:01974:inst2,beauty:01974,Pelayanan,positif,2
+beauty:02020:inst1,beauty:02020,Kualitas Produk,positif,0
+beauty:02020:inst2,beauty:02020,Harga,positif,2
+beauty:02080:inst1,beauty:02080,Kualitas Produk,negatif,2
+beauty:02135:inst1,beauty:02135,Umum,positif,2
+beauty:02135:inst2,beauty:02135,Harga,positif,2
+beauty:02152:inst1,beauty:02152,Kualitas Produk,positif,2
+beauty:02152:inst2,beauty:02152,Pelayanan,positif,2
+beauty:02168:inst1,beauty:02168,Kualitas Produk,positif,2
+beauty:02168:inst2,beauty:02168,Harga,positif,2
+beauty:02168:inst3,beauty:02168,Pengiriman,positif,2
+beauty:02170:inst1,beauty:02170,Pelayanan,negatif,0
+beauty:02170:inst2,beauty:02170,Kualitas Produk,negatif,0
+beauty:02224:inst1,beauty:02224,Kualitas Produk,positif,2
+beauty:02224:inst2,beauty:02224,Pelayanan,positif,2
+beauty:02268:inst1,beauty:02268,Pengiriman,positif,2
+beauty:02268:inst2,beauty:02268,Pelayanan,positif,2
+beauty:02268:inst3,beauty:02268,Harga,positif,2
+beauty:02285:inst1,beauty:02285,Kualitas Produk,positif,2
+beauty:02380:inst1,beauty:02380,Pengiriman,positif,0
+beauty:02440:inst1,beauty:02440,Kualitas Produk,positif,2
+beauty:02440:inst2,beauty:02440,Pelayanan,negatif,0
+beauty:02490:inst1,beauty:02490,Kualitas Produk,positif,2
+beauty:02488:inst1,beauty:02488,Pelayanan,negatif,0
+beauty:02559:inst1,beauty:02559,Pelayanan,positif,2
+beauty:02597:inst1,beauty:02597,Kualitas Produk,positif,0
+tokopedia:03874:inst1,tokopedia:03874,Pelayanan,negatif,0
+tokopedia:03902:inst1,tokopedia:03902,Pengiriman,netral,0
+tokopedia:03902:inst2,tokopedia:03902,Pelayanan,negatif,0
+tokopedia:03904:inst1,tokopedia:03904,Kualitas Produk,negatif,0
+tokopedia:03923:inst1,tokopedia:03923,Pengiriman,negatif,0
+tokopedia:03923:inst2,tokopedia:03923,Pelayanan,negatif,0
+tokopedia:03932:inst1,tokopedia:03932,Kualitas Produk,negatif,0
+tokopedia:03932:inst2,tokopedia:03932,Pelayanan,negatif,0
+tokopedia:04000:inst1,tokopedia:04000,Pengiriman,negatif,0
+tokopedia:04000:inst2,tokopedia:04000,Pelayanan,negatif,0
+tokopedia:04132:inst1,tokopedia:04132,Pelayanan,negatif,0
+tokopedia:04118:inst1,tokopedia:04118,Pelayanan,negatif,0
+tokopedia:04118:inst2,tokopedia:04118,Pengiriman,negatif,0
+tokopedia:04118:inst3,tokopedia:04118,Harga,negatif,0
+tokopedia:04135:inst1,tokopedia:04135,Pelayanan,negatif,0
+tokopedia:04168:inst1,tokopedia:04168,Kualitas Produk,negatif,0
+tokopedia:04171:inst1,tokopedia:04171,Kualitas Produk,negatif,0
+tokopedia:04203:inst1,tokopedia:04203,Pelayanan,negatif,0
+tokopedia:04219:inst1,tokopedia:04219,Pengiriman,negatif,1
+tokopedia:04219:inst2,tokopedia:04219,Kualitas Produk,positif,0
+tokopedia:04219:inst3,tokopedia:04219,Pelayanan,negatif,0
+tokopedia:04251:inst1,tokopedia:04251,Pengiriman,negatif,2
+tokopedia:04251:inst2,tokopedia:04251,Pelayanan,positif,2
+tokopedia:04236:inst1,tokopedia:04236,Pelayanan,negatif,0
+tokopedia:04326:inst1,tokopedia:04326,Pelayanan,negatif,0
+tokopedia:04326:inst2,tokopedia:04326,Kualitas Produk,positif,0
+tokopedia:04326:inst3,tokopedia:04326,Pengiriman,positif,0
+tokopedia:04362:inst1,tokopedia:04362,Kualitas Produk,negatif,0
+tokopedia:04374:inst1,tokopedia:04374,Kualitas Produk,negatif,0
+tokopedia:04392:inst1,tokopedia:04392,Pelayanan,negatif,0
+tokopedia:04392:inst2,tokopedia:04392,Kualitas Produk,negatif,0
+tokopedia:04442:inst1,tokopedia:04442,Kualitas Produk,negatif,2
+tokopedia:04520:inst1,tokopedia:04520,Pengiriman,negatif,0
+tokopedia:04614:inst1,tokopedia:04614,Kualitas Produk,positif,2
+tokopedia:04649:inst1,tokopedia:04649,Pelayanan,positif,2
+tokopedia:04649:inst2,tokopedia:04649,Pengiriman,positif,2
+tokopedia:04649:inst3,tokopedia:04649,Kualitas Produk,positif,2
+tokopedia:04655:inst1,tokopedia:04655,Kualitas Produk,positif,2
+tokopedia:04698:inst1,tokopedia:04698,Kualitas Produk,positif,2
+tokopedia:04698:inst2,tokopedia:04698,Pelayanan,positif,2
+tokopedia:04700:inst1,tokopedia:04700,Kualitas Produk,positif,2
+tokopedia:04710:inst1,tokopedia:04710,Pengiriman,netral,1
+tokopedia:04723:inst1,tokopedia:04723,Harga,negatif,2
+tokopedia:04766:inst1,tokopedia:04766,Kualitas Produk,positif,2
+tokopedia:04766:inst2,tokopedia:04766,Pengiriman,positif,2
+tokopedia:04799:inst1,tokopedia:04799,Kualitas Produk,positif,2
+tokopedia:04799:inst2,tokopedia:04799,Pengiriman,positif,2
+tokopedia:04844:inst1,tokopedia:04844,Pengiriman,positif,2
+tokopedia:04844:inst2,tokopedia:04844,Pelayanan,positif,2
+tokopedia:04877:inst1,tokopedia:04877,Kualitas Produk,positif,2
+tokopedia:04986:inst1,tokopedia:04986,Kualitas Produk,positif,2
+beauty:01219:inst1,beauty:01219,Kualitas Produk,positif,0
+beauty:01219:inst2,beauty:01219,Pelayanan,negatif,0
+tokopedia:03945:inst1,tokopedia:03945,Pelayanan,negatif,0
+tokopedia:03952:inst1,tokopedia:03952,Kualitas Produk,negatif,0
+tokopedia:03958:inst1,tokopedia:03958,Pelayanan,negatif,0
+tokopedia:03959:inst1,tokopedia:03959,Pelayanan,negatif,0
+tokopedia:03968:inst1,tokopedia:03968,Kualitas Produk,negatif,0
+tokopedia:03968:inst2,tokopedia:03968,Pelayanan,negatif,0
+tokopedia:03967:inst1,tokopedia:03967,Pelayanan,negatif,0
+tokopedia:03971:inst1,tokopedia:03971,Pelayanan,negatif,0
+tokopedia:03982:inst1,tokopedia:03982,Pengiriman,negatif,0
+tokopedia:03982:inst2,tokopedia:03982,Pelayanan,negatif,0
+tokopedia:03984:inst1,tokopedia:03984,Harga,negatif,0
+tokopedia:03984:inst2,tokopedia:03984,Kualitas Produk,negatif,0
+tokopedia:03995:inst1,tokopedia:03995,Pelayanan,negatif,0
+tokopedia:03995:inst2,tokopedia:03995,Pengiriman,negatif,0
+tokopedia:04008:inst1,tokopedia:04008,Kualitas Produk,negatif,0
+tokopedia:04008:inst2,tokopedia:04008,Pelayanan,negatif,0
+tokopedia:04027:inst1,tokopedia:04027,Kualitas Produk,negatif,0
+tokopedia:04030:inst1,tokopedia:04030,Kualitas Produk,negatif,0
+tokopedia:04049:inst1,tokopedia:04049,Pelayanan,negatif,0
+tokopedia:04058:inst1,tokopedia:04058,Pelayanan,negatif,0
+tokopedia:04060:inst1,tokopedia:04060,Kualitas Produk,negatif,0
+tokopedia:04060:inst2,tokopedia:04060,Pelayanan,negatif,0
+tokopedia:04060:inst3,tokopedia:04060,Harga,negatif,0
+tokopedia:04086:inst1,tokopedia:04086,Pelayanan,negatif,0
+tokopedia:04084:inst1,tokopedia:04084,Pelayanan,negatif,0
+tokopedia:04090:inst1,tokopedia:04090,Kualitas Produk,negatif,0
+tokopedia:04090:inst2,tokopedia:04090,Pelayanan,negatif,0
+tokopedia:04102:inst1,tokopedia:04102,Kualitas Produk,negatif,0
+tokopedia:04102:inst2,tokopedia:04102,Pelayanan,negatif,0
+tokopedia:04105:inst1,tokopedia:04105,Kualitas Produk,negatif,0
+tokopedia:04109:inst1,tokopedia:04109,Kualitas Produk,negatif,0
+tokopedia:04109:inst2,tokopedia:04109,Pelayanan,positif,0
+tokopedia:04116:inst1,tokopedia:04116,Pelayanan,negatif,0
+tokopedia:04122:inst1,tokopedia:04122,Pengiriman,negatif,0
+tokopedia:04147:inst1,tokopedia:04147,Pelayanan,negatif,0
+tokopedia:04165:inst1,tokopedia:04165,Pelayanan,negatif,0
+tokopedia:04165:inst2,tokopedia:04165,Pengiriman,negatif,0
+tokopedia:04165:inst3,tokopedia:04165,Kualitas Produk,negatif,0
+tokopedia:04167:inst1,tokopedia:04167,Pelayanan,negatif,0
+tokopedia:04169:inst1,tokopedia:04169,Kualitas Produk,negatif,0
+tokopedia:04176:inst1,tokopedia:04176,Pengiriman,negatif,0
+tokopedia:04176:inst2,tokopedia:04176,Pelayanan,negatif,0
+tokopedia:04181:inst1,tokopedia:04181,Kualitas Produk,positif,0
+tokopedia:04181:inst2,tokopedia:04181,Pelayanan,negatif,0
+tokopedia:04181:inst3,tokopedia:04181,Pengiriman,negatif,0
+tokopedia:04182:inst1,tokopedia:04182,Kualitas Produk,negatif,2
+tokopedia:04183:inst1,tokopedia:04183,Kualitas Produk,negatif,0
+tokopedia:04183:inst2,tokopedia:04183,Pelayanan,negatif,0
+tokopedia:04184:inst1,tokopedia:04184,Kualitas Produk,negatif,0
+tokopedia:04184:inst2,tokopedia:04184,Pelayanan,negatif,0
+tokopedia:04192:inst1,tokopedia:04192,Pengiriman,netral,0
+tokopedia:04192:inst2,tokopedia:04192,Kualitas Produk,negatif,0
+tokopedia:04234:inst1,tokopedia:04234,Pengiriman,negatif,1
+tokopedia:04234:inst2,tokopedia:04234,Pelayanan,negatif,0
+tokopedia:04234:inst3,tokopedia:04234,Kualitas Produk,negatif,0
+tokopedia:04239:inst1,tokopedia:04239,Kualitas Produk,negatif,0
+tokopedia:04253:inst1,tokopedia:04253,Kualitas Produk,positif,2
+tokopedia:04258:inst1,tokopedia:04258,Pelayanan,negatif,0
+tokopedia:04268:inst1,tokopedia:04268,Pelayanan,negatif,0
+tokopedia:04281:inst1,tokopedia:04281,Pelayanan,negatif,0
+tokopedia:04281:inst2,tokopedia:04281,Pengiriman,positif,0
+tokopedia:04302:inst1,tokopedia:04302,Pelayanan,negatif,0
+tokopedia:04312:inst1,tokopedia:04312,Kualitas Produk,negatif,0
+tokopedia:04318:inst1,tokopedia:04318,Kualitas Produk,negatif,0
+tokopedia:04329:inst1,tokopedia:04329,Kualitas Produk,positif,0
+tokopedia:04329:inst2,tokopedia:04329,Pelayanan,negatif,0
+tokopedia:04329:inst3,tokopedia:04329,Pengiriman,negatif,0
+tokopedia:04335:inst1,tokopedia:04335,Pengiriman,positif,1
+tokopedia:04335:inst2,tokopedia:04335,Pelayanan,negatif,0
+tokopedia:04335:inst3,tokopedia:04335,Kualitas Produk,negatif,0
+tokopedia:04346:inst1,tokopedia:04346,Pelayanan,negatif,0
+tokopedia:04359:inst1,tokopedia:04359,Pelayanan,positif,2
+tokopedia:04359:inst2,tokopedia:04359,Kualitas Produk,negatif,2
+tokopedia:04371:inst1,tokopedia:04371,Kualitas Produk,negatif,0
+tokopedia:04371:inst2,tokopedia:04371,Pelayanan,positif,0
+tokopedia:04394:inst1,tokopedia:04394,Pelayanan,negatif,0
+tokopedia:04401:inst1,tokopedia:04401,Pelayanan,negatif,0
+tokopedia:04405:inst1,tokopedia:04405,Kualitas Produk,positif,0
+tokopedia:04405:inst2,tokopedia:04405,Pengiriman,positif,2
+tokopedia:04405:inst3,tokopedia:04405,Pelayanan,negatif,0
+tokopedia:04410:inst1,tokopedia:04410,Harga,positif,0
+tokopedia:04410:inst2,tokopedia:04410,Pelayanan,negatif,0
+tokopedia:04413:inst1,tokopedia:04413,Pengiriman,negatif,0
+tokopedia:04416:inst1,tokopedia:04416,Kualitas Produk,negatif,0
+tokopedia:04416:inst2,tokopedia:04416,Pelayanan,negatif,0
+tokopedia:04428:inst1,tokopedia:04428,Kualitas Produk,positif,0
+tokopedia:04428:inst2,tokopedia:04428,Pelayanan,negatif,2
+tokopedia:04433:inst1,tokopedia:04433,Kualitas Produk,negatif,0
+tokopedia:04433:inst2,tokopedia:04433,Pelayanan,negatif,0
+tokopedia:04460:inst1,tokopedia:04460,Harga,positif,0
+tokopedia:04460:inst2,tokopedia:04460,Kualitas Produk,positif,0
+tokopedia:04468:inst1,tokopedia:04468,Kualitas Produk,positif,0
+tokopedia:04468:inst2,tokopedia:04468,Pengiriman,negatif,0
+tokopedia:04468:inst3,tokopedia:04468,Pelayanan,negatif,0
+tokopedia:04487:inst1,tokopedia:04487,Pelayanan,negatif,0
+tokopedia:04488:inst1,tokopedia:04488,Pengiriman,negatif,0
+tokopedia:04488:inst2,tokopedia:04488,Pelayanan,negatif,0
+tokopedia:04522:inst1,tokopedia:04522,Kualitas Produk,negatif,2
+tokopedia:04519:inst1,tokopedia:04519,Kualitas Produk,negatif,2
+tokopedia:04519:inst2,tokopedia:04519,Pengiriman,negatif,0
+tokopedia:04530:inst1,tokopedia:04530,Pelayanan,negatif,0
+tokopedia:04539:inst1,tokopedia:04539,Pelayanan,positif,0
+tokopedia:04539:inst2,tokopedia:04539,Pengiriman,negatif,0
+tokopedia:04551:inst1,tokopedia:04551,Kualitas Produk,negatif,2
+tokopedia:04581:inst1,tokopedia:04581,Pengiriman,negatif,0
+tokopedia:04597:inst1,tokopedia:04597,Kualitas Produk,positif,2
+tokopedia:04597:inst2,tokopedia:04597,Pelayanan,positif,2
+tokopedia:04618:inst1,tokopedia:04618,Kualitas Produk,positif,2
+tokopedia:04618:inst2,tokopedia:04618,Pelayanan,positif,2
+tokopedia:04623:inst1,tokopedia:04623,Kualitas Produk,positif,2
+tokopedia:04623:inst2,tokopedia:04623,Pengiriman,positif,2
+tokopedia:04637:inst1,tokopedia:04637,Pengiriman,positif,0
+tokopedia:04662:inst1,tokopedia:04662,Pelayanan,positif,0
+tokopedia:04662:inst2,tokopedia:04662,Pengiriman,positif,0
+tokopedia:04668:inst1,tokopedia:04668,Kualitas Produk,positif,2
+tokopedia:04668:inst2,tokopedia:04668,Pengiriman,positif,2
+tokopedia:04679:inst1,tokopedia:04679,Umum,positif,2
+tokopedia:04679:inst2,tokopedia:04679,Harga,positif,2
+tokopedia:04679:inst3,tokopedia:04679,Pelayanan,positif,2
+tokopedia:04697:inst1,tokopedia:04697,Kualitas Produk,positif,2
+tokopedia:04705:inst1,tokopedia:04705,Pengiriman,positif,2
+tokopedia:04705:inst2,tokopedia:04705,Pelayanan,positif,2
+tokopedia:04702:inst1,tokopedia:04702,Kualitas Produk,positif,2
+tokopedia:04702:inst2,tokopedia:04702,Harga,netral,2
+tokopedia:04714:inst1,tokopedia:04714,Kualitas Produk,positif,2
+tokopedia:04714:inst2,tokopedia:04714,Pelayanan,positif,2
+tokopedia:04740:inst1,tokopedia:04740,Umum,positif,2
+tokopedia:04740:inst2,tokopedia:04740,Pelayanan,positif,2
+tokopedia:04743:inst1,tokopedia:04743,Kualitas Produk,positif,2
+tokopedia:04783:inst1,tokopedia:04783,Kualitas Produk,positif,2
+tokopedia:04783:inst2,tokopedia:04783,Pelayanan,positif,2
+tokopedia:04791:inst1,tokopedia:04791,Kualitas Produk,positif,0
+tokopedia:04813:inst1,tokopedia:04813,Kualitas Produk,positif,2
+tokopedia:04813:inst2,tokopedia:04813,Pelayanan,positif,2
+tokopedia:04822:inst1,tokopedia:04822,Pelayanan,positif,2
+tokopedia:04822:inst2,tokopedia:04822,Pengiriman,positif,2
+tokopedia:04829:inst1,tokopedia:04829,Kualitas Produk,positif,2
+tokopedia:04829:inst2,tokopedia:04829,Harga,positif,2
+tokopedia:04830:inst1,tokopedia:04830,Kualitas Produk,positif,2
+tokopedia:04830:inst2,tokopedia:04830,Pengiriman,negatif,0
+tokopedia:04866:inst1,tokopedia:04866,Pelayanan,positif,2
+tokopedia:04866:inst2,tokopedia:04866,Kualitas Produk,positif,2
+tokopedia:04866:inst3,tokopedia:04866,Harga,positif,2
+tokopedia:04878:inst1,tokopedia:04878,Kualitas Produk,positif,2
+tokopedia:04892:inst1,tokopedia:04892,Kualitas Produk,positif,2
+tokopedia:04892:inst2,tokopedia:04892,Pelayanan,positif,2
+tokopedia:04905:inst1,tokopedia:04905,Pelayanan,positif,2
+tokopedia:04905:inst2,tokopedia:04905,Harga,positif,2
+tokopedia:04906:inst1,tokopedia:04906,Kualitas Produk,positif,2
+tokopedia:04906:inst2,tokopedia:04906,Pelayanan,positif,2
+tokopedia:04924:inst1,tokopedia:04924,Pelayanan,positif,2
+tokopedia:04926:inst1,tokopedia:04926,Pengiriman,positif,2
+tokopedia:04926:inst2,tokopedia:04926,Pelayanan,positif,2
+tokopedia:04927:inst1,tokopedia:04927,Pengiriman,netral,1
+tokopedia:04927:inst2,tokopedia:04927,Kualitas Produk,positif,2
+tokopedia:04927:inst3,tokopedia:04927,Harga,positif,2
+tokopedia:04929:inst1,tokopedia:04929,Kualitas Produk,positif,2
+tokopedia:04929:inst2,tokopedia:04929,Pelayanan,positif,2
+tokopedia:04929:inst3,tokopedia:04929,Pengiriman,positif,2
+tokopedia:04938:inst1,tokopedia:04938,Kualitas Produk,positif,2
+tokopedia:04938:inst2,tokopedia:04938,Pelayanan,positif,2
+tokopedia:04939:inst1,tokopedia:04939,Kualitas Produk,positif,2
+tokopedia:04939:inst2,tokopedia:04939,Pelayanan,positif,0
+tokopedia:04940:inst1,tokopedia:04940,Kualitas Produk,positif,0
+tokopedia:04940:inst2,tokopedia:04940,Pelayanan,positif,0
+tokopedia:04940:inst3,tokopedia:04940,Pengiriman,positif,0
+tokopedia:04941:inst1,tokopedia:04941,Kualitas Produk,positif,2
+tokopedia:04941:inst2,tokopedia:04941,Pengiriman,positif,0
+tokopedia:04943:inst1,tokopedia:04943,Harga,positif,2
+tokopedia:04944:inst1,tokopedia:04944,Pelayanan,positif,2
+tokopedia:04949:inst1,tokopedia:04949,Pengiriman,positif,2
+tokopedia:04949:inst2,tokopedia:04949,Pelayanan,positif,2
+tokopedia:04949:inst3,tokopedia:04949,Kualitas Produk,positif,2
+tokopedia:04967:inst1,tokopedia:04967,Kualitas Produk,positif,2
+tokopedia:04974:inst1,tokopedia:04974,Pelayanan,positif,2
+tokopedia:04974:inst2,tokopedia:04974,Kualitas Produk,positif,2
+tokopedia:04974:inst3,tokopedia:04974,Pengiriman,positif,2
+tokopedia:04982:inst1,tokopedia:04982,Pelayanan,positif,2
+tokopedia:04982:inst2,tokopedia:04982,Pengiriman,positif,2

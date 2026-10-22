@@ -390,70 +390,71 @@ st.markdown("<div style='height: 0.5rem;'></div>", unsafe_allow_html=True)
 jalankan = st.button("Analisa Aspek & Sentimen", type="primary", use_container_width=True, disabled=not teks.strip())
 
 if jalankan:
-    aspek_list = deteksi_aspek(teks)
+    with st.spinner("Menganalisa aspek dan menjalankan inferensi 4 model..."):
+        aspek_list = deteksi_aspek(teks)
 
-    st.markdown(
-        f"<div style='margin-top:1.2rem; font-size:0.9rem; color:var(--text-secondary);'>"
-        f"Aspek terdeteksi: <b style='color:var(--text-primary);'>" + ", ".join(aspek_list) + "</b></div>",
-        unsafe_allow_html=True,
-    )
+        st.markdown(
+            f"<div style='margin-top:1.2rem; font-size:0.9rem; color:var(--text-secondary);'>"
+            f"Aspek terdeteksi: <b style='color:var(--text-primary);'>" + ", ".join(aspek_list) + "</b></div>",
+            unsafe_allow_html=True,
+        )
 
-    warna_map = {
-        "negatif": "var(--neg)",
-        "netral": "var(--net)",
-        "positif": "var(--pos)",
-    }
+        warna_map = {
+            "negatif": "var(--neg)",
+            "netral": "var(--net)",
+            "positif": "var(--pos)",
+        }
 
-    try:
-        m_bi, v_bi, _ = muat_bilstm()
-        m_tr, v_tr, _ = muat_transformer()
-    except Exception as e:
-        st.error(f"Gagal memuat model neural: {e}")
-        st.stop()
-
-    for asp in aspek_list:
-        baris = []
-
-        # TF-IDF
         try:
-            p = pred_tfidf(teks, asp)
-            baris.append({"model": "TF-IDF", "prediksi": KELAS[int(np.argmax(p))],
-                          "p": p, "macro_f1": 0.5794})
+            m_bi, v_bi, _ = muat_bilstm()
+            m_tr, v_tr, _ = muat_transformer()
         except Exception as e:
-            baris.append({"model": "TF-IDF", "error": str(e)})
+            st.error(f"Gagal memuat model neural: {e}")
+            st.stop()
 
-        # BiLSTM
-        try:
-            p = pred_neural(m_bi, v_bi, teks, asp)
-            baris.append({"model": "BiLSTM", "prediksi": KELAS[int(np.argmax(p))],
-                          "p": p, "macro_f1": 0.5857})
-        except Exception as e:
-            baris.append({"model": "BiLSTM", "error": str(e)})
+        for asp in aspek_list:
+            baris = []
 
-        # Transformer
-        try:
-            p = pred_neural(m_tr, v_tr, teks, asp)
-            baris.append({"model": "Transformer", "prediksi": KELAS[int(np.argmax(p))],
-                          "p": p, "macro_f1": 0.6008})
-        except Exception as e:
-            baris.append({"model": "Transformer", "error": str(e)})
+            # TF-IDF
+            try:
+                p = pred_tfidf(teks, asp)
+                baris.append({"model": "TF-IDF", "prediksi": KELAS[int(np.argmax(p))],
+                              "p": p, "macro_f1": 0.5794})
+            except Exception as e:
+                baris.append({"model": "TF-IDF", "error": str(e)})
 
-        # mBERT
-        try:
-            p = pred_mbert(teks, asp)
-            baris.append({"model": "mBERT", "prediksi": KELAS[int(np.argmax(p))],
-                          "p": p, "macro_f1": 0.7100})
-        except Exception as e:
-            baris.append({"model": "mBERT", "error": str(e)})
+            # BiLSTM
+            try:
+                p = pred_neural(m_bi, v_bi, teks, asp)
+                baris.append({"model": "BiLSTM", "prediksi": KELAS[int(np.argmax(p))],
+                              "p": p, "macro_f1": 0.5857})
+            except Exception as e:
+                baris.append({"model": "BiLSTM", "error": str(e)})
 
-        sukses = [b for b in baris if "prediksi" in b]
-        if sukses:
-            suara = {}
-            for b in sukses:
-                suara[b["prediksi"]] = suara.get(b["prediksi"], 0) + 1
-            konsensus = max(suara, key=suara.get)
+            # Transformer
+            try:
+                p = pred_neural(m_tr, v_tr, teks, asp)
+                baris.append({"model": "Transformer", "prediksi": KELAS[int(np.argmax(p))],
+                              "p": p, "macro_f1": 0.6008})
+            except Exception as e:
+                baris.append({"model": "Transformer", "error": str(e)})
 
-            card_header = f"""
+            # mBERT
+            try:
+                p = pred_mbert(teks, asp)
+                baris.append({"model": "mBERT", "prediksi": KELAS[int(np.argmax(p))],
+                              "p": p, "macro_f1": 0.7100})
+            except Exception as e:
+                baris.append({"model": "mBERT", "error": str(e)})
+
+            sukses = [b for b in baris if "prediksi" in b]
+            if sukses:
+                suara = {}
+                for b in sukses:
+                    suara[b["prediksi"]] = suara.get(b["prediksi"], 0) + 1
+                konsensus = max(suara, key=suara.get)
+
+                card_header = f"""
 <div class="aspect-section">
   <div class="aspect-header">
     <div class="aspect-name">Aspek: {asp}</div>
@@ -465,23 +466,23 @@ if jalankan:
     </div>
   </div>
 """
-            st.markdown(card_header, unsafe_allow_html=True)
+                st.markdown(card_header, unsafe_allow_html=True)
 
-            m_cols = st.columns(4)
-            for j, b in enumerate(sukses):
-                with m_cols[j]:
-                    p = b["p"]
-                    detail_str = "<br>".join(f"{KELAS[k]}: {p[k]*100:.1f}%" for k in range(3))
-                    box_html = f"""
+                m_cols = st.columns(4)
+                for j, b in enumerate(sukses):
+                    with m_cols[j]:
+                        p = b["p"]
+                        detail_str = "<br>".join(f"{KELAS[k]}: {p[k]*100:.1f}%" for k in range(3))
+                        box_html = f"""
 <div class="model-cell">
   <div class="model-name">{b['model']}</div>
   <div class="model-pred" style="color:{warna_map[b['prediksi']]};">{b['prediksi'].upper()}</div>
   <div class="model-probs">{detail_str}</div>
 </div>
 """
-                    st.markdown(box_html, unsafe_allow_html=True)
+                        st.markdown(box_html, unsafe_allow_html=True)
 
-            st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("<div style='height:1rem;'></div>", unsafe_allow_html=True)
 FIG_DIR = APP / "figures"

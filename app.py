@@ -484,6 +484,53 @@ if jalankan:
             st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("<div style='height:1rem;'></div>", unsafe_allow_html=True)
+FIG_DIR = APP / "figures"
+
+st.markdown("<div style='height:1.5rem;'></div>", unsafe_allow_html=True)
+
+# Section Visualisasi Hasil Penelitian
+with st.expander("Hasil Eksperimen & Visualisasi Grafis", expanded=False):
+    tab1, tab2, tab3 = st.tabs(["Performa Model", "Efek Augmentasi & Ketahanan", "Distribusi Dataset"])
+
+    with tab1:
+        st.markdown("**Perbandingan Macro-F1 Lintas Model (Kondisi Augmented)**")
+        st.caption("Hasil uji pada 1.261 instance. mBERT memimpin secara signifikan (p < 0,001).")
+        p3 = FIG_DIR / "grafik_3_macro_f1_model.png"
+        if p3.exists():
+            st.image(str(p3), use_container_width=True)
+
+        st.markdown("**F1-Score per Kelas Polaritas**")
+        st.caption("F1 kelas netral lebih rendah di seluruh model akibat proporsi data latih netral sebesar 5,2%.")
+        p4 = FIG_DIR / "grafik_4_f1_per_kelas.png"
+        if p4.exists():
+            st.image(str(p4), use_container_width=True)
+
+    with tab2:
+        st.markdown("**Augmentation Gain (Augmented vs Original)**")
+        st.caption("Augmentasi menyelamatkan model BiLSTM dari kegagalan konvergensi (+0,3530 Macro-F1).")
+        p6 = FIG_DIR / "grafik_6_augmentation_gain.png"
+        if p6.exists():
+            st.image(str(p6), use_container_width=True)
+
+        st.markdown("**Robustness Drop mBERT terhadap 8 Fenomena Bahasa Informal**")
+        st.caption("Penurunan performa saat data uji diberi perturbasi noise sintetis. Typo dan kombinasi noise adalah titik paling rentan.")
+        p5 = FIG_DIR / "grafik_5_robustness_drop.png"
+        if p5.exists():
+            st.image(str(p5), use_container_width=True)
+
+    with tab3:
+        st.markdown("**Distribusi Kelas Polaritas per Split Data**")
+        st.caption("Proporsi polaritas dijaga seimbang dan stratifikasi konsisten antara Train, Validation, dan Test.")
+        p1 = FIG_DIR / "grafik_1_distribusi_kelas.png"
+        if p1.exists():
+            st.image(str(p1), use_container_width=True)
+
+        st.markdown("**Distribusi Aspek pada Data Latih**")
+        st.caption("Kualitas Produk dan Pelayanan merupakan aspek yang paling mendominasi diskusi pengguna e-commerce.")
+        p2 = FIG_DIR / "grafik_2_distribusi_aspek.png"
+        if p2.exists():
+            st.image(str(p2), use_container_width=True)
+
 with st.expander("Metodologi dan Benchmark Data"):
     st.markdown("""
 - **Dataset:** 8.212 instance ulasan marketplace Indonesia (Shopee, Tokopedia, Lazada).

@@ -34,24 +34,27 @@ st.set_page_config(
 # ============================================================
 POLA_ASPEK = {
     "Pengiriman": re.compile(
-        r"\b(kirim|pengiriman|dikirim|kirimnya|kirimkan|kurir|kurirnya|ekspedisi|"
-        r"paket|paketnya|sampai|nyampe|nyampai|datang|tiba|antar|pengantaran|"
-        r"cepat|cepet|lambat|lama|ongkir|resi|tracking|tertunda)\b", re.I),
+        r"\b(kirim\w*|pengiriman|dikirim|kurir\w*|ekspedisi\w*|paket\w*|"
+        r"sampai\w*|nyampe\w*|nyampai\w*|datang\w*|tiba\w*|antar\w*|"
+        r"pengantaran|cepat|cepet|lambat|lama|ongkir\w*|resi|tracking|"
+        r"tertunda)\b", re.I),
     "Pelayanan": re.compile(
-        r"\b(seller|sellernya|penjual|admin|adminnya|toko|tokonya|chat|chatnya|"
-        r"respon|respons|balas|dibalas|balasan|ramah|kemas|kemasan|packing|"
-        r"bungkus|bubble|dus|kardus|retur|refund|garansi|komplain|klaim|"
-        r"salah kirim|salah barang|pesanan|ganti|tukar|pelayanan|layanan|"
-        r"service|cs|customer service|bantu|bantuan|tanggung jawab)\b", re.I),
+        r"\b(seller\w*|penjual\w*|admin\w*|toko\w*|chat\w*|respon\w*|"
+        r"respons\w*|balas\w*|dibalas|balasan|ramah|kemas\w*|packing\w*|"
+        r"bungkus\w*|bubble|dus|kardus|retur\w*|refund\w*|garansi\w*|"
+        r"komplain\w*|klaim\w*|salah kirim|salah barang|pesanan\w*|ganti\w*|"
+        r"tukar\w*|pelayanan\w*|layanan\w*|service|cs|customer service|"
+        r"bantu\w*|tanggung jawab)\b", re.I),
     "Harga": re.compile(
-        r"\b(harga|harganya|mahal|murah|diskon|promo|voucher|terjangkau|"
-        r"kemahalan|worth|segini|kantong|duit|uang|sepadan|sebanding)\b", re.I),
+        r"\b(harga\w*|mahal\w*|murah\w*|diskon\w*|promo\w*|voucher\w*|"
+        r"terjangkau|kemahalan|worth|segini|kantong|duit\w*|uang\w*|biaya\w*|"
+        r"sepadan|sebanding)\b", re.I),
     "Kualitas Produk": re.compile(
-        r"\b(kualitas|kualitasnya|barang|barangnya|produk|produknya|bahan|fungsi|"
-        r"berfungsi|rusak|rusaknya|pecah|cacat|palsu|ori|original|asli|awet|"
-        r"warna|ukuran|size|wangi|bau|aroma|tekstur|jahit|jahitan|bocor|patah|"
-        r"tipis|tebal|mati|sesuai|bagus|jelek|exp|expired|kadaluarsa|b aja|kw|"
-        r"tiruan)\b", re.I),
+        r"\b(kualitas\w*|barang\w*|produk\w*|bahan\w*|fungsi\w*|berfungsi|"
+        r"rusak\w*|pecah\w*|cacat\w*|palsu|ori|original|asli|awet\w*|"
+        r"warna\w*|luntur\w*|ukuran\w*|size|wangi\w*|bau\w*|aroma\w*|"
+        r"tekstur\w*|jahit\w*|bocor\w*|patah\w*|tipis|tebal|mati|sesuai|"
+        r"bagus\w*|jelek\w*|exp|expired|kadaluarsa|b aja|kw|tiruan)\b", re.I),
 }
 
 

@@ -344,6 +344,29 @@ button[kind="primary"]:hover {
     color: var(--text-secondary);
     margin: 0.8rem 0 0.35rem 0;
 }
+
+.team-card {
+    background-color: var(--panel-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    margin-top: 1.5rem;
+}
+
+.team-heading {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.team-list {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
 </style>""", unsafe_allow_html=True)
 
 # Header Aplikasi
@@ -352,7 +375,8 @@ st.markdown("""
   <div class="app-title">ABSA Marketplace Indonesia</div>
   <div class="app-subtitle">
     Deteksi aspek otomatis dan komparasi polaritas lintas 4 arsitektur:
-    TF-IDF, BiLSTM, Transformer, dan mBERT.
+    TF-IDF, BiLSTM, Transformer, dan mBERT.<br>
+    <span style="font-size:0.8rem; color:var(--text-secondary);">Proyek Penelitian Kelompok 17 · Research Methodology</span>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -552,3 +576,15 @@ with st.expander("Metodologi dan Benchmark Data"):
 - **Format Input Model:** Setiap ulasan dipasangkan dengan aspek terdeteksi: `{ulasan} [ASPECT] {aspek}`.
 - **Karakteristik Kelas Netral:** Porsi kelas netral adalah 5,2% pada data latih, sehingga confidence probabilitas netral bersifat lebih konservatif dibanding positif/negatif.
 """)
+
+# Footer Anggota Kelompok 17
+st.markdown("""
+<div class="team-card">
+  <div class="team-heading">Kelompok 17 — Research Methodology</div>
+  <div class="team-list">
+    1. <b>Keizha Tanuwijaya Sumbaymider</b> — 2802512184<br>
+    2. <b>Rizky Putra Ichfiandra</b> — 2802530331<br>
+    3. <b>Muhammad Raid Zakwan</b> — 2802532684
+  </div>
+</div>
+""", unsafe_allow_html=True)

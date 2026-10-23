@@ -34,20 +34,24 @@ st.set_page_config(
 # ============================================================
 POLA_ASPEK = {
     "Pengiriman": re.compile(
-        r"\b(kirim|pengiriman|kurir|ekspedisi|paket|sampai|nyampe|datang|tiba|"
-        r"antar|cepat|cepet|lambat|lama|ongkir|resi|tracking)\b", re.I),
+        r"\b(kirim|pengiriman|dikirim|kirimnya|kirimkan|kurir|kurirnya|ekspedisi|"
+        r"paket|paketnya|sampai|nyampe|nyampai|datang|tiba|antar|pengantaran|"
+        r"cepat|cepet|lambat|lama|ongkir|resi|tracking|tertunda)\b", re.I),
     "Pelayanan": re.compile(
-        r"\b(seller|penjual|admin|toko|chat|respon|respons|balas|ramah|kemas|"
-        r"kemasan|packing|bungkus|bubble|dus|kardus|retur|refund|garansi|"
-        r"komplain|klaim|salah kirim|pesanan)\b", re.I),
+        r"\b(seller|sellernya|penjual|admin|adminnya|toko|tokonya|chat|chatnya|"
+        r"respon|respons|balas|dibalas|balasan|ramah|kemas|kemasan|packing|"
+        r"bungkus|bubble|dus|kardus|retur|refund|garansi|komplain|klaim|"
+        r"salah kirim|salah barang|pesanan|ganti|tukar|pelayanan|layanan|"
+        r"service|cs|customer service|bantu|bantuan|tanggung jawab)\b", re.I),
     "Harga": re.compile(
         r"\b(harga|harganya|mahal|murah|diskon|promo|voucher|terjangkau|"
-        r"kemahalan|worth|segini|kantong|duit|uang)\b", re.I),
+        r"kemahalan|worth|segini|kantong|duit|uang|sepadan|sebanding)\b", re.I),
     "Kualitas Produk": re.compile(
-        r"\b(kualitas|barang|barangnya|produk|bahan|fungsi|berfungsi|rusak|"
-        r"pecah|cacat|palsu|ori|original|asli|awet|warna|ukuran|size|wangi|"
-        r"bau|aroma|tekstur|jahit|jahitan|bocor|patah|tipis|tebal|mati|"
-        r"sesuai|bagus|jelek|exp|expired|kadaluarsa|b aja)\b", re.I),
+        r"\b(kualitas|kualitasnya|barang|barangnya|produk|produknya|bahan|fungsi|"
+        r"berfungsi|rusak|rusaknya|pecah|cacat|palsu|ori|original|asli|awet|"
+        r"warna|ukuran|size|wangi|bau|aroma|tekstur|jahit|jahitan|bocor|patah|"
+        r"tipis|tebal|mati|sesuai|bagus|jelek|exp|expired|kadaluarsa|b aja|kw|"
+        r"tiruan)\b", re.I),
 }
 
 

@@ -154,7 +154,7 @@ Rather than performing primary manual web scraping, this research leverages thre
 |---|---|:---:|:---:|---|
 | **Beauty Products Review** | Shopee & Tokopedia (Beauty) | 76,256 | Apache 2.0 | [HuggingFace Dataset](https://huggingface.co/datasets/sekarmulyani/ulasan-beauty-products) |
 | **Lazada Indonesian Reviews** | Lazada Indonesia (General Retail) | 203,787 | CC0: Public Domain | [Kaggle Dataset](https://www.kaggle.com/datasets/grikomsn/lazada-indonesian-reviews) |
-| **Tokopedia Product Reviews** | Tokopedia (Electronics & Retail) | 65,543 | Open Data | Archived Benchmark Repository |
+| **Tokopedia Product Reviews 2025** | Tokopedia (Electronics & Retail) | 65,543 | CC0 / Open Data | [Kaggle Dataset](https://www.kaggle.com/datasets/salmanabdu/tokopedia-product-reviews-2025) |
 
 ### Data Curation Pipeline:
 1. **Deduplication & Length Filtering**: Retained reviews between 20 and 1,000 characters $\rightarrow$ 156,005 valid reviews.
@@ -168,8 +168,8 @@ Rather than performing primary manual web scraping, this research leverages thre
 
 This research project was conducted by **Kelompok 17** for the **Research Methodology** curriculum at the School of Information Systems / Computer Science, **Bina Nusantara University (BINUS)**:
 
-- **Muhammad Raid Zakwan** — NIM: 2802532684
-- **Keizha Tanuwijaya Sumbaymider** — NIM: 2802512184
-- **Rizky Putra Ichfiandra** — NIM: 2802530331
+- **Muhammad Raid Zakwan** — 2802532684
+- **Keizha Tanuwijaya Sumbaymider** — 2802512184
+- **Rizky Putra Ichfiandra** — 2802530331
 
 Special thanks to the open-source contributors of HuggingFace `ulasan-beauty-products` and Kaggle `lazada-indonesian-reviews` for curating the foundational public corpora.
